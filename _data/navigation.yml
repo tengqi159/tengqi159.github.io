@@ -2,18 +2,24 @@
 main:
   - title: "主页"
     url: /
+    icon: "fas fa-fw fa-home"
 
   - title: "招生"
     url: /admissions/
+    icon: "fas fa-fw fa-graduation-cap"
 
   - title: "论文"
     url: /publications/
+    icon: "fas fa-fw fa-file-alt"
     
   - title: "项目与专利"
     url: /projects/
+    icon: "fas fa-fw fa-project-diagram"
 
   - title: "博客"
     url: /year-archive/
+    icon: "fas fa-fw fa-blog"
 
   - title: "简历"
     url: /cv/
+    icon: "fas fa-fw fa-user"
