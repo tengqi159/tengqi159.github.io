@@ -135,8 +135,6 @@ redirect_from:
 
 {% include base_path %}
 
-<a href="{{ base_path }}/简历.pdf" class="download-btn">📄 下载完整简历（PDF）</a>
-
 ---
 
 ## 📊 科研概况
