@@ -144,10 +144,6 @@ body {
   border-left: 5px solid #2a5298;
 }
 
-.highlight-text {
-  color: #1e3c72;
-  font-weight: 600;
-}
 
 /* Info Cards */
 .info-card {
@@ -204,6 +200,44 @@ body {
   border-color: #1e3c72;
   color: #1e3c72;
   box-shadow: 0 10px 25px rgba(30, 60, 114, 0.15);
+}
+
+.highlight-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.2rem;
+  margin: 1.5rem 0 2rem;
+}
+
+.highlight-card {
+  background: linear-gradient(135deg, #ffffff 0%, #f6f8ff 100%);
+  border: 1px solid #e6ebf5;
+  border-radius: 14px;
+  padding: 1.2rem 1.4rem;
+  box-shadow: 0 6px 18px rgba(30, 60, 114, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.highlight-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 26px rgba(30, 60, 114, 0.18);
+}
+
+.highlight-title {
+  font-weight: 700;
+  color: #1e3c72;
+  margin-bottom: 0.4rem;
+}
+
+.highlight-text {
+  color: #1e3c72;
+  font-weight: 600;
+}
+
+.highlight-desc {
+  color: #555;
+  font-size: 0.98rem;
+  line-height: 1.6;
 }
 
 /* Section Title */
@@ -271,19 +305,17 @@ body {
 }
 </style>
 
-<!-- Hero Section -->
 <div class="hero-section">
-  <h1>Dr. Qi Teng (滕起)</h1>
-  <p class="subtitle">Associate Research Fellow @ Zhengzhou University</p>
-  
+  <h1>滕起</h1>
+  <p class="subtitle">南京大学博士 · 直聘副研究员（郑州大学）</p>
   <div class="stats-container">
     <div class="stat-card">
       <div class="number">630+</div>
-      <div class="label">Citations</div>
+      <div class="label">谷歌学术引用</div>
     </div>
     <div class="stat-card">
-      <div class="number">14+</div>
-      <div class="label">Papers</div>
+      <div class="number">10+</div>
+      <div class="label">高水平论文</div>
     </div>
     <div class="stat-card">
       <div class="number">11</div>
@@ -292,30 +324,18 @@ body {
   </div>
 </div>
 
-<!-- Admissions / Recruitment Section (Top Priority) -->
 <div class="admissions-card">
   <div class="admissions-title">
-    👋 招生信息 | Prospective Students
+    👋 招生信息
   </div>
   <div class="admissions-content">
-    <p><strong>滕起</strong>，南京大学博士，直聘副研究员。主要从事<strong>深度学习、可穿戴计算、人体活动识别（HAR）及主动健康管理</strong>等领域的研究。</p>
-    
-    <p>近年来在 <span class="highlight-text">IEEE JBHI、IEEE TIM、IEEE TIE</span> 等国际权威期刊发表高水平论文10余篇，谷歌学术引用630余次。参与国家重点研发计划及社科基金重大项目多项。担任 IEEE TIM, Scientific Reports, Pattern Recognition 等期刊审稿人。</p>
-    
-    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 1.5rem 0;">
-    
-    <p>🎓 <strong>招生对象：</strong></p>
-    <ul>
-      <li>欢迎感兴趣的<strong>零基础且踏实勤奋</strong>的同学报名。</li>
-      <li>更欢迎具有<strong>编程（Python/PyTorch）或数学基础</strong>，对人工智能与健康医疗交叉领域感兴趣的同学报考。</li>
-    </ul>
-    
-    <p>💡 <strong>我的承诺：</strong></p>
-    <p>我的学业导师职责就是将指导你一步步撰写 <span class="highlight-text">SCIE/SSCI 学术论文</span>，为<strong>保研升学、互联网大厂就业、学术研究</strong>打下坚实基础。</p>
-    
+    <p><strong>滕起</strong>，南京大学博士，直聘副研究员。主要从事<strong>深度学习、可穿戴计算、人体活动识别（HAR）与主动健康管理</strong>等领域研究。</p>
+    <p>近年来在 <span class="highlight-text">IEEE JBHI、IEEE TIM、IEEE TIE</span> 等国际期刊发表高水平论文10余篇，谷歌学术引用630余次。参与国家重点研发计划及社科基金重大项目多项，担任 IEEE TIM、Scientific Reports、Pattern Recognition 等期刊审稿人。</p>
+    <p>欢迎对人工智能与健康医疗交叉领域感兴趣的同学报考。更欢迎具备 <span class="highlight-text">Python / PyTorch</span> 或数学基础、踏实勤奋、愿意长期投入科研训练的同学。</p>
+    <p>我的学业导师职责是指导你逐步完成 <span class="highlight-text">SCIE/SSCI 论文</span>，为保研升学、科研深造与就业打下扎实基础。</p>
     <div style="text-align: center; margin-top: 2rem;">
-      <a href="mailto:teqi159@gmail.com" style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; padding: 1rem 3rem; border-radius: 50px; text-decoration: none; font-weight: 600; box-shadow: 0 10px 20px rgba(30, 60, 114, 0.3); transition: all 0.3s ease; display: inline-block;">
-        📧 联系我 / Contact Me
+      <a href="/admissions/" style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; padding: 1rem 3rem; border-radius: 50px; text-decoration: none; font-weight: 600; box-shadow: 0 10px 20px rgba(30, 60, 114, 0.3); transition: all 0.3s ease; display: inline-block;">
+        📌 查看招生详情
       </a>
     </div>
   </div>
@@ -327,16 +347,32 @@ body {
 <div style="flex: 2; min-width: 300px;">
 
   <!-- Research Interests -->
-  <h2 class="section-title">🔬 研究方向 | Research</h2>
+  <h2 class="section-title">🔬 研究方向</h2>
   <div class="research-grid">
-    <div class="research-item">🤖 Deep Learning</div>
-    <div class="research-item">⌚ Wearable Computing</div>
-    <div class="research-item">🏃 Activity Recognition</div>
-    <div class="research-item">🏥 Smart Health</div>
+    <div class="research-item">🤖 深度学习（Deep Learning）</div>
+    <div class="research-item">⌚ 可穿戴计算（Wearable Computing）</div>
+    <div class="research-item">🏃 人体活动识别（HAR）</div>
+    <div class="research-item">🏥 主动健康管理（Smart Health）</div>
+  </div>
+
+  <h2 class="section-title">✨ 研究亮点</h2>
+  <div class="highlight-grid">
+    <div class="highlight-card">
+      <div class="highlight-title">📈 高质量产出</div>
+      <div class="highlight-desc">IEEE JBHI、IEEE TIM、IEEE TIE 等期刊论文 10+，聚焦可穿戴计算与HAR。</div>
+    </div>
+    <div class="highlight-card">
+      <div class="highlight-title">🧠 方法创新</div>
+      <div class="highlight-desc">提出多项HAR模型结构改进与长尾分布优化策略，强调可复现与可落地。</div>
+    </div>
+    <div class="highlight-card">
+      <div class="highlight-title">🩺 交叉融合</div>
+      <div class="highlight-desc">深度学习 × 健康医疗场景，推动智能健康评估与干预应用。</div>
+    </div>
   </div>
 
   <!-- Selected Publications -->
-  <h2 class="section-title">📚 代表作 | Selected Papers</h2>
+  <h2 class="section-title">📚 代表作</h2>
 
   <div class="pub-highlight">
     <div class="pub-title">DanHAR: Dual Attention Network for Multimodal Human Activity Recognition Using Wearable Sensors</div>
@@ -358,27 +394,26 @@ body {
 
 </div>
 
-<!-- Right Column -->
 <div style="flex: 1; min-width: 250px;">
-
-  <!-- Education (Only Ph.D as requested) -->
-  <h2 class="section-title">🎓 学历 | Education</h2>
+  <h2 class="section-title">💼 现任</h2>
   <div class="info-card">
-    <h3>🏛️ Ph.D. in Information Science</h3>
-    <p><strong>Nanjing University</strong></p>
-    <p style="color: #1e3c72; font-weight: 500;">School of Information Management</p>
-    <p style="font-size: 0.9rem; color: #888; margin-top: 0.5rem;">Sep 2021 - Jun 2026</p>
-  </div>
-  
-  <!-- Current Position -->
-  <h2 class="section-title">💼 现任 | Position</h2>
-  <div class="info-card">
-    <h3>🔬 Associate Research Fellow</h3>
-    <p><strong>Zhengzhou University</strong></p>
-    <p style="color: #1e3c72; font-weight: 500;">直聘副研究员</p>
-    <p style="font-size: 0.9rem; color: #888; margin-top: 0.5rem;">Jul 2026 - Present</p>
+    <h3>🔬 直聘副研究员</h3>
+    <p><strong>郑州大学 信息管理学院</strong></p>
+    <p style="color: #1e3c72; font-weight: 500;">研究方向：深度学习与可穿戴健康</p>
   </div>
 
+  <h2 class="section-title">🧭 学术服务</h2>
+  <div class="info-card">
+    <h3>期刊审稿</h3>
+    <p>IEEE TIM、Scientific Reports、Pattern Recognition 等</p>
+  </div>
+
+  <h2 class="section-title">🔗 入口</h2>
+  <div class="info-card">
+    <p><a href="/publications/">论文列表</a></p>
+    <p><a href="/projects/">项目与专利</a></p>
+    <p><a href="/admissions/">招生详情</a></p>
+  </div>
 </div>
 
 </div>

@@ -1,6 +1,6 @@
 ---
 layout: archive
-title: "Publications"
+title: "论文"
 permalink: /publications/
 author_profile: true
 ---
@@ -175,15 +175,15 @@ author_profile: true
 </style>
 
 <div class="pub-header">
-  <h2>📚 Research Publications</h2>
+  <h2>📚 论文与成果</h2>
   <div class="pub-stats">
     <div class="pub-stat">
-      <div class="pub-stat-number">900+</div>
-      <div class="pub-stat-label">Total Citations</div>
+      <div class="pub-stat-number">630+</div>
+      <div class="pub-stat-label">谷歌学术引用</div>
     </div>
     <div class="pub-stat">
-      <div class="pub-stat-number">14+</div>
-      <div class="pub-stat-label">Publications</div>
+      <div class="pub-stat-number">10+</div>
+      <div class="pub-stat-label">高水平论文</div>
     </div>
     <div class="pub-stat">
       <div class="pub-stat-number">11</div>
@@ -191,7 +191,7 @@ author_profile: true
     </div>
   </div>
   <a href="https://scholar.google.com/citations?user=D5kHbeAAAAAJ&hl=en" class="google-scholar-btn">
-    🎓 View Google Scholar Profile
+    🎓 查看谷歌学术主页
   </a>
 </div>
 
@@ -205,8 +205,8 @@ author_profile: true
   </div>
   <div class="pub-card-venue">Pattern Recognition, 2025</div>
   <div class="pub-card-meta">
-    <span class="pub-badge badge-citations">🆕 New</span>
-    <span class="pub-badge badge-venue">Journal</span>
+    <span class="pub-badge badge-citations">🆕 最新</span>
+    <span class="pub-badge badge-venue">期刊</span>
   </div>
 </div>
 
@@ -221,7 +221,7 @@ author_profile: true
   <div class="pub-card-venue">ACM CIKM 2024</div>
   <div class="pub-card-meta">
     <span class="pub-badge badge-citations">📖 1 Citation</span>
-    <span class="pub-badge badge-venue">Conference</span>
+    <span class="pub-badge badge-venue">会议</span>
   </div>
 </div>
 
@@ -231,8 +231,8 @@ author_profile: true
   </div>
   <div class="pub-card-venue">IEEE Sensors Journal, 2024</div>
   <div class="pub-card-meta">
-    <span class="pub-badge badge-citations">📖 13 Citations</span>
-    <span class="pub-badge badge-venue">Journal</span>
+    <span class="pub-badge badge-citations">📖 13 引用</span>
+    <span class="pub-badge badge-venue">期刊</span>
   </div>
 </div>
 
@@ -246,8 +246,8 @@ author_profile: true
   </div>
   <div class="pub-card-venue">Expert Systems with Applications, 2023</div>
   <div class="pub-card-meta">
-    <span class="pub-badge badge-citations">📖 16 Citations</span>
-    <span class="pub-badge badge-venue">Journal</span>
+    <span class="pub-badge badge-citations">📖 16 引用</span>
+    <span class="pub-badge badge-venue">期刊</span>
   </div>
 </div>
 
@@ -257,8 +257,8 @@ author_profile: true
   </div>
   <div class="pub-card-venue">IEEE Sensors Journal, 2023</div>
   <div class="pub-card-meta">
-    <span class="pub-badge badge-citations">📖 30 Citations</span>
-    <span class="pub-badge badge-venue">Journal</span>
+    <span class="pub-badge badge-citations">📖 30 引用</span>
+    <span class="pub-badge badge-venue">期刊</span>
   </div>
 </div>
 
@@ -272,8 +272,8 @@ author_profile: true
   </div>
   <div class="pub-card-venue">IEEE Transactions on Neural Networks and Learning Systems (TNNLS), 2022</div>
   <div class="pub-card-meta">
-    <span class="pub-badge badge-citations">📖 128 Citations</span>
-    <span class="pub-badge badge-venue">Top Journal</span>
+    <span class="pub-badge badge-citations">📖 128 引用</span>
+    <span class="pub-badge badge-venue">顶级期刊</span>
   </div>
 </div>
 
@@ -283,8 +283,8 @@ author_profile: true
   </div>
   <div class="pub-card-venue">Applied Soft Computing, 2022</div>
   <div class="pub-card-meta">
-    <span class="pub-badge badge-citations">📖 222 Citations</span>
-    <span class="pub-badge badge-venue">Journal</span>
+    <span class="pub-badge badge-citations">📖 222 引用</span>
+    <span class="pub-badge badge-venue">期刊</span>
   </div>
 </div>
 
@@ -298,8 +298,8 @@ author_profile: true
   </div>
   <div class="pub-card-venue">AIP Advances, 2021</div>
   <div class="pub-card-meta">
-    <span class="pub-badge badge-citations">📖 2 Citations</span>
-    <span class="pub-badge badge-venue">Journal</span>
+    <span class="pub-badge badge-citations">📖 2 引用</span>
+    <span class="pub-badge badge-venue">期刊</span>
   </div>
 </div>
 
@@ -309,8 +309,8 @@ author_profile: true
   </div>
   <div class="pub-card-venue">IEEE Sensors Journal, 2021</div>
   <div class="pub-card-meta">
-    <span class="pub-badge badge-citations">📖 22 Citations</span>
-    <span class="pub-badge badge-venue">Journal</span>
+    <span class="pub-badge badge-citations">📖 22 引用</span>
+    <span class="pub-badge badge-venue">期刊</span>
   </div>
 </div>
 
@@ -324,8 +324,8 @@ author_profile: true
   </div>
   <div class="pub-card-venue">IEEE Sensors Journal, 2020</div>
   <div class="pub-card-meta">
-    <span class="pub-badge badge-citations">📖 209 Citations</span>
-    <span class="pub-badge badge-venue">Journal</span>
+    <span class="pub-badge badge-citations">📖 209 引用</span>
+    <span class="pub-badge badge-venue">期刊</span>
   </div>
 </div>
 
@@ -335,8 +335,8 @@ author_profile: true
   </div>
   <div class="pub-card-venue">IEEE Sensors Journal, 2020</div>
   <div class="pub-card-meta">
-    <span class="pub-badge badge-citations">📖 158 Citations</span>
-    <span class="pub-badge badge-venue">Journal</span>
+    <span class="pub-badge badge-citations">📖 158 引用</span>
+    <span class="pub-badge badge-venue">期刊</span>
   </div>
 </div>
 
@@ -346,8 +346,8 @@ author_profile: true
   </div>
   <div class="pub-card-venue">IEEE Access, 2020</div>
   <div class="pub-card-meta">
-    <span class="pub-badge badge-citations">📖 47 Citations</span>
-    <span class="pub-badge badge-venue">Journal</span>
+    <span class="pub-badge badge-citations">📖 47 引用</span>
+    <span class="pub-badge badge-venue">期刊</span>
   </div>
 </div>
 
@@ -361,8 +361,8 @@ author_profile: true
   </div>
   <div class="pub-card-venue">AIP Advances, 2019</div>
   <div class="pub-card-meta">
-    <span class="pub-badge badge-citations">📖 35 Citations</span>
-    <span class="pub-badge badge-venue">Journal</span>
+    <span class="pub-badge badge-citations">📖 35 引用</span>
+    <span class="pub-badge badge-venue">期刊</span>
   </div>
 </div>
 
@@ -372,7 +372,7 @@ author_profile: true
   </div>
   <div class="pub-card-venue">IEEE Journal of Biomedical and Health Informatics (J-BHI), 2019</div>
   <div class="pub-card-meta">
-    <span class="pub-badge badge-citations">📖 16 Citations</span>
-    <span class="pub-badge badge-venue">Journal</span>
+    <span class="pub-badge badge-citations">📖 16 引用</span>
+    <span class="pub-badge badge-venue">期刊</span>
   </div>
 </div>

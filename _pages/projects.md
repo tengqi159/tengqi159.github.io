@@ -1,6 +1,6 @@
 ---
 layout: archive
-title: "Projects & Patents"
+title: "项目与专利"
 permalink: /projects/
 author_profile: true
 ---
@@ -72,30 +72,36 @@ author_profile: true
 </style>
 
 <div class="section-head">
-  🚀 科研项目 | Research Projects
+  🚀 科研项目
 </div>
 
 <div class="project-card">
-  <div class="project-title">National Key R&D Program of China</div>
-  <div class="project-role">Participant (参与)</div>
-  <p>Participated in major research tasks focusing on smart health and wearable computing technologies. Contributed to the development of deep learning models for human activity recognition.</p>
-  <p><strong>Keywords:</strong> Deep Learning, Smart Health, Wearable Sensors</p>
+  <div class="project-title">研究方向概览</div>
+  <div class="project-role">深度学习 · 可穿戴计算 · HAR · 主动健康</div>
+  <p>围绕人体活动识别与健康管理场景，开展算法模型、传感器融合与应用落地研究，服务于智能健康、医疗监测与公共健康管理。</p>
 </div>
 
 <div class="project-card">
-  <div class="project-title">Major Project of National Social Science Fund of China</div>
-  <div class="project-role">Participant (参与)</div>
-  <p>Involved in research concerning digital government and information management. Focused on data-driven decision making and intelligent public service systems.</p>
-  <p><strong>Keywords:</strong> Digital Government, Information Management, Public Service</p>
+  <div class="project-title">国家重点研发计划</div>
+  <div class="project-role">参与</div>
+  <p>聚焦智能健康与可穿戴计算关键技术，参与模型设计与算法优化，支撑人体活动识别与健康状态评估应用。</p>
+  <p><strong>关键词：</strong>深度学习、智能健康、可穿戴传感器</p>
+</div>
+
+<div class="project-card">
+  <div class="project-title">国家社科基金重大项目</div>
+  <div class="project-role">参与</div>
+  <p>面向数据驱动治理与智能公共服务场景，参与信息管理与决策支持相关研究。</p>
+  <p><strong>关键词：</strong>数字政府、信息管理、公共服务</p>
 </div>
 
 <div class="section-head">
-  💡 发明专利 | Patents
+  💡 发明专利
 </div>
 
 <div class="patent-card">
-  <strong>Note:</strong> Specific patent details are being updated.
+  <strong>专利概况：</strong>围绕可穿戴健康与人体活动识别方向，已参与多项发明专利申请与布局。
   <p style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">
-    Please refer to official patent databases or contact me for detailed disclosure of intellectual property.
+    详细清单与公开信息可在沟通后提供。
   </p>
 </div>

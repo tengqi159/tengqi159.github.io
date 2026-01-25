@@ -1,13 +1,17 @@
 ---
 layout: archive
 permalink: /year-archive/
-title: "Blog posts"
+title: "博客"
 author_profile: true
 redirect_from:
   - /wordpress/blog-posts/
 ---
 
 {% include base_path %}
+<div style="margin-bottom: 2rem; background: white; padding: 1.5rem; border-radius: 16px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); border: 1px solid #eee;">
+  <h3>📌 博客内容</h3>
+  <p>记录科研方法、可穿戴计算与人体活动识别的研究进展、代码实践与学生培养心得。</p>
+</div>
 {% capture written_year %}'None'{% endcapture %}
 {% for post in site.posts %}
   {% capture year %}{{ post.date | date: '%Y' }}{% endcapture %}

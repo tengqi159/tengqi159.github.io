@@ -1,6 +1,6 @@
 ---
 layout: archive
-title: "Curriculum Vitae"
+title: "简历"
 permalink: /cv/
 author_profile: true
 redirect_from:
@@ -135,56 +135,38 @@ redirect_from:
 
 {% include base_path %}
 
-<a href="https://github.com/tengqi159/tengqi.github.io/blob/main/CV.pdf" class="download-btn">📄 Download Full CV (PDF)</a>
+<a href="{{ base_path }}/简历.pdf" class="download-btn">📄 下载完整简历（PDF）</a>
 
 ---
 
-## 📊 Research Metrics
+## 📊 科研概况
 
 <div class="metrics-row">
   <div class="metric-card">
-    <div class="metric-number">900+</div>
-    <div class="metric-label">Total Citations</div>
+    <div class="metric-number">630+</div>
+    <div class="metric-label">谷歌学术引用</div>
   </div>
   <div class="metric-card">
     <div class="metric-number">11</div>
     <div class="metric-label">h-index</div>
   </div>
   <div class="metric-card">
-    <div class="metric-number">14+</div>
-    <div class="metric-label">Publications</div>
+    <div class="metric-number">10+</div>
+    <div class="metric-label">高水平论文</div>
   </div>
 </div>
 
 ---
 
 <div class="cv-section">
-<h2 class="cv-section-title">🎓 Education</h2>
+<h2 class="cv-section-title">💼 工作经历</h2>
 
 <div class="cv-item">
-  <div class="cv-item-title">Ph.D. in Information Science</div>
-  <div class="cv-item-org">Nanjing University, School of Information Management</div>
-  <div class="cv-item-date">September 2021 - June 2026</div>
+  <div class="cv-item-title">直聘副研究员</div>
+  <div class="cv-item-org">郑州大学 信息管理学院</div>
+  <div class="cv-item-date">2026.07 - 至今</div>
   <div class="cv-item-desc">
-    Advisor: Prof. Guangwei Hu<br/>
-    Research: Deep Learning for Human Activity Recognition
-  </div>
-</div>
-
-<!-- M.S. degree information omitted by request -->
-</div>
-
----
-
-<div class="cv-section">
-<h2 class="cv-section-title">💼 Professional Experience</h2>
-
-<div class="cv-item">
-  <div class="cv-item-title">Associate Research Fellow (直聘副研究员)</div>
-  <div class="cv-item-org">Zhengzhou University, School of Information Management</div>
-  <div class="cv-item-date">July 2026 - Present</div>
-  <div class="cv-item-desc">
-    Research focus: Deep Learning, Human Activity Recognition, Digital Government
+    研究方向：深度学习、人体活动识别、可穿戴计算与主动健康管理
   </div>
 </div>
 </div>
@@ -192,23 +174,23 @@ redirect_from:
 ---
 
 <div class="cv-section">
-<h2 class="cv-section-title">🔬 Research Interests</h2>
+<h2 class="cv-section-title">🔬 研究方向</h2>
 
 <ul>
-  <li><strong>Deep Learning</strong>: CNN architectures, attention mechanisms, neural network optimization</li>
-  <li><strong>Human Activity Recognition</strong>: Wearable sensor-based HAR, multimodal learning</li>
-  <li><strong>Time Series Analysis</strong>: Signal processing, temporal pattern recognition</li>
-  <li><strong>Digital Government</strong>: E-government, smart city, community services</li>
+  <li><strong>深度学习</strong>：模型设计、注意力机制、优化训练策略</li>
+  <li><strong>人体活动识别（HAR）</strong>：可穿戴传感器、多模态学习</li>
+  <li><strong>时序信号分析</strong>：信号处理、时序模式识别</li>
+  <li><strong>主动健康管理</strong>：智能健康评估与干预</li>
 </ul>
 </div>
 
 ---
 
 <div class="cv-section">
-<h2 class="cv-section-title">🛠️ Technical Skills</h2>
+<h2 class="cv-section-title">🛠️ 技术能力</h2>
 
 <div class="skill-category">
-  <div class="skill-category-title">Programming Languages</div>
+  <div class="skill-category-title">编程语言</div>
   <div class="skill-pills">
     <span class="skill-pill">Python</span>
     <span class="skill-pill">MATLAB</span>
@@ -218,7 +200,7 @@ redirect_from:
 </div>
 
 <div class="skill-category">
-  <div class="skill-category-title">Deep Learning Frameworks</div>
+  <div class="skill-category-title">深度学习框架</div>
   <div class="skill-pills">
     <span class="skill-pill">PyTorch</span>
     <span class="skill-pill">TensorFlow</span>
@@ -227,7 +209,7 @@ redirect_from:
 </div>
 
 <div class="skill-category">
-  <div class="skill-category-title">Data Science</div>
+  <div class="skill-category-title">数据分析</div>
   <div class="skill-pills">
     <span class="skill-pill">NumPy</span>
     <span class="skill-pill">Pandas</span>
@@ -238,7 +220,7 @@ redirect_from:
 </div>
 
 <div class="skill-category">
-  <div class="skill-category-title">Tools & Platforms</div>
+  <div class="skill-category-title">工具与平台</div>
   <div class="skill-pills">
     <span class="skill-pill">Git</span>
     <span class="skill-pill">Linux</span>
@@ -251,7 +233,7 @@ redirect_from:
 ---
 
 <div class="cv-section">
-<h2 class="cv-section-title">📚 Selected Publications</h2>
+<h2 class="cv-section-title">📚 代表论文</h2>
 
 <ul>{% for post in site.publications reversed %}
   {% include archive-single-cv.html %}
@@ -261,11 +243,11 @@ redirect_from:
 ---
 
 <div class="cv-section">
-<h2 class="cv-section-title">🏆 Awards & Honors</h2>
+<h2 class="cv-section-title">🏆 荣誉与奖励</h2>
 
 <div class="cv-item">
-  <div class="cv-item-title">Outstanding Graduate Student</div>
-  <div class="cv-item-org">Nanjing University</div>
+  <div class="cv-item-title">优秀研究生</div>
+  <div class="cv-item-org">南京大学</div>
   <div class="cv-item-date">2026</div>
 </div>
 </div>
@@ -273,10 +255,10 @@ redirect_from:
 ---
 
 <div class="cv-section">
-<h2 class="cv-section-title">📬 Academic Service</h2>
+<h2 class="cv-section-title">📬 学术服务</h2>
 
 <ul>
-  <li><strong>Journal Reviewer</strong>: IEEE Sensors Journal, IEEE Access, Applied Soft Computing</li>
-  <li><strong>Conference Reviewer</strong>: ACM CIKM, IEEE SENSORS</li>
+  <li><strong>期刊审稿</strong>：IEEE Sensors Journal、IEEE Access、Applied Soft Computing</li>
+  <li><strong>会议审稿</strong>：ACM CIKM、IEEE SENSORS</li>
 </ul>
 </div>
