@@ -70,6 +70,42 @@ body {
   text-decoration: none;
 }
 
+/* --- Navigation Menu Overrides (Force Visible) --- */
+.nav__list {
+  display: block !important;
+}
+
+.nav__list .nav__items {
+  display: block !important;
+  visibility: visible !important;
+  max-height: none !important;
+  opacity: 1 !important;
+}
+
+/* Hide the hamburger button since we force the menu open */
+.greedy-nav__toggle {
+  display: none !important;
+}
+
+/* Sidebar styling improvements */
+.sidebar {
+  opacity: 1;
+  transform: none;
+  visibility: visible;
+  padding-top: 1em;
+}
+
+/* Fix mobile/tablet view sidebar visibility */
+@media (max-width: 64em) {
+  .sidebar {
+    position: relative;
+    top: 0;
+    width: 100%;
+    max-width: none;
+    margin-bottom: 2rem;
+  }
+}
+
 /* --- Navigation Menu (Top/Side) --- */
 .nav__list .nav__items {
   padding: 0;
