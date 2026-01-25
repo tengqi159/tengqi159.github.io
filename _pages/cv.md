@@ -159,6 +159,21 @@ redirect_from:
 ---
 
 <div class="cv-section">
+<h2 class="cv-section-title">🎓 教育经历</h2>
+
+<div class="cv-item">
+  <div class="cv-item-title">博士研究生</div>
+  <div class="cv-item-org">南京大学 信息管理学院</div>
+  <div class="cv-item-date">2026.06 毕业</div>
+  <div class="cv-item-desc">
+    研究方向：深度学习、可穿戴计算、人体活动识别（HAR）
+  </div>
+</div>
+</div>
+
+---
+
+<div class="cv-section">
 <h2 class="cv-section-title">💼 工作经历</h2>
 
 <div class="cv-item">

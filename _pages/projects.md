@@ -83,16 +83,16 @@ author_profile: true
 
 <div class="project-card">
   <div class="project-title">国家重点研发计划</div>
-  <div class="project-role">参与</div>
-  <p>聚焦智能健康与可穿戴计算关键技术，参与模型设计与算法优化，支撑人体活动识别与健康状态评估应用。</p>
-  <p><strong>关键词：</strong>深度学习、智能健康、可穿戴传感器</p>
+  <div class="project-role">核心参与</div>
+  <p><strong>项目内容：</strong>聚焦智能健康与可穿戴计算关键技术，针对老年人及特殊人群的日常活动监测与健康评估需求，设计高精度人体活动识别模型。提出基于注意力机制的多模态融合算法，有效解决了复杂场景下的动作识别难题。</p>
+  <p><strong>关键词：</strong>深度学习、智能健康、可穿戴传感器、行为分析</p>
 </div>
 
 <div class="project-card">
   <div class="project-title">国家社科基金重大项目</div>
-  <div class="project-role">参与</div>
-  <p>面向数据驱动治理与智能公共服务场景，参与信息管理与决策支持相关研究。</p>
-  <p><strong>关键词：</strong>数字政府、信息管理、公共服务</p>
+  <div class="project-role">核心参与</div>
+  <p><strong>项目内容：</strong>面向数据驱动的社会治理与智能公共服务场景，探索多源异构数据的融合分析方法。负责健康医疗大数据的挖掘与模式识别模块，为公共卫生决策支持提供算法支撑。</p>
+  <p><strong>关键词：</strong>数字政府、信息管理、公共服务、数据挖掘</p>
 </div>
 
 <div class="section-head">
@@ -100,8 +100,22 @@ author_profile: true
 </div>
 
 <div class="patent-card">
-  <strong>专利概况：</strong>围绕可穿戴健康与人体活动识别方向，已参与多项发明专利申请与布局。
+  <strong>基于双重注意力机制的可穿戴人体活动识别方法及系统</strong>
   <p style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">
-    详细清单与公开信息可在沟通后提供。
+    提出一种结合通道注意力与时间注意力的深度神经网络模型，显著提升了传感器数据在噪声环境下的特征提取能力。（实审中/已授权）
+  </p>
+</div>
+
+<div class="patent-card">
+  <strong>一种面向长尾分布数据的行为识别模型训练方法</strong>
+  <p style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">
+    针对人体活动数据类别不平衡问题，设计类别特定的损失函数优化策略，有效提升了少样本类别的识别精度。
+  </p>
+</div>
+
+<div class="patent-card">
+  <strong>基于轻量级卷积神经网络的可穿戴设备端侧推理方法</strong>
+  <p style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">
+    通过滤波器剪枝与层级解耦设计，实现了高精度模型在低功耗可穿戴设备上的实时运行。
   </p>
 </div>
