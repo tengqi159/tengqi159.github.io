@@ -377,7 +377,7 @@ body {
 
   <div class="pub-highlight">
     <div class="pub-title">DanHAR: Dual Attention Network for Multimodal Human Activity Recognition Using Wearable Sensors</div>
-    <div class="pub-venue">Applied Soft Computing, 2022</div>
+    <div class="pub-venue">Applied Soft Computing, 2021</div>
     <span class="pub-stats-badge">🔥 222 Citations</span>
   </div>
 
@@ -388,9 +388,9 @@ body {
   </div>
 
   <div class="pub-highlight">
-    <div class="pub-title">Triple Cross-Domain Attention on Human Activity Recognition Using Wearable Sensors</div>
-    <div class="pub-venue">IEEE TNNLS, 2022</div>
-    <span class="pub-stats-badge">⭐ 128 Citations</span>
+    <div class="pub-title">Layer-Wise Training Convolutional Neural Networks with Smaller Filters for Human Activity Recognition Using Wearable Sensors</div>
+    <div class="pub-venue">IEEE Sensors Journal, 2020</div>
+    <span class="pub-stats-badge">⭐ 158 Citations</span>
   </div>
 
 </div>

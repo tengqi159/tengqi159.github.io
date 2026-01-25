@@ -61,18 +61,6 @@ author_profile: true
   color: white !important;
 }
 
-.year-section {
-  margin: 2rem 0;
-}
-
-.year-title {
-  font-size: 1.5rem;
-  color: #667eea;
-  border-bottom: 2px solid #667eea;
-  padding-bottom: 0.5rem;
-  margin-bottom: 1.5rem;
-}
-
 .pub-card {
   background: white;
   border: 1px solid #eee;
@@ -107,15 +95,6 @@ author_profile: true
   padding-left: 0.5rem;
 }
 
-.pub-card-title a {
-  color: #333;
-  text-decoration: none;
-}
-
-.pub-card-title a:hover {
-  color: #667eea;
-}
-
 .pub-card-venue {
   color: #666;
   font-style: italic;
@@ -148,30 +127,6 @@ author_profile: true
   background: #f0f0f0;
   color: #555;
 }
-
-.filter-bar {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-  margin-bottom: 2rem;
-  justify-content: center;
-}
-
-.filter-btn {
-  padding: 0.5rem 1rem;
-  border: 2px solid #667eea;
-  border-radius: 25px;
-  background: white;
-  color: #667eea;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 0.9rem;
-}
-
-.filter-btn:hover, .filter-btn.active {
-  background: #667eea;
-  color: white;
-}
 </style>
 
 <div class="pub-header">
@@ -201,7 +156,18 @@ author_profile: true
 
 <div class="pub-card">
   <div class="pub-card-title">
-    <a href="/publication/2025-dual-stagewise">Dual Stage-Wise Decoupling Networks for Long-Tailed Activity Recognition Using Wearable Sensors</a>
+    CSFO: A Category-Specific Flattening Optimization Method for Sensor-Based Long-Tailed Activity Recognition
+  </div>
+  <div class="pub-card-venue">IEEE Sensors Journal, 2025</div>
+  <div class="pub-card-meta">
+    <span class="pub-badge badge-citations">🆕 最新</span>
+    <span class="pub-badge badge-venue">期刊</span>
+  </div>
+</div>
+
+<div class="pub-card">
+  <div class="pub-card-title">
+    Dual Stage-Wise Decoupling Networks for Long-Tailed Activity Recognition Using Wearable Sensors
   </div>
   <div class="pub-card-venue">Pattern Recognition, 2025</div>
   <div class="pub-card-meta">
@@ -216,18 +182,18 @@ author_profile: true
 
 <div class="pub-card">
   <div class="pub-card-title">
-    <a href="/publication/2024-csfo">CSFO: A Category-Specific Flattening Optimization Method for Sensor-Based Long-Tailed Activity Recognition</a>
+    Innovative dual-decoupling CNN with layer-wise temporal-spatial attention for sensor-based human activity recognition
   </div>
-  <div class="pub-card-venue">ACM CIKM 2024</div>
+  <div class="pub-card-venue">IEEE Journal of Biomedical and Health Informatics, 2024</div>
   <div class="pub-card-meta">
-    <span class="pub-badge badge-citations">📖 1 Citation</span>
-    <span class="pub-badge badge-venue">会议</span>
+    <span class="pub-badge badge-citations">📖 16 引用</span>
+    <span class="pub-badge badge-venue">期刊</span>
   </div>
 </div>
 
 <div class="pub-card">
   <div class="pub-card-title">
-    <a href="/publication/2024-lrfa">Large Receptive Field Attention: An Innovation in Decomposing Large-Kernel Convolution for Sensor-Based Activity Recognition</a>
+    Large receptive field attention: An innovation in decomposing large-kernel convolution for sensor-based activity recognition
   </div>
   <div class="pub-card-venue">IEEE Sensors Journal, 2024</div>
   <div class="pub-card-meta">
@@ -242,20 +208,9 @@ author_profile: true
 
 <div class="pub-card">
   <div class="pub-card-title">
-    <a href="/publication/2023-dual-decoupling">Innovative Dual-Decoupling CNN with Layer-Wise Temporal-Spatial Attention for Sensor-Based Human Activity Recognition</a>
+    RepHAR: Decoupling networks with accuracy-speed tradeoff for sensor-based human activity recognition
   </div>
-  <div class="pub-card-venue">Expert Systems with Applications, 2023</div>
-  <div class="pub-card-meta">
-    <span class="pub-badge badge-citations">📖 16 引用</span>
-    <span class="pub-badge badge-venue">期刊</span>
-  </div>
-</div>
-
-<div class="pub-card">
-  <div class="pub-card-title">
-    <a href="/publication/2023-rephar">RepHAR: Decoupling Networks with Accuracy-Speed Tradeoff for Sensor-Based Human Activity Recognition</a>
-  </div>
-  <div class="pub-card-venue">IEEE Sensors Journal, 2023</div>
+  <div class="pub-card-venue">IEEE Transactions on Instrumentation and Measurement, 2023</div>
   <div class="pub-card-meta">
     <span class="pub-badge badge-citations">📖 30 引用</span>
     <span class="pub-badge badge-venue">期刊</span>
@@ -268,22 +223,11 @@ author_profile: true
 
 <div class="pub-card">
   <div class="pub-card-title">
-    <a href="/publication/2022-triple-attention">Triple Cross-Domain Attention on Human Activity Recognition Using Wearable Sensors</a>
+    Triple cross-domain attention on human activity recognition using wearable sensors
   </div>
-  <div class="pub-card-venue">IEEE Transactions on Neural Networks and Learning Systems (TNNLS), 2022</div>
+  <div class="pub-card-venue">IEEE Transactions on Emerging Topics in Computational Intelligence, 2022</div>
   <div class="pub-card-meta">
     <span class="pub-badge badge-citations">📖 128 引用</span>
-    <span class="pub-badge badge-venue">顶级期刊</span>
-  </div>
-</div>
-
-<div class="pub-card">
-  <div class="pub-card-title">
-    <a href="/publication/2022-danhar">DanHAR: Dual Attention Network for Multimodal Human Activity Recognition Using Wearable Sensors</a>
-  </div>
-  <div class="pub-card-venue">Applied Soft Computing, 2022</div>
-  <div class="pub-card-meta">
-    <span class="pub-badge badge-citations">📖 222 引用</span>
     <span class="pub-badge badge-venue">期刊</span>
   </div>
 </div>
@@ -294,18 +238,29 @@ author_profile: true
 
 <div class="pub-card">
   <div class="pub-card-title">
-    <a href="/publication/2021-attention-governing">Data Driven Governing Equations Approximations Using Attention Based Multistep Neural Networks</a>
+    DanHAR: Dual attention network for multimodal human activity recognition using wearable sensors
   </div>
-  <div class="pub-card-venue">AIP Advances, 2021</div>
+  <div class="pub-card-venue">Applied Soft Computing, 2021</div>
   <div class="pub-card-meta">
-    <span class="pub-badge badge-citations">📖 2 引用</span>
+    <span class="pub-badge badge-citations">🔥 222 引用</span>
     <span class="pub-badge badge-venue">期刊</span>
   </div>
 </div>
 
 <div class="pub-card">
   <div class="pub-card-title">
-    <a href="/publication/2021-blockwise">Block-Wise Training Residual Networks on Multi-Channel Time Series for Human Activity Recognition</a>
+    The convolutional neural networks training with channel-selectivity for human activity recognition based on sensors
+  </div>
+  <div class="pub-card-venue">IEEE Journal of Biomedical and Health Informatics, 2021</div>
+  <div class="pub-card-meta">
+    <span class="pub-badge badge-citations">📖 47 引用</span>
+    <span class="pub-badge badge-venue">期刊</span>
+  </div>
+</div>
+
+<div class="pub-card">
+  <div class="pub-card-title">
+    Block-wise training residual networks on multi-channel time series for human activity recognition
   </div>
   <div class="pub-card-venue">IEEE Sensors Journal, 2021</div>
   <div class="pub-card-meta">
@@ -320,33 +275,33 @@ author_profile: true
 
 <div class="pub-card">
   <div class="pub-card-title">
-    <a href="/publication/2020-layerwise-local-loss">The Layer-Wise Training Convolutional Neural Networks Using Local Loss for Sensor-Based Human Activity Recognition</a>
+    The layer-wise training convolutional neural networks using local loss for sensor-based human activity recognition
   </div>
   <div class="pub-card-venue">IEEE Sensors Journal, 2020</div>
   <div class="pub-card-meta">
-    <span class="pub-badge badge-citations">📖 209 引用</span>
+    <span class="pub-badge badge-citations">📌 209 引用</span>
     <span class="pub-badge badge-venue">期刊</span>
   </div>
 </div>
 
 <div class="pub-card">
   <div class="pub-card-title">
-    <a href="/publication/2020-smaller-filters">Layer-Wise Training Convolutional Neural Networks with Smaller Filters for Human Activity Recognition Using Wearable Sensors</a>
+    Layer-wise training convolutional neural networks with smaller filters for human activity recognition using wearable sensors
   </div>
   <div class="pub-card-venue">IEEE Sensors Journal, 2020</div>
   <div class="pub-card-meta">
-    <span class="pub-badge badge-citations">📖 158 引用</span>
+    <span class="pub-badge badge-citations">⭐ 158 引用</span>
     <span class="pub-badge badge-venue">期刊</span>
   </div>
 </div>
 
 <div class="pub-card">
   <div class="pub-card-title">
-    <a href="/publication/2020-channel-selectivity">The Convolutional Neural Networks Training with Channel-Selectivity for Human Activity Recognition Based on Sensors</a>
+    Data driven governing equations approximations using attention based multistep neural networks
   </div>
-  <div class="pub-card-venue">IEEE Access, 2020</div>
+  <div class="pub-card-venue">AIP Advances, 2020</div>
   <div class="pub-card-meta">
-    <span class="pub-badge badge-citations">📖 47 引用</span>
+    <span class="pub-badge badge-citations">📖 2 引用</span>
     <span class="pub-badge badge-venue">期刊</span>
   </div>
 </div>
@@ -357,22 +312,11 @@ author_profile: true
 
 <div class="pub-card">
   <div class="pub-card-title">
-    <a href="/publication/2019-cldnn">Data Driven Nonlinear Dynamical Systems Identification Using Multi-Step CLDNN</a>
+    Data driven nonlinear dynamical systems identification using multi-step CLDNN
   </div>
   <div class="pub-card-venue">AIP Advances, 2019</div>
   <div class="pub-card-meta">
     <span class="pub-badge badge-citations">📖 35 引用</span>
-    <span class="pub-badge badge-venue">期刊</span>
-  </div>
-</div>
-
-<div class="pub-card">
-  <div class="pub-card-title">
-    <a href="/publication/2019-efficient-cnn">Efficient Convolutional Neural Networks with Smaller Filters for Human Activity Recognition Using Wearable Sensors</a>
-  </div>
-  <div class="pub-card-venue">IEEE Journal of Biomedical and Health Informatics (J-BHI), 2019</div>
-  <div class="pub-card-meta">
-    <span class="pub-badge badge-citations">📖 16 引用</span>
     <span class="pub-badge badge-venue">期刊</span>
   </div>
 </div>
