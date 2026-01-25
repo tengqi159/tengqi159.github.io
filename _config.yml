@@ -7,10 +7,10 @@
 
 # Site Settings
 locale                   : "en-US"
-title                    : "Dr. Qi Teng | 滕琦"
+title                    : "Dr. Qi Teng | 滕起"
 title_separator          : "-"
-name                     : &name "Dr. Qi Teng (滕琦)"
-description              : &description "Associate Research Fellow at Zhengzhou University | Deep Learning & Human Activity Recognition Researcher | 900+ Citations"
+name                     : &name "Dr. Qi Teng (滕起)"
+description              : &description "Associate Research Fellow at Zhengzhou University | Deep Learning & Human Activity Recognition Researcher | 630+ Citations"
 url                      : https://tengqi159.github.io/tengqi.github.io/ # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
 repository               : "tengqi159/tengqi.github.io"

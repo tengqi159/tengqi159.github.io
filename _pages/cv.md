@@ -171,15 +171,7 @@ redirect_from:
   </div>
 </div>
 
-<div class="cv-item">
-  <div class="cv-item-title">M.S. in Computer Science</div>
-  <div class="cv-item-org">Nanjing Normal University</div>
-  <div class="cv-item-date">September 2018 - June 2021</div>
-  <div class="cv-item-desc">
-    Advisor: Prof. Lei Zhang<br/>
-    Research: Neural Networks for Time Series Analysis
-  </div>
-</div>
+<!-- M.S. degree information omitted by request -->
 </div>
 
 ---

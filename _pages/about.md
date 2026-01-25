@@ -9,287 +9,281 @@ redirect_from:
 ---
 
 <style>
-/* Hero Section */
+/* Modern Gradient Background */
+body {
+  background: #f0f2f5;
+}
+
+/* Hero Section with Glassmorphism */
 .hero-section {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 3rem 2rem;
-  border-radius: 16px;
-  margin-bottom: 2rem;
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  padding: 3.5rem 2rem;
+  border-radius: 20px;
+  margin-bottom: 2.5rem;
   color: white;
   text-align: center;
-  box-shadow: 0 20px 60px rgba(102, 126, 234, 0.3);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 80%);
+  animation: pulse 15s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
 }
 
 .hero-section h1 {
-  font-size: 2.5rem;
+  font-size: 3rem;
   margin-bottom: 0.5rem;
-  font-weight: 700;
+  font-weight: 800;
+  letter-spacing: -1px;
+  position: relative;
+  z-index: 1;
 }
 
 .hero-section .subtitle {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   opacity: 0.95;
-  margin-bottom: 1rem;
-}
-
-.hero-section .tagline {
-  font-size: 1rem;
-  opacity: 0.85;
+  margin-bottom: 1.5rem;
+  font-weight: 300;
+  position: relative;
+  z-index: 1;
 }
 
 /* Stats Cards */
 .stats-container {
   display: flex;
   justify-content: center;
-  gap: 2rem;
-  margin-top: 1.5rem;
+  gap: 1.5rem;
+  margin-top: 2rem;
   flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
 }
 
 .stat-card {
-  background: rgba(255,255,255,0.15);
-  backdrop-filter: blur(10px);
-  padding: 1rem 1.5rem;
-  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 1.2rem 2rem;
+  border-radius: 16px;
   text-align: center;
-  min-width: 120px;
+  min-width: 140px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .stat-card .number {
-  font-size: 1.8rem;
+  font-size: 2rem;
   font-weight: 700;
+  color: #fff;
 }
 
 .stat-card .label {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   opacity: 0.9;
+  color: #e0e0e0;
 }
 
-/* Section Styling */
-.section-title {
-  font-size: 1.5rem;
-  color: #333;
-  margin: 2rem 0 1rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 3px solid #667eea;
-  display: inline-block;
+/* Admissions Card - COOL ANIMATION */
+.admissions-card {
+  background: white;
+  border-radius: 20px;
+  padding: 2.5rem;
+  margin: 3rem 0;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 15px 50px rgba(30, 60, 114, 0.15);
+  border: 1px solid rgba(30, 60, 114, 0.1);
+}
+
+.admissions-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(90deg, #1e3c72, #2a5298, #6dd5ed);
+}
+
+.admissions-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e3c72;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.admissions-content {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #444;
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border-left: 5px solid #2a5298;
+}
+
+.highlight-text {
+  color: #1e3c72;
+  font-weight: 600;
 }
 
 /* Info Cards */
 .info-card {
-  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+  background: white;
   padding: 1.5rem;
-  border-radius: 12px;
+  border-radius: 16px;
   margin-bottom: 1.5rem;
-  border-left: 4px solid #667eea;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+  border: 1px solid #eee;
 }
 
 .info-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+  border-color: #1e3c72;
 }
 
 .info-card h3 {
   margin: 0 0 0.5rem;
-  color: #333;
-  font-size: 1.1rem;
+  color: #1e3c72;
+  font-size: 1.2rem;
+  font-weight: 600;
 }
 
 .info-card p {
   margin: 0;
-  color: #666;
-}
-
-.info-card .date {
-  font-size: 0.85rem;
-  color: #888;
+  color: #555;
+  font-size: 1.05rem;
 }
 
 /* Research Areas */
 .research-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  margin: 1rem 0;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.2rem;
+  margin: 1.5rem 0;
 }
 
 .research-item {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 1rem;
-  border-radius: 10px;
+  background: white;
+  color: #1e3c72;
+  padding: 1.2rem;
+  border-radius: 12px;
   text-align: center;
-  font-weight: 500;
-  transition: transform 0.3s ease;
-  cursor: default;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  border: 2px solid transparent;
 }
 
 .research-item:hover {
-  transform: scale(1.05);
+  transform: translateY(-5px);
+  border-color: #1e3c72;
+  color: #1e3c72;
+  box-shadow: 0 10px 25px rgba(30, 60, 114, 0.15);
+}
+
+/* Section Title */
+.section-title {
+  font-size: 1.8rem;
+  color: #1e3c72;
+  margin: 3rem 0 1.5rem;
+  padding-bottom: 0.5rem;
+  font-weight: 700;
+  position: relative;
+  display: inline-block;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60%;
+  height: 4px;
+  background: #2a5298;
+  border-radius: 2px;
 }
 
 /* Publication Highlights */
 .pub-highlight {
   background: white;
-  border: 1px solid #eee;
-  padding: 1.2rem;
-  border-radius: 10px;
-  margin-bottom: 1rem;
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 1.2rem;
   transition: all 0.3s ease;
   position: relative;
-  overflow: hidden;
-}
-
-.pub-highlight::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 4px;
-  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+  border: 1px solid #f0f0f0;
 }
 
 .pub-highlight:hover {
-  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-  transform: translateX(5px);
+  transform: translateX(10px);
+  border-left: 5px solid #1e3c72;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
 }
 
 .pub-title {
   font-weight: 600;
   color: #333;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
 }
 
 .pub-venue {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   color: #666;
   font-style: italic;
-}
-
-.pub-citations {
-  display: inline-block;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 0.2rem 0.6rem;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  margin-top: 0.5rem;
-}
-
-/* Skills */
-.skill-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin: 1rem 0;
-}
-
-.skill-tag {
-  background: #f0f0f0;
-  padding: 0.4rem 0.8rem;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  color: #555;
-  transition: all 0.3s ease;
-}
-
-.skill-tag:hover {
-  background: #667eea;
-  color: white;
-}
-
-/* Collaborator Cards */
-.collab-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 1.5rem;
-  margin: 1.5rem 0;
-}
-
-.collab-card {
-  text-align: center;
-  padding: 1rem;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-  transition: transform 0.3s ease;
-}
-
-.collab-card:hover {
-  transform: translateY(-5px);
-}
-
-.collab-card img {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid #667eea;
   margin-bottom: 0.5rem;
 }
 
-.collab-card .name {
+.pub-stats-badge {
+  display: inline-block;
+  background: #e3f2fd;
+  color: #1565c0;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
   font-weight: 600;
-  color: #333;
-  font-size: 0.9rem;
-}
-
-.collab-card .affiliation {
-  font-size: 0.75rem;
-  color: #888;
-}
-
-/* Visitor Map */
-.map-container {
-  text-align: center;
-  margin: 2rem 0;
-  padding: 1.5rem;
-  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
-  border-radius: 12px;
-}
-
-/* News Section */
-.news-item {
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 1rem;
-  padding: 0.8rem;
-  background: #fafafa;
-  border-radius: 8px;
-}
-
-.news-date {
-  background: #667eea;
-  color: white;
-  padding: 0.3rem 0.6rem;
-  border-radius: 6px;
-  font-size: 0.75rem;
-  margin-right: 1rem;
-  white-space: nowrap;
-}
-
-.news-content {
-  color: #555;
-  font-size: 0.9rem;
 }
 </style>
 
 <!-- Hero Section -->
 <div class="hero-section">
-  <h1>👋 Welcome!</h1>
-  <p class="subtitle">I'm <strong>Dr. Qi Teng (滕琦)</strong></p>
-  <p class="tagline">Associate Research Fellow @ Zhengzhou University</p>
+  <h1>Dr. Qi Teng (滕起)</h1>
+  <p class="subtitle">Associate Research Fellow @ Zhengzhou University</p>
   
   <div class="stats-container">
     <div class="stat-card">
-      <div class="number">900+</div>
+      <div class="number">630+</div>
       <div class="label">Citations</div>
     </div>
     <div class="stat-card">
       <div class="number">14+</div>
-      <div class="label">Publications</div>
+      <div class="label">Papers</div>
     </div>
     <div class="stat-card">
       <div class="number">11</div>
@@ -298,180 +292,101 @@ redirect_from:
   </div>
 </div>
 
-<!-- About Me -->
-<h2 class="section-title">📖 About Me</h2>
-
-I am an **Associate Research Fellow (直聘副研究员)** at the [School of Information Management, Zhengzhou University](http://www5.zzu.edu.cn/glxy/). I received my Ph.D. degree from [Nanjing University](https://www.nju.edu.cn/) in June 2026, supervised by [Prof. Guangwei Hu](https://im.nju.edu.cn/hgw/list.htm).
-
-My research focuses on **Deep Learning for Human Activity Recognition (HAR)** using wearable sensors, with applications in smart healthcare, digital government, and intelligent community services.
-
----
-
-<!-- Education -->
-<h2 class="section-title">🎓 Education</h2>
-
-<div class="info-card">
-  <h3>🏛️ Ph.D. in Information Science</h3>
-  <p><strong>Nanjing University</strong>, School of Information Management</p>
-  <p class="date">Sep 2021 - Jun 2026</p>
+<!-- Admissions / Recruitment Section (Top Priority) -->
+<div class="admissions-card">
+  <div class="admissions-title">
+    👋 招生信息 | Prospective Students
+  </div>
+  <div class="admissions-content">
+    <p><strong>滕起</strong>，南京大学博士，直聘副研究员。主要从事<strong>深度学习、可穿戴计算、人体活动识别（HAR）及主动健康管理</strong>等领域的研究。</p>
+    
+    <p>近年来在 <span class="highlight-text">IEEE JBHI、IEEE TIM、IEEE TIE</span> 等国际权威期刊发表高水平论文10余篇，谷歌学术引用630余次。参与国家重点研发计划及社科基金重大项目多项。担任 IEEE TIM, Scientific Reports, Pattern Recognition 等期刊审稿人。</p>
+    
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 1.5rem 0;">
+    
+    <p>🎓 <strong>招生对象：</strong></p>
+    <ul>
+      <li>欢迎感兴趣的<strong>零基础且踏实勤奋</strong>的同学报名。</li>
+      <li>更欢迎具有<strong>编程（Python/PyTorch）或数学基础</strong>，对人工智能与健康医疗交叉领域感兴趣的同学报考。</li>
+    </ul>
+    
+    <p>💡 <strong>我的承诺：</strong></p>
+    <p>我的学业导师职责就是将指导你一步步撰写 <span class="highlight-text">SCIE/SSCI 学术论文</span>，为<strong>保研升学、互联网大厂就业、学术研究</strong>打下坚实基础。</p>
+    
+    <div style="text-align: center; margin-top: 2rem;">
+      <a href="mailto:teqi159@gmail.com" style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; padding: 1rem 3rem; border-radius: 50px; text-decoration: none; font-weight: 600; box-shadow: 0 10px 20px rgba(30, 60, 114, 0.3); transition: all 0.3s ease; display: inline-block;">
+        📧 联系我 / Contact Me
+      </a>
+    </div>
+  </div>
 </div>
 
-<div class="info-card">
-  <h3>📚 M.S. in Computer Science</h3>
-  <p><strong>Nanjing Normal University</strong></p>
-  <p class="date">Sep 2018 - Jun 2021</p>
+<div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+
+<!-- Left Column -->
+<div style="flex: 2; min-width: 300px;">
+
+  <!-- Research Interests -->
+  <h2 class="section-title">🔬 研究方向 | Research</h2>
+  <div class="research-grid">
+    <div class="research-item">🤖 Deep Learning</div>
+    <div class="research-item">⌚ Wearable Computing</div>
+    <div class="research-item">🏃 Activity Recognition</div>
+    <div class="research-item">🏥 Smart Health</div>
+  </div>
+
+  <!-- Selected Publications -->
+  <h2 class="section-title">📚 代表作 | Selected Papers</h2>
+
+  <div class="pub-highlight">
+    <div class="pub-title">DanHAR: Dual Attention Network for Multimodal Human Activity Recognition Using Wearable Sensors</div>
+    <div class="pub-venue">Applied Soft Computing, 2022</div>
+    <span class="pub-stats-badge">🔥 222 Citations</span>
+  </div>
+
+  <div class="pub-highlight">
+    <div class="pub-title">The Layer-Wise Training Convolutional Neural Networks Using Local Loss for Sensor-Based Human Activity Recognition</div>
+    <div class="pub-venue">IEEE Sensors Journal, 2020</div>
+    <span class="pub-stats-badge">📌 209 Citations</span>
+  </div>
+
+  <div class="pub-highlight">
+    <div class="pub-title">Triple Cross-Domain Attention on Human Activity Recognition Using Wearable Sensors</div>
+    <div class="pub-venue">IEEE TNNLS, 2022</div>
+    <span class="pub-stats-badge">⭐ 128 Citations</span>
+  </div>
+
 </div>
 
----
+<!-- Right Column -->
+<div style="flex: 1; min-width: 250px;">
 
-<!-- Current Position -->
-<h2 class="section-title">💼 Current Position</h2>
-
-<div class="info-card">
-  <h3>🔬 Associate Research Fellow (直聘副研究员)</h3>
-  <p><strong>Zhengzhou University</strong>, School of Information Management</p>
-  <p class="date">Jul 2026 - Present</p>
-</div>
-
----
-
-<!-- Research Interests -->
-<h2 class="section-title">🔬 Research Interests</h2>
-
-<div class="research-grid">
-  <div class="research-item">🤖 Deep Learning</div>
-  <div class="research-item">⌚ Wearable Computing</div>
-  <div class="research-item">🏃 Human Activity Recognition</div>
-  <div class="research-item">🏛️ Digital Government</div>
-  <div class="research-item">📊 Time Series Analysis</div>
-  <div class="research-item">🧠 Attention Mechanisms</div>
-</div>
-
----
-
-<!-- Selected Publications -->
-<h2 class="section-title">📚 Selected Publications</h2>
-
-<div class="pub-highlight">
-  <div class="pub-title">DanHAR: Dual Attention Network for Multimodal Human Activity Recognition Using Wearable Sensors</div>
-  <div class="pub-venue">Applied Soft Computing, 2022</div>
-  <span class="pub-citations">📖 222 Citations</span>
-</div>
-
-<div class="pub-highlight">
-  <div class="pub-title">The Layer-Wise Training Convolutional Neural Networks Using Local Loss for Sensor-Based Human Activity Recognition</div>
-  <div class="pub-venue">IEEE Sensors Journal, 2020</div>
-  <span class="pub-citations">📖 209 Citations</span>
-</div>
-
-<div class="pub-highlight">
-  <div class="pub-title">Layer-Wise Training Convolutional Neural Networks with Smaller Filters for Human Activity Recognition Using Wearable Sensors</div>
-  <div class="pub-venue">IEEE Sensors Journal, 2020</div>
-  <span class="pub-citations">📖 158 Citations</span>
-</div>
-
-<div class="pub-highlight">
-  <div class="pub-title">Triple Cross-Domain Attention on Human Activity Recognition Using Wearable Sensors</div>
-  <div class="pub-venue">IEEE TNNLS, 2022</div>
-  <span class="pub-citations">📖 128 Citations</span>
-</div>
-
-<p style="text-align: center; margin-top: 1.5rem;">
-  <a href="/publications/" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 0.8rem 2rem; border-radius: 30px; text-decoration: none; font-weight: 600; display: inline-block; transition: transform 0.3s ease;">View All Publications →</a>
-</p>
-
----
-
-<!-- Skills -->
-<h2 class="section-title">🛠️ Technical Skills</h2>
-
-<div class="skill-tags">
-  <span class="skill-tag">Python</span>
-  <span class="skill-tag">PyTorch</span>
-  <span class="skill-tag">TensorFlow</span>
-  <span class="skill-tag">Keras</span>
-  <span class="skill-tag">NumPy</span>
-  <span class="skill-tag">Pandas</span>
-  <span class="skill-tag">Scikit-learn</span>
-  <span class="skill-tag">MATLAB</span>
-  <span class="skill-tag">Deep Learning</span>
-  <span class="skill-tag">Time Series Analysis</span>
-  <span class="skill-tag">Signal Processing</span>
-</div>
-
----
-
-<!-- Collaborators -->
-<h2 class="section-title">🤝 Research Advisors & Collaborators</h2>
-
-<div class="collab-grid">
-  <div class="collab-card">
-    <a href="https://im.nju.edu.cn/hgw/list.htm">
-      <img src="huangwei.png" alt="Guangwei Hu"/>
-      <div class="name">Guangwei Hu</div>
-      <div class="affiliation">Professor, NJU</div>
-    </a>
+  <!-- Education (Only Ph.D as requested) -->
+  <h2 class="section-title">🎓 学历 | Education</h2>
+  <div class="info-card">
+    <h3>🏛️ Ph.D. in Information Science</h3>
+    <p><strong>Nanjing University</strong></p>
+    <p style="color: #1e3c72; font-weight: 500;">School of Information Management</p>
+    <p style="font-size: 0.9rem; color: #888; margin-top: 0.5rem;">Sep 2021 - Jun 2026</p>
   </div>
   
-  <div class="collab-card">
-    <a href="http://d.njnu.edu.cn/person/3288.html">
-      <img src="leizhang.png" alt="Lei Zhang"/>
-      <div class="name">Lei Zhang</div>
-      <div class="affiliation">Assoc. Prof., NNU</div>
-    </a>
+  <!-- Current Position -->
+  <h2 class="section-title">💼 现任 | Position</h2>
+  <div class="info-card">
+    <h3>🔬 Associate Research Fellow</h3>
+    <p><strong>Zhengzhou University</strong></p>
+    <p style="color: #1e3c72; font-weight: 500;">直聘副研究员</p>
+    <p style="font-size: 0.9rem; color: #888; margin-top: 0.5rem;">Jul 2026 - Present</p>
   </div>
-  
-  <div class="collab-card">
-    <a href="https://sites.google.com/site/hejunzz/">
-      <img src="../images/junhe.jpg" alt="Jun He"/>
-      <div class="name">Jun He</div>
-      <div class="affiliation">Assoc. Prof., NUIST</div>
-    </a>
-  </div>
-  
-  <div class="collab-card">
-    <a href="http://www.ise.ynu.edu.cn/teacher/805">
-      <img src="../images/haowu.jpg" alt="Hao Wu"/>
-      <div class="name">Hao Wu</div>
-      <div class="affiliation">Assoc. Prof., YNU</div>
-    </a>
-  </div>
+
+</div>
+
 </div>
 
 ---
 
-<!-- News -->
-<h2 class="section-title">📢 News</h2>
-
-<div class="news-item">
-  <span class="news-date">Jan 2026</span>
-  <span class="news-content">🎉 Successfully defended my Ph.D. dissertation at Nanjing University!</span>
-</div>
-
-<div class="news-item">
-  <span class="news-date">Jul 2026</span>
-  <span class="news-content">🏢 Joined Zhengzhou University as Associate Research Fellow.</span>
-</div>
-
-<div class="news-item">
-  <span class="news-date">2025</span>
-  <span class="news-content">📄 New paper on Long-Tailed Activity Recognition accepted to Pattern Recognition.</span>
-</div>
-
----
-
-<!-- Visitor Map -->
-<div class="map-container">
-  <h3 style="margin-top: 0;">🌍 Visitor Map</h3>
+<p style="text-align: center; margin-top: 3rem; color: #888;">
   <a href="https://clustrmaps.com/site/1bkl9" title="Visit tracker">
-    <img src="//www.clustrmaps.com/map_v2.png?d=Low9E1eDuwQC9_4r3QNfSbfjL1XZUwXz09oQFvUEK2s&cl=ffffff" alt="Visitor Map"/>
+    <img src="//www.clustrmaps.com/map_v2.png?d=Low9E1eDuwQC9_4r3QNfSbfjL1XZUwXz09oQFvUEK2s&cl=ffffff" alt="Visitor Map" style="max-width: 100%; border-radius: 12px;"/>
   </a>
-</div>
-
----
-
-<p style="text-align: center; color: #888; font-size: 0.9rem;">
-  📧 Contact: <a href="mailto:teqi159@gmail.com">teqi159@gmail.com</a> | 
-  <a href="https://scholar.google.com/citations?user=D5kHbeAAAAAJ">Google Scholar</a> | 
-  <a href="https://github.com/tengqi159">GitHub</a>
 </p>
