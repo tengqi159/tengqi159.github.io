@@ -11,9 +11,10 @@ title                    : "滕起 | 南京大学博士 | 直聘副研究员"
 title_separator          : "-"
 name                     : &name "滕起"
 description              : &description "南京大学博士｜直聘副研究员｜深度学习、可穿戴计算、人体活动识别（HAR）与主动健康管理"
-url                      : "https://tengqi159.github.io" # the base hostname & protocol for your site
-baseurl                  : "" # the subpath of your site
-repository               : "tengqi159/tengqi.github.io"
+url                      : "https://tengqi159.github.io"
+baseurl                  : ""
+repository               : "tengqi159/tengqi159.github.io"
+remote_theme             : "mmistakes/minimal-mistakes"
 teaser                   :  # filename of teaser fallback teaser image placed in /images/, .e.g. "500x300.png"
 breadcrumbs              : false # true, false (default)
 words_per_minute         : 160
