@@ -1,116 +1,185 @@
 ---
-layout: single
-title: "招生"
+layout: page
+title: 招生信息
 permalink: /admissions/
-author_profile: true
 ---
 
 <style>
 .admission-hero {
-  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-  color: #fff;
-  padding: 2.5rem;
-  border-radius: 18px;
-  box-shadow: 0 15px 40px rgba(30, 60, 114, 0.25);
-  margin-bottom: 2rem;
-}
-.admission-hero h1 {
-  margin: 0 0 0.5rem;
-  font-size: 2.2rem;
-}
-.admission-hero p {
-  margin: 0.6rem 0;
-  opacity: 0.95;
-}
-.admission-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.2rem;
-  margin: 2rem 0;
-}
-.admission-card {
-  background: #fff;
-  border: 1px solid #eee;
-  border-radius: 16px;
-  padding: 1.4rem;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-}
-.admission-card h3 {
-  margin: 0 0 0.6rem;
-  color: #1e3c72;
-  font-size: 1.2rem;
-}
-.admission-list {
-  margin: 0;
-  padding-left: 1.2rem;
-}
-.admission-list li {
-  margin-bottom: 0.5rem;
-}
-.admission-cta {
+  background: var(--gradient-primary);
+  color: var(--white);
+  padding: 3rem 2rem;
+  border-radius: var(--radius-lg);
   text-align: center;
-  margin-top: 2rem;
+  margin-bottom: 3rem;
 }
-.admission-cta a {
-  display: inline-block;
-  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-  color: #fff;
-  padding: 0.9rem 2.6rem;
-  border-radius: 999px;
-  text-decoration: none;
-  font-weight: 600;
-  box-shadow: 0 10px 20px rgba(30, 60, 114, 0.3);
+
+.admission-hero h2 {
+  color: var(--white);
+  margin-bottom: 1rem;
+}
+
+.admission-section {
+  background: var(--white);
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  margin-bottom: 2rem;
+  border-left: 4px solid var(--secondary-color);
+}
+
+.admission-section h3 {
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
+}
+
+.requirements-list {
+  list-style: none;
+  padding: 0;
+}
+
+.requirements-list li {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: flex-start;
+}
+
+.requirements-list li:last-child {
+  border-bottom: none;
+}
+
+.requirements-list li::before {
+  content: "✓";
+  color: var(--secondary-color);
+  font-weight: bold;
+  margin-right: 1rem;
+  font-size: 1.25rem;
+}
+
+.highlight-box {
+  background: var(--light-bg);
+  padding: 1.5rem;
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--accent-color);
+  margin: 1.5rem 0;
+}
+
+.contact-box {
+  background: var(--gradient-primary);
+  color: var(--white);
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+  text-align: center;
+  margin-top: 3rem;
+}
+
+.contact-box h3 {
+  color: var(--white);
+  margin-bottom: 1rem;
+}
+
+.contact-box p {
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
 }
 </style>
 
 <div class="admission-hero">
-  <h1>研究生与本科生学术导师招生</h1>
-  <p><strong>滕起</strong>，南京大学博士，直聘副研究员（郑州大学信息管理学院）。</p>
-  <p>研究方向：深度学习、可穿戴计算、人体活动识别（HAR）、主动健康管理。</p>
-  <p>近年来在 IEEE JBHI、IEEE TIM、IEEE TIE 等期刊发表高水平论文10余篇，谷歌学术引用630余次，参与国家重点研发计划及社科基金重大项目多项。</p>
+  <h2>🎓 欢迎加入我们的研究团队</h2>
+  <p>探索人工智能与健康医疗的交叉领域</p>
 </div>
 
-<div class="admission-grid">
-  <div class="admission-card">
-    <h3>🎯 适合人群</h3>
-    <ul class="admission-list">
-      <li>对人工智能与健康医疗交叉领域感兴趣</li>
-      <li>踏实勤奋、愿意长期投入科研训练</li>
-      <li>有 Python / PyTorch 或数学基础者优先</li>
-    </ul>
-  </div>
-  <div class="admission-card">
-    <h3>🧪 训练路线</h3>
-    <ul class="admission-list">
-      <li>工具与代码基础训练</li>
-      <li>论文阅读与复现实验</li>
-      <li>逐步产出可投稿成果</li>
-    </ul>
-  </div>
-  <div class="admission-card">
-    <h3>📌 你将获得</h3>
-    <ul class="admission-list">
-      <li>从零到一的科研能力提升</li>
-      <li>SCIE/SSCI 论文写作与投稿指导</li>
-      <li>保研升学、科研深造与就业能力</li>
-    </ul>
-  </div>
-  <div class="admission-card">
-    <h3>📝 报名材料</h3>
-    <ul class="admission-list">
-      <li>个人简历与成绩单</li>
-      <li>兴趣方向与可投入时间</li>
-      <li>如有编程作品或项目请附链接</li>
-    </ul>
-  </div>
+<div class="admission-section">
+  <h3>📋 招生方向</h3>
+  <p>我们欢迎对以下研究方向感兴趣的同学：</p>
+  <ul class="requirements-list">
+    <li>深度学习算法优化与模型设计</li>
+    <li>可穿戴计算技术与应用</li>
+    <li>人体活动识别（HAR）</li>
+    <li>主动健康管理与智能医疗</li>
+    <li>时间序列分析与预测</li>
+    <li>长尾学习与类别不平衡问题</li>
+  </ul>
 </div>
 
-<div class="admission-card">
+<div class="admission-section">
+  <h3>💡 我们期望你</h3>
+  <ul class="requirements-list">
+    <li>对科研有浓厚兴趣，愿意长期投入研究工作</li>
+    <li>踏实勤奋，具有良好的学习能力和自我驱动力</li>
+    <li>具备扎实的数学基础（线性代数、概率论、优化理论等）</li>
+    <li>熟悉至少一门编程语言（Python 优先）</li>
+    <li>有深度学习框架使用经验（PyTorch / TensorFlow）者优先</li>
+    <li>有论文阅读和写作经验者优先</li>
+    <li>英语阅读能力良好，能够阅读英文文献</li>
+  </ul>
+</div>
+
+<div class="highlight-box">
+  <h4>🌟 特别欢迎</h4>
+  <p>具备以下技能或经验的同学：</p>
+  <ul>
+    <li>熟练使用 <strong>Python</strong> 和 <strong>PyTorch</strong></li>
+    <li>有机器学习或深度学习项目经验</li>
+    <li>有数据分析和可视化能力</li>
+    <li>有传感器数据处理经验</li>
+    <li>有论文发表经验</li>
+  </ul>
+</div>
+
+<div class="admission-section">
+  <h3>🎯 我们提供</h3>
+  <ul class="requirements-list">
+    <li>系统的科研训练和学术指导</li>
+    <li>充足的计算资源和实验设备</li>
+    <li>参与国家级科研项目的机会</li>
+    <li>国内外学术交流和会议参与机会</li>
+    <li>论文发表指导和支持</li>
+    <li>良好的科研氛围和团队协作环境</li>
+    <li>有竞争力的奖助学金</li>
+  </ul>
+</div>
+
+<div class="admission-section">
+  <h3>📚 研究成果</h3>
+  <p>我们的研究团队在以下方面取得了显著成果：</p>
+  <ul class="requirements-list">
+    <li>在 IEEE JBHI、IEEE TIM、IEEE TIE 等顶级期刊发表论文 10+ 篇</li>
+    <li>谷歌学术引用 {{ site.statistics.citations }}+ 次</li>
+    <li>h-index: {{ site.statistics.h_index }}</li>
+    <li>多篇高被引论文（200+ 引用）</li>
+    <li>参与国家重点研发计划和社科基金重大项目</li>
+  </ul>
+</div>
+
+<div class="admission-section">
+  <h3>📝 申请流程</h3>
+  <ol style="line-height: 2;">
+    <li>发送邮件至 <strong>{{ site.author.email }}</strong></li>
+    <li>邮件标题：<strong>【研究生申请】姓名-学校-专业</strong></li>
+    <li>邮件内容包括：
+      <ul>
+        <li>个人简历（包括教育背景、研究经历、技能特长）</li>
+        <li>成绩单（本科/硕士）</li>
+        <li>研究兴趣和未来规划</li>
+        <li>代表性项目或论文（如有）</li>
+      </ul>
+    </li>
+    <li>初步沟通后安排面试</li>
+  </ol>
+</div>
+
+<div class="contact-box">
   <h3>📧 联系方式</h3>
-  <p>欢迎邮件联系，请简要说明你的研究兴趣、基础与期望方向。</p>
-  <p><strong>邮箱：</strong><a href="mailto:teqi159@gmail.com">teqi159@gmail.com</a></p>
+  <p>如果你对我们的研究方向感兴趣，欢迎随时联系！</p>
+  <p><strong>邮箱</strong>: {{ site.author.email }}</p>
+  <p><strong>单位</strong>: {{ site.author.affiliation }}</p>
+  <div style="margin-top: 2rem;">
+    <a href="mailto:{{ site.author.email }}" class="btn btn-secondary">发送邮件</a>
+  </div>
 </div>
 
-<div class="admission-cta">
-  <a href="mailto:teqi159@gmail.com">立即联系</a>
+<div style="text-align: center; margin-top: 3rem; color: var(--text-light);">
+  <p>期待与你一起探索人工智能的无限可能！</p>
 </div>

@@ -1,0 +1,285 @@
+/* ==========================================
+   Hero Section
+   ========================================== */
+.hero-section {
+  background: var(--gradient-primary);
+  color: var(--white);
+  padding: 4rem 2rem;
+  text-align: center;
+  margin-bottom: 3rem;
+  border-radius: var(--radius-xl);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  letter-spacing: -1px;
+  color: var(--white);
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  opacity: 0.9;
+  margin-bottom: 2rem;
+  font-weight: 300;
+}
+
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.stat-item {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 1rem 1.5rem;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: var(--transition);
+}
+
+.stat-item:hover {
+  transform: translateY(-3px);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.stat-number {
+  font-size: 2rem;
+  font-weight: 700;
+  display: block;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+/* ==========================================
+   Introduction Section
+   ========================================== */
+.intro-section {
+  background: var(--white);
+  padding: 2.5rem;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  margin-bottom: 3rem;
+  border: 1px solid var(--border-color);
+}
+
+.intro-text {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--text-color);
+  margin-bottom: 1.5rem;
+}
+
+.intro-text strong {
+  color: var(--primary-color);
+}
+
+.intro-text .highlight {
+  color: var(--secondary-color);
+  font-weight: 600;
+}
+
+/* ==========================================
+   News Timeline
+   ========================================== */
+.news-section {
+  margin-bottom: 3rem;
+}
+
+.section-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.news-timeline {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.news-timeline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--secondary-color);
+}
+
+.news-item {
+  position: relative;
+  margin-bottom: 2rem;
+  background: var(--white);
+  padding: 1.5rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow);
+  border-left: 4px solid var(--secondary-color);
+  transition: var(--transition);
+}
+
+.news-item:hover {
+  transform: translateX(5px);
+  box-shadow: var(--shadow-lg);
+}
+
+.news-date {
+  color: var(--secondary-color);
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.news-content {
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+/* ==========================================
+   Research Areas
+   ========================================== */
+.research-section {
+  margin-bottom: 3rem;
+}
+
+.research-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.research-card {
+  background: var(--white);
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border-color);
+  transition: var(--transition);
+  text-align: center;
+}
+
+.research-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--accent-color);
+}
+
+.research-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.research-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
+
+.research-desc {
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+/* ==========================================
+   Publications Preview
+   ========================================== */
+.publications-preview {
+  margin-bottom: 3rem;
+}
+
+.pub-item {
+  background: var(--white);
+  padding: 1.5rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow);
+  margin-bottom: 1.5rem;
+  border-left: 4px solid var(--secondary-color);
+  transition: var(--transition);
+}
+
+.pub-item:hover {
+  transform: translateX(5px);
+  box-shadow: var(--shadow-lg);
+}
+
+.pub-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
+
+.pub-venue {
+  color: var(--text-color);
+  font-style: italic;
+  margin-bottom: 0.5rem;
+}
+
+.pub-stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* ==========================================
+   Responsive Design
+   ========================================== */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .hero-stats {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .research-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .news-timeline {
+    padding-left: 1rem;
+  }
+  
+  .intro-section {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-section {
+    padding: 3rem 1rem;
+  }
+  
+  .hero-title {
+    font-size: 2rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+  
+  .stat-number {
+    font-size: 1.5rem;
+  }
+}

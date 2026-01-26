@@ -1,0 +1,83 @@
+- title: "CSFO: A Category-Specific Flattening Optimization Method for Sensor-Based Long-Tailed Activity Recognition"
+  venue: "IEEE Sensors Journal"
+  year: 2025
+  type: "journal"
+  citations: 0
+  highlight: true
+
+- title: "Dual Stage-Wise Decoupling Networks for Long-Tailed Activity Recognition Using Wearable Sensors"
+  venue: "Pattern Recognition"
+  year: 2025
+  type: "journal"
+  citations: 0
+  highlight: true
+
+- title: "Innovative dual-decoupling CNN with layer-wise temporal-spatial attention for sensor-based human activity recognition"
+  venue: "IEEE Journal of Biomedical and Health Informatics"
+  year: 2024
+  type: "journal"
+  citations: 16
+
+- title: "Large receptive field attention: An innovation in decomposing large-kernel convolution for sensor-based activity recognition"
+  venue: "IEEE Sensors Journal"
+  year: 2024
+  type: "journal"
+  citations: 13
+
+- title: "RepHAR: Decoupling networks with accuracy-speed tradeoff for sensor-based human activity recognition"
+  venue: "IEEE Transactions on Instrumentation and Measurement"
+  year: 2023
+  type: "journal"
+  citations: 30
+
+- title: "Triple cross-domain attention on human activity recognition using wearable sensors"
+  venue: "IEEE Transactions on Emerging Topics in Computational Intelligence"
+  year: 2022
+  type: "journal"
+  citations: 128
+  highlight: true
+
+- title: "DanHAR: Dual attention network for multimodal human activity recognition using wearable sensors"
+  venue: "Applied Soft Computing"
+  year: 2021
+  type: "journal"
+  citations: 222
+  highlight: true
+
+- title: "The convolutional neural networks training with channel-selectivity for human activity recognition based on sensors"
+  venue: "IEEE Journal of Biomedical and Health Informatics"
+  year: 2021
+  type: "journal"
+  citations: 47
+
+- title: "Block-wise training residual networks on multi-channel time series for human activity recognition"
+  venue: "IEEE Sensors Journal"
+  year: 2021
+  type: "journal"
+  citations: 22
+
+- title: "The layer-wise training convolutional neural networks using local loss for sensor-based human activity recognition"
+  venue: "IEEE Sensors Journal"
+  year: 2020
+  type: "journal"
+  citations: 209
+  highlight: true
+
+- title: "Layer-wise training convolutional neural networks with smaller filters for human activity recognition using wearable sensors"
+  venue: "IEEE Sensors Journal"
+  year: 2020
+  type: "journal"
+  citations: 158
+  highlight: true
+
+- title: "Data driven governing equations approximations using attention based multistep neural networks"
+  venue: "AIP Advances"
+  year: 2020
+  type: "journal"
+  citations: 2
+
+- title: "Data driven nonlinear dynamical systems identification using multi-step CLDNN"
+  venue: "AIP Advances"
+  year: 2019
+  type: "journal"
+  citations: 35

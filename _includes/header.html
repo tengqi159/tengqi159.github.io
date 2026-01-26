@@ -1,0 +1,21 @@
+<header class="site-header">
+  <div class="header-container">
+    <a href="{{ '/' | relative_url }}" class="site-logo">
+      {{ site.author.name }}
+    </a>
+    
+    <button class="menu-toggle" aria-label="Toggle menu">
+      ☰
+    </button>
+    
+    <nav class="site-nav">
+      <ul>
+        <li><a href="{{ '/' | relative_url }}" {% if page.url == '/' %}class="active"{% endif %}>首页</a></li>
+        <li><a href="{{ '/publications/' | relative_url }}" {% if page.url contains '/publications' %}class="active"{% endif %}>论文</a></li>
+        <li><a href="{{ '/projects/' | relative_url }}" {% if page.url contains '/projects' %}class="active"{% endif %}>项目</a></li>
+        <li><a href="{{ '/cv/' | relative_url }}" {% if page.url contains '/cv' %}class="active"{% endif %}>简历</a></li>
+        <li><a href="{{ '/admissions/' | relative_url }}" {% if page.url contains '/admissions' %}class="active"{% endif %}>招生</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>

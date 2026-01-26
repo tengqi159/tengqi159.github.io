@@ -1,0 +1,15 @@
+- icon: "🤖"
+  title: "深度学习"
+  description: "Deep Learning 算法优化与模型设计"
+
+- icon: "⌚"
+  title: "可穿戴计算"
+  description: "Wearable Computing 技术与应用"
+
+- icon: "🏃"
+  title: "人体活动识别"
+  description: "Human Activity Recognition (HAR)"
+
+- icon: "🏥"
+  title: "主动健康管理"
+  description: "Smart Health 系统与应用"

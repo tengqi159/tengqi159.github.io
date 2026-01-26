@@ -1,121 +1,92 @@
 ---
-layout: archive
-title: "项目与专利"
+layout: page
+title: 项目
 permalink: /projects/
-author_profile: true
 ---
 
 <style>
-/* Modern Card Style */
 .project-card {
-  background: white;
-  border-radius: 16px;
+  background: var(--white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
   padding: 2rem;
   margin-bottom: 2rem;
-  border: 1px solid #eee;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
 }
 
 .project-card:hover {
+  box-shadow: var(--shadow-lg);
   transform: translateY(-5px);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-}
-
-.project-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 5px;
-  background: linear-gradient(90deg, #1e3c72, #2a5298);
 }
 
 .project-title {
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: 700;
-  color: #1e3c72;
+  color: var(--primary-color);
   margin-bottom: 1rem;
 }
 
-.project-role {
-  display: inline-block;
-  background: #e8f5e9;
-  color: #2e7d32;
-  padding: 0.3rem 0.8rem;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  font-weight: 600;
+.project-desc {
+  color: var(--text-color);
+  line-height: 1.8;
   margin-bottom: 1rem;
 }
 
-.patent-card {
-  background: #fafafa;
-  padding: 1.5rem;
-  border-left: 4px solid #1e3c72;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-}
-
-.section-head {
-  font-size: 1.8rem;
-  color: #333;
-  margin: 3rem 0 1.5rem;
-  font-weight: 700;
+.project-meta {
   display: flex;
-  align-items: center;
-  gap: 0.8rem;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 </style>
 
-<div class="section-head">
-  🚀 科研项目
+## 研究项目
+
+<div class="project-card">
+  <h3 class="project-title">深度学习在人体活动识别中的应用</h3>
+  <p class="project-desc">
+    研究基于深度学习的人体活动识别方法，开发高效的卷积神经网络架构，提升可穿戴设备上的活动识别准确率。
+  </p>
+  <div class="project-meta">
+    <span class="badge badge-primary">深度学习</span>
+    <span class="badge badge-primary">HAR</span>
+    <span class="badge badge-success">进行中</span>
+  </div>
 </div>
 
 <div class="project-card">
-  <div class="project-title">研究方向概览</div>
-  <div class="project-role">深度学习 · 可穿戴计算 · HAR · 主动健康</div>
-  <p>围绕人体活动识别与健康管理场景，开展算法模型、传感器融合与应用落地研究，服务于智能健康、医疗监测与公共健康管理。</p>
+  <h3 class="project-title">可穿戴计算与健康监测</h3>
+  <p class="project-desc">
+    利用可穿戴传感器数据进行健康状态监测和疾病预警，开发智能健康管理系统。
+  </p>
+  <div class="project-meta">
+    <span class="badge badge-primary">可穿戴计算</span>
+    <span class="badge badge-primary">健康监测</span>
+    <span class="badge badge-success">进行中</span>
+  </div>
 </div>
 
 <div class="project-card">
-  <div class="project-title">国家重点研发计划</div>
-  <div class="project-role">核心参与</div>
-  <p><strong>项目内容：</strong>聚焦智能健康与可穿戴计算关键技术，针对老年人及特殊人群的日常活动监测与健康评估需求，设计高精度人体活动识别模型。提出基于注意力机制的多模态融合算法，有效解决了复杂场景下的动作识别难题。</p>
-  <p><strong>关键词：</strong>深度学习、智能健康、可穿戴传感器、行为分析</p>
-</div>
-
-<div class="project-card">
-  <div class="project-title">国家社科基金重大项目</div>
-  <div class="project-role">核心参与</div>
-  <p><strong>项目内容：</strong>面向数据驱动的社会治理与智能公共服务场景，探索多源异构数据的融合分析方法。负责健康医疗大数据的挖掘与模式识别模块，为公共卫生决策支持提供算法支撑。</p>
-  <p><strong>关键词：</strong>数字政府、信息管理、公共服务、数据挖掘</p>
-</div>
-
-<div class="section-head">
-  💡 发明专利
-</div>
-
-<div class="patent-card">
-  <strong>基于双重注意力机制的可穿戴人体活动识别方法及系统</strong>
-  <p style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">
-    提出一种结合通道注意力与时间注意力的深度神经网络模型，显著提升了传感器数据在噪声环境下的特征提取能力。（实审中/已授权）
+  <h3 class="project-title">长尾分布下的活动识别优化</h3>
+  <p class="project-desc">
+    针对现实场景中活动数据的长尾分布问题，研究类别平衡和模型优化方法。
   </p>
+  <div class="project-meta">
+    <span class="badge badge-primary">长尾学习</span>
+    <span class="badge badge-primary">模型优化</span>
+    <span class="badge badge-success">进行中</span>
+  </div>
 </div>
 
-<div class="patent-card">
-  <strong>一种面向长尾分布数据的行为识别模型训练方法</strong>
-  <p style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">
-    针对人体活动数据类别不平衡问题，设计类别特定的损失函数优化策略，有效提升了少样本类别的识别精度。
-  </p>
-</div>
+## 合作机会
 
-<div class="patent-card">
-  <strong>基于轻量级卷积神经网络的可穿戴设备端侧推理方法</strong>
-  <p style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">
-    通过滤波器剪枝与层级解耦设计，实现了高精度模型在低功耗可穿戴设备上的实时运行。
-  </p>
+欢迎对以下方向感兴趣的同学和研究者联系合作：
+
+- 深度学习算法优化
+- 可穿戴计算应用
+- 人体活动识别
+- 健康医疗数据分析
+
+<div style="text-align: center; margin-top: 2rem;">
+  <a href="{{ '/admissions/' | relative_url }}" class="btn btn-primary">了解招生信息</a>
 </div>
