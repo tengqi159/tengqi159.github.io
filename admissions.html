@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>招生信息 - 滕起</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-container">
+      <a href="index.html" class="site-logo">滕起</a>
+      <button class="menu-toggle" aria-label="Toggle menu">☰</button>
+      <nav class="site-nav">
+        <ul>
+          <li><a href="index.html">首页</a></li>
+          <li><a href="publications.html">论文</a></li>
+          <li><a href="projects.html">项目</a></li>
+          <li><a href="cv.html">简历</a></li>
+          <li><a href="admissions.html" class="active">招生</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="container">
+      <style>
+        .admission-hero {
+          background: var(--gradient-primary);
+          color: var(--white);
+          padding: 3rem 2rem;
+          border-radius: var(--radius-lg);
+          text-align: center;
+          margin-bottom: 3rem;
+        }
+        .admission-hero h1 {
+          color: var(--white);
+          margin-bottom: 1rem;
+        }
+        .admission-section {
+          background: var(--white);
+          padding: 2rem;
+          border-radius: var(--radius-lg);
+          box-shadow: var(--shadow);
+          margin-bottom: 2rem;
+          border-left: 4px solid var(--secondary-color);
+        }
+        .admission-section h2 {
+          color: var(--primary-color);
+          margin-bottom: 1.5rem;
+        }
+        .requirements-list {
+          list-style: none;
+          padding: 0;
+        }
+        .requirements-list li {
+          padding: 0.75rem 0;
+          border-bottom: 1px solid var(--border-color);
+          display: flex;
+          align-items: flex-start;
+        }
+        .requirements-list li:last-child {
+          border-bottom: none;
+        }
+        .requirements-list li::before {
+          content: "✓";
+          color: var(--secondary-color);
+          font-weight: bold;
+          margin-right: 1rem;
+          font-size: 1.25rem;
+        }
+        .highlight-box {
+          background: var(--light-bg);
+          padding: 1.5rem;
+          border-radius: var(--radius-md);
+          border-left: 4px solid var(--accent-color);
+          margin: 1.5rem 0;
+        }
+        .contact-box {
+          background: var(--gradient-primary);
+          color: var(--white);
+          padding: 2rem;
+          border-radius: var(--radius-lg);
+          text-align: center;
+          margin-top: 3rem;
+        }
+        .contact-box h2 {
+          color: var(--white);
+          margin-bottom: 1rem;
+        }
+        .contact-box p {
+          font-size: 1.1rem;
+          margin-bottom: 1.5rem;
+        }
+      </style>
+
+      <div class="admission-hero">
+        <h1>🎓 欢迎加入我们的研究团队</h1>
+        <p>探索人工智能与健康医疗的交叉领域</p>
+      </div>
+
+      <div class="admission-section">
+        <h2>📋 招生方向</h2>
+        <p>我们欢迎对以下研究方向感兴趣的同学：</p>
+        <ul class="requirements-list">
+          <li>深度学习算法优化与模型设计</li>
+          <li>可穿戴计算技术与应用</li>
+          <li>人体活动识别（HAR）</li>
+          <li>主动健康管理与智能医疗</li>
+          <li>时间序列分析与预测</li>
+          <li>长尾学习与类别不平衡问题</li>
+        </ul>
+      </div>
+
+      <div class="admission-section">
+        <h2>💡 我们期望你</h2>
+        <ul class="requirements-list">
+          <li>对科研有浓厚兴趣，愿意长期投入研究工作</li>
+          <li>踏实勤奋，具有良好的学习能力和自我驱动力</li>
+          <li>具备扎实的数学基础（线性代数、概率论、优化理论等）</li>
+          <li>熟悉至少一门编程语言（Python 优先）</li>
+          <li>有深度学习框架使用经验（PyTorch / TensorFlow）者优先</li>
+          <li>有论文阅读和写作经验者优先</li>
+          <li>英语阅读能力良好，能够阅读英文文献</li>
+        </ul>
+      </div>
+
+      <div class="highlight-box">
+        <h3>🌟 特别欢迎</h3>
+        <p>具备以下技能或经验的同学：</p>
+        <ul>
+          <li>熟练使用 <strong>Python</strong> 和 <strong>PyTorch</strong></li>
+          <li>有机器学习或深度学习项目经验</li>
+          <li>有数据分析和可视化能力</li>
+          <li>有传感器数据处理经验</li>
+          <li>有论文发表经验</li>
+        </ul>
+      </div>
+
+      <div class="admission-section">
+        <h2>🎯 我们提供</h2>
+        <ul class="requirements-list">
+          <li>系统的科研训练和学术指导</li>
+          <li>充足的计算资源和实验设备</li>
+          <li>参与国家级科研项目的机会</li>
+          <li>国内外学术交流和会议参与机会</li>
+          <li>论文发表指导和支持</li>
+          <li>良好的科研氛围和团队协作环境</li>
+          <li>有竞争力的奖助学金</li>
+        </ul>
+      </div>
+
+      <div class="admission-section">
+        <h2>📚 研究成果</h2>
+        <p>我们的研究团队在以下方面取得了显著成果：</p>
+        <ul class="requirements-list">
+          <li>在 IEEE JBHI、IEEE TIM、IEEE TIE 等顶级期刊发表论文 13 篇</li>
+          <li>谷歌学术引用 630+ 次</li>
+          <li>h-index: 11</li>
+          <li>多篇高被引论文（200+ 引用）</li>
+          <li>参与国家重点研发计划和社科基金重大项目</li>
+        </ul>
+      </div>
+
+      <div class="admission-section">
+        <h2>📝 申请流程</h2>
+        <ol style="line-height: 2;">
+          <li>发送邮件至 <strong>teqi159@gmail.com</strong></li>
+          <li>邮件标题：<strong>【研究生申请】姓名-学校-专业</strong></li>
+          <li>邮件内容包括：
+            <ul>
+              <li>个人简历（包括教育背景、研究经历、技能特长）</li>
+              <li>成绩单（本科/硕士）</li>
+              <li>研究兴趣和未来规划</li>
+              <li>代表性项目或论文（如有）</li>
+            </ul>
+          </li>
+          <li>初步沟通后安排面试</li>
+        </ol>
+      </div>
+
+      <div class="contact-box">
+        <h2>📧 联系方式</h2>
+        <p>如果你对我们的研究方向感兴趣，欢迎随时联系！</p>
+        <p><strong>邮箱</strong>: teqi159@gmail.com</p>
+        <p><strong>单位</strong>: 郑州大学信息管理学院</p>
+        <div style="margin-top: 2rem;">
+          <a href="mailto:teqi159@gmail.com" class="btn btn-secondary">发送邮件</a>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 3rem; color: var(--text-light);">
+        <p>期待与你一起探索人工智能的无限可能！</p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-content">
+      <p>&copy; 2025 滕起 | 郑州大学信息管理学院</p>
+      <p>邮箱: teqi159@gmail.com</p>
+      <div class="social-links">
+        <a href="https://scholar.google.com/citations?user=D5kHbeAAAAAJ&hl=en" target="_blank" title="Google Scholar">🎓</a>
+        <a href="https://github.com/tengqi159" target="_blank" title="GitHub">💻</a>
+        <a href="https://www.researchgate.net/profile/Qi-Teng" target="_blank" title="ResearchGate">🔬</a>
+        <a href="https://orcid.org/0000-0003-3573-4146" target="_blank" title="ORCID">🆔</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>简历 - 滕起</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-container">
+      <a href="index.html" class="site-logo">滕起</a>
+      <button class="menu-toggle" aria-label="Toggle menu">☰</button>
+      <nav class="site-nav">
+        <ul>
+          <li><a href="index.html">首页</a></li>
+          <li><a href="publications.html">论文</a></li>
+          <li><a href="projects.html">项目</a></li>
+          <li><a href="cv.html" class="active">简历</a></li>
+          <li><a href="admissions.html">招生</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="container">
+      <style>
+        .cv-content {
+          background: var(--white);
+          padding: 3rem;
+          border-radius: var(--radius-lg);
+          box-shadow: var(--shadow);
+        }
+        .cv-section {
+          margin-bottom: 3rem;
+        }
+        .cv-section-title {
+          font-size: 1.75rem;
+          font-weight: 700;
+          color: var(--primary-color);
+          margin-bottom: 1.5rem;
+          padding-bottom: 0.5rem;
+          border-bottom: 2px solid var(--secondary-color);
+        }
+        .cv-item {
+          margin-bottom: 2rem;
+          padding-left: 1.5rem;
+          border-left: 3px solid var(--border-color);
+        }
+        .cv-item-title {
+          font-size: 1.25rem;
+          font-weight: 600;
+          color: var(--primary-color);
+          margin-bottom: 0.5rem;
+        }
+        .cv-item-meta {
+          color: var(--text-light);
+          font-size: 0.95rem;
+          margin-bottom: 0.5rem;
+        }
+        .cv-item-desc {
+          color: var(--text-color);
+          line-height: 1.8;
+        }
+        .info-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: 1rem;
+          margin-bottom: 2rem;
+        }
+        .info-item {
+          padding: 1rem;
+          background: var(--light-bg);
+          border-radius: var(--radius-sm);
+        }
+        .info-label {
+          font-weight: 600;
+          color: var(--primary-color);
+        }
+      </style>
+
+      <div class="cv-content">
+        <h1 style="text-align: center; margin-bottom: 2rem;">个人简历</h1>
+
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">姓名：</span>滕起 (Qi Teng)
+          </div>
+          <div class="info-item">
+            <span class="info-label">职位：</span>直聘副研究员
+          </div>
+          <div class="info-item">
+            <span class="info-label">单位：</span>郑州大学信息管理学院
+          </div>
+          <div class="info-item">
+            <span class="info-label">邮箱：</span>teqi159@gmail.com
+          </div>
+        </div>
+
+        <div class="cv-section">
+          <h2 class="cv-section-title">🎓 教育背景</h2>
+          
+          <div class="cv-item">
+            <div class="cv-item-title">博士 - 计算机科学与技术</div>
+            <div class="cv-item-meta">南京大学 | 2019 - 2024</div>
+            <div class="cv-item-desc">
+              研究方向：深度学习、人体活动识别
+            </div>
+          </div>
+        </div>
+
+        <div class="cv-section">
+          <h2 class="cv-section-title">💼 工作经历</h2>
+          
+          <div class="cv-item">
+            <div class="cv-item-title">直聘副研究员</div>
+            <div class="cv-item-meta">郑州大学信息管理学院 | 2025/01 - 至今</div>
+            <div class="cv-item-desc">
+              从事深度学习、可穿戴计算、人体活动识别等领域的研究工作
+            </div>
+          </div>
+        </div>
+
+        <div class="cv-section">
+          <h2 class="cv-section-title">🏆 荣誉奖项</h2>
+          
+          <div class="cv-item">
+            <div class="cv-item-title">高被引论文</div>
+            <div class="cv-item-meta">2021</div>
+            <div class="cv-item-desc">
+              DanHAR 论文获得 222 次引用，成为领域内高被引论文
+            </div>
+          </div>
+        </div>
+
+        <div class="cv-section">
+          <h2 class="cv-section-title">📊 学术统计</h2>
+          
+          <div class="cv-item">
+            <div class="cv-item-desc">
+              - 谷歌学术引用: <strong>630+</strong><br>
+              - h-index: <strong>11</strong><br>
+              - 发表论文: <strong>13</strong> 篇<br>
+              - 期刊审稿: IEEE TIM, Scientific Reports, Pattern Recognition 等
+            </div>
+          </div>
+        </div>
+
+        <div class="cv-section">
+          <h2 class="cv-section-title">🔬 研究项目</h2>
+          
+          <div class="cv-item">
+            <div class="cv-item-title">国家重点研发计划</div>
+            <div class="cv-item-meta">参与</div>
+            <div class="cv-item-desc">
+              参与国家重点研发计划项目，从事人体活动识别相关研究
+            </div>
+          </div>
+          
+          <div class="cv-item">
+            <div class="cv-item-title">社科基金重大项目</div>
+            <div class="cv-item-meta">参与</div>
+            <div class="cv-item-desc">
+              参与社科基金重大项目，研究智能健康管理系统
+            </div>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 3rem;">
+          <a href="https://scholar.google.com/citations?user=D5kHbeAAAAAJ&hl=en" class="btn btn-primary" target="_blank">查看完整学术档案</a>
+          <a href="publications.html" class="btn btn-secondary">查看论文列表</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-content">
+      <p>&copy; 2025 滕起 | 郑州大学信息管理学院</p>
+      <p>邮箱: teqi159@gmail.com</p>
+      <div class="social-links">
+        <a href="https://scholar.google.com/citations?user=D5kHbeAAAAAJ&hl=en" target="_blank" title="Google Scholar">🎓</a>
+        <a href="https://github.com/tengqi159" target="_blank" title="GitHub">💻</a>
+        <a href="https://www.researchgate.net/profile/Qi-Teng" target="_blank" title="ResearchGate">🔬</a>
+        <a href="https://orcid.org/0000-0003-3573-4146" target="_blank" title="ORCID">🆔</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>项目 - 滕起</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-container">
+      <a href="index.html" class="site-logo">滕起</a>
+      <button class="menu-toggle" aria-label="Toggle menu">☰</button>
+      <nav class="site-nav">
+        <ul>
+          <li><a href="index.html">首页</a></li>
+          <li><a href="publications.html">论文</a></li>
+          <li><a href="projects.html" class="active">项目</a></li>
+          <li><a href="cv.html">简历</a></li>
+          <li><a href="admissions.html">招生</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="container">
+      <style>
+        .page-header {
+          text-align: center;
+          margin-bottom: 3rem;
+        }
+        .page-title {
+          font-size: 2.5rem;
+          color: var(--primary-color);
+          margin-bottom: 1rem;
+        }
+        .project-card {
+          background: var(--white);
+          border: 1px solid var(--border-color);
+          border-radius: var(--radius-lg);
+          padding: 2rem;
+          margin-bottom: 2rem;
+          box-shadow: var(--shadow);
+          transition: var(--transition);
+        }
+        .project-card:hover {
+          box-shadow: var(--shadow-lg);
+          transform: translateY(-5px);
+        }
+        .project-title {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: var(--primary-color);
+          margin-bottom: 1rem;
+        }
+        .project-desc {
+          color: var(--text-color);
+          line-height: 1.8;
+          margin-bottom: 1rem;
+        }
+        .project-meta {
+          display: flex;
+          gap: 1rem;
+          flex-wrap: wrap;
+        }
+      </style>
+
+      <div class="page-header">
+        <h1 class="page-title">🔬 研究项目</h1>
+      </div>
+
+      <div class="project-card">
+        <h3 class="project-title">深度学习在人体活动识别中的应用</h3>
+        <p class="project-desc">
+          研究基于深度学习的人体活动识别方法，开发高效的卷积神经网络架构，提升可穿戴设备上的活动识别准确率。
+        </p>
+        <div class="project-meta">
+          <span class="badge badge-primary">深度学习</span>
+          <span class="badge badge-primary">HAR</span>
+          <span class="badge badge-primary">进行中</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <h3 class="project-title">可穿戴计算与健康监测</h3>
+        <p class="project-desc">
+          利用可穿戴传感器数据进行健康状态监测和疾病预警，开发智能健康管理系统。
+        </p>
+        <div class="project-meta">
+          <span class="badge badge-primary">可穿戴计算</span>
+          <span class="badge badge-primary">健康监测</span>
+          <span class="badge badge-primary">进行中</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <h3 class="project-title">长尾分布下的活动识别优化</h3>
+        <p class="project-desc">
+          针对现实场景中活动数据的长尾分布问题，研究类别平衡和模型优化方法。
+        </p>
+        <div class="project-meta">
+          <span class="badge badge-primary">长尾学习</span>
+          <span class="badge badge-primary">模型优化</span>
+          <span class="badge badge-primary">进行中</span>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 3rem;">
+        <h2 style="margin-bottom: 2rem;">合作机会</h2>
+        <p style="margin-bottom: 2rem;">欢迎对以下方向感兴趣的同学和研究者联系合作：</p>
+        <ul style="text-align: left; max-width: 600px; margin: 0 auto 2rem;">
+          <li>深度学习算法优化</li>
+          <li>可穿戴计算应用</li>
+          <li>人体活动识别</li>
+          <li>健康医疗数据分析</li>
+        </ul>
+        <a href="admissions.html" class="btn btn-primary">了解招生信息</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-content">
+      <p>&copy; 2025 滕起 | 郑州大学信息管理学院</p>
+      <p>邮箱: teqi159@gmail.com</p>
+      <div class="social-links">
+        <a href="https://scholar.google.com/citations?user=D5kHbeAAAAAJ&hl=en" target="_blank" title="Google Scholar">🎓</a>
+        <a href="https://github.com/tengqi159" target="_blank" title="GitHub">💻</a>
+        <a href="https://www.researchgate.net/profile/Qi-Teng" target="_blank" title="ResearchGate">🔬</a>
+        <a href="https://orcid.org/0000-0003-3573-4146" target="_blank" title="ORCID">🆔</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>论文 - 滕起</title>
+  <meta name="description" content="滕起的学术论文列表">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-container">
+      <a href="index.html" class="site-logo">滕起</a>
+      <button class="menu-toggle" aria-label="Toggle menu">☰</button>
+      <nav class="site-nav">
+        <ul>
+          <li><a href="index.html">首页</a></li>
+          <li><a href="publications.html" class="active">论文</a></li>
+          <li><a href="projects.html">项目</a></li>
+          <li><a href="cv.html">简历</a></li>
+          <li><a href="admissions.html">招生</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="container">
+      <style>
+        .pub-header {
+          background: var(--gradient-primary);
+          padding: 2rem;
+          border-radius: var(--radius-lg);
+          color: var(--white);
+          text-align: center;
+          margin-bottom: 2rem;
+          box-shadow: 0 15px 40px rgba(102, 126, 234, 0.3);
+        }
+        .pub-header h1 {
+          margin: 0 0 1rem;
+          font-size: 2rem;
+          color: var(--white);
+        }
+        .pub-stats-grid {
+          display: flex;
+          justify-content: center;
+          gap: 3rem;
+          flex-wrap: wrap;
+          margin-top: 1.5rem;
+        }
+        .pub-stat {
+          text-align: center;
+        }
+        .pub-stat-number {
+          font-size: 2.5rem;
+          font-weight: 700;
+        }
+        .pub-stat-label {
+          font-size: 0.9rem;
+          opacity: 0.9;
+        }
+        .scholar-btn {
+          display: inline-block;
+          background: rgba(255,255,255,0.2);
+          color: var(--white);
+          padding: 0.6rem 1.5rem;
+          border-radius: var(--radius-full);
+          text-decoration: none;
+          margin-top: 1rem;
+          transition: var(--transition);
+          backdrop-filter: blur(10px);
+        }
+        .scholar-btn:hover {
+          background: rgba(255,255,255,0.3);
+          transform: translateY(-2px);
+          color: var(--white);
+        }
+        .year-section {
+          margin-bottom: 3rem;
+        }
+        .year-title {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: var(--primary-color);
+          margin-bottom: 1.5rem;
+          padding-bottom: 0.5rem;
+          border-bottom: 2px solid var(--secondary-color);
+        }
+        .pub-card {
+          background: var(--white);
+          border: 1px solid var(--border-color);
+          border-radius: var(--radius-md);
+          padding: 1.5rem;
+          margin-bottom: 1.5rem;
+          transition: var(--transition);
+          position: relative;
+          overflow: hidden;
+        }
+        .pub-card::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 0;
+          height: 100%;
+          width: 4px;
+          background: var(--gradient-primary);
+        }
+        .pub-card:hover {
+          box-shadow: var(--shadow-lg);
+          transform: translateY(-3px);
+        }
+        .pub-card-title {
+          font-size: 1.1rem;
+          font-weight: 600;
+          color: var(--primary-color);
+          margin-bottom: 0.5rem;
+          padding-left: 0.5rem;
+        }
+        .pub-card-venue {
+          color: var(--text-light);
+          font-style: italic;
+          font-size: 0.95rem;
+          padding-left: 0.5rem;
+          margin-bottom: 0.5rem;
+        }
+        .pub-card-meta {
+          display: flex;
+          gap: 1rem;
+          flex-wrap: wrap;
+          padding-left: 0.5rem;
+        }
+      </style>
+
+      <div class="pub-header">
+        <h1>📚 论文与成果</h1>
+        <div class="pub-stats-grid">
+          <div class="pub-stat">
+            <div class="pub-stat-number">630+</div>
+            <div class="pub-stat-label">谷歌学术引用</div>
+          </div>
+          <div class="pub-stat">
+            <div class="pub-stat-number">13</div>
+            <div class="pub-stat-label">发表论文</div>
+          </div>
+          <div class="pub-stat">
+            <div class="pub-stat-number">11</div>
+            <div class="pub-stat-label">h-index</div>
+          </div>
+        </div>
+        <a href="https://scholar.google.com/citations?user=D5kHbeAAAAAJ&hl=en" class="scholar-btn" target="_blank">
+          🎓 查看谷歌学术主页
+        </a>
+      </div>
+
+      <!-- 2025 -->
+      <div class="year-section">
+        <h2 class="year-title">2025</h2>
+        
+        <div class="pub-card">
+          <div class="pub-card-title">CSFO: A Category-Specific Flattening Optimization Method for Sensor-Based Long-Tailed Activity Recognition</div>
+          <div class="pub-card-venue">IEEE Sensors Journal, 2025</div>
+          <div class="pub-card-meta">
+            <span class="badge badge-primary">🆕 最新</span>
+            <span class="badge badge-primary">journal</span>
+            <span class="badge badge-warning">⭐ 高亮</span>
+          </div>
+        </div>
+        
+        <div class="pub-card">
+          <div class="pub-card-title">Dual Stage-Wise Decoupling Networks for Long-Tailed Activity Recognition Using Wearable Sensors</div>
+          <div class="pub-card-venue">Pattern Recognition, 2025</div>
+          <div class="pub-card-meta">
+            <span class="badge badge-primary">🆕 最新</span>
+            <span class="badge badge-primary">journal</span>
+            <span class="badge badge-warning">⭐ 高亮</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2024 -->
+      <div class="year-section">
+        <h2 class="year-title">2024</h2>
+        
+        <div class="pub-card">
+          <div class="pub-card-title">Innovative dual-decoupling CNN with layer-wise temporal-spatial attention for sensor-based human activity recognition</div>
+          <div class="pub-card-venue">IEEE Journal of Biomedical and Health Informatics, 2024</div>
+          <div class="pub-card-meta">
+            <span class="badge badge-gradient">📖 16 引用</span>
+            <span class="badge badge-primary">journal</span>
+          </div>
+        </div>
+        
+        <div class="pub-card">
+          <div class="pub-card-title">Large receptive field attention: An innovation in decomposing large-kernel convolution for sensor-based activity recognition</div>
+          <div class="pub-card-venue">IEEE Sensors Journal, 2024</div>
+          <div class="pub-card-meta">
+            <span class="badge badge-gradient">📖 13 引用</span>
+            <span class="badge badge-primary">journal</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2023 -->
+      <div class="year-section">
+        <h2 class="year-title">2023</h2>
+        
+        <div class="pub-card">
+          <div class="pub-card-title">RepHAR: Decoupling networks with accuracy-speed tradeoff for sensor-based human activity recognition</div>
+          <div class="pub-card-venue">IEEE Transactions on Instrumentation and Measurement, 2023</div>
+          <div class="pub-card-meta">
+            <span class="badge badge-gradient">📖 30 引用</span>
+            <span class="badge badge-primary">journal</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2022 -->
+      <div class="year-section">
+        <h2 class="year-title">2022</h2>
+        
+        <div class="pub-card">
+          <div class="pub-card-title">Triple cross-domain attention on human activity recognition using wearable sensors</div>
+          <div class="pub-card-venue">IEEE Transactions on Emerging Topics in Computational Intelligence, 2022</div>
+          <div class="pub-card-meta">
+            <span class="badge badge-gradient">📖 128 引用</span>
+            <span class="badge badge-primary">journal</span>
+            <span class="badge badge-warning">⭐ 高亮</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2021 -->
+      <div class="year-section">
+        <h2 class="year-title">2021</h2>
+        
+        <div class="pub-card">
+          <div class="pub-card-title">DanHAR: Dual attention network for multimodal human activity recognition using wearable sensors</div>
+          <div class="pub-card-venue">Applied Soft Computing, 2021</div>
+          <div class="pub-card-meta">
+            <span class="badge badge-gradient">🔥 222 引用</span>
+            <span class="badge badge-primary">journal</span>
+            <span class="badge badge-warning">⭐ 高亮</span>
+          </div>
+        </div>
+        
+        <div class="pub-card">
+          <div class="pub-card-title">The convolutional neural networks training with channel-selectivity for human activity recognition based on sensors</div>
+          <div class="pub-card-venue">IEEE Journal of Biomedical and Health Informatics, 2021</div>
+          <div class="pub-card-meta">
+            <span class="badge badge-gradient">📖 47 引用</span>
+            <span class="badge badge-primary">journal</span>
+          </div>
+        </div>
+        
+        <div class="pub-card">
+          <div class="pub-card-title">Block-wise training residual networks on multi-channel time series for human activity recognition</div>
+          <div class="pub-card-venue">IEEE Sensors Journal, 2021</div>
+          <div class="pub-card-meta">
+            <span class="badge badge-gradient">📖 22 引用</span>
+            <span class="badge badge-primary">journal</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2020 -->
+      <div class="year-section">
+        <h2 class="year-title">2020</h2>
+        
+        <div class="pub-card">
+          <div class="pub-card-title">The layer-wise training convolutional neural networks using local loss for sensor-based human activity recognition</div>
+          <div class="pub-card-venue">IEEE Sensors Journal, 2020</div>
+          <div class="pub-card-meta">
+            <span class="badge badge-gradient">📌 209 引用</span>
+            <span class="badge badge-primary">journal</span>
+            <span class="badge badge-warning">⭐ 高亮</span>
+          </div>
+        </div>
+        
+        <div class="pub-card">
+          <div class="pub-card-title">Layer-wise training convolutional neural networks with smaller filters for human activity recognition using wearable sensors</div>
+          <div class="pub-card-venue">IEEE Sensors Journal, 2020</div>
+          <div class="pub-card-meta">
+            <span class="badge badge-gradient">⭐ 158 引用</span>
+            <span class="badge badge-primary">journal</span>
+            <span class="badge badge-warning">⭐ 高亮</span>
+          </div>
+        </div>
+        
+        <div class="pub-card">
+          <div class="pub-card-title">Data driven governing equations approximations using attention based multistep neural networks</div>
+          <div class="pub-card-venue">AIP Advances, 2020</div>
+          <div class="pub-card-meta">
+            <span class="badge badge-gradient">📖 2 引用</span>
+            <span class="badge badge-primary">journal</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2019 -->
+      <div class="year-section">
+        <h2 class="year-title">2019</h2>
+        
+        <div class="pub-card">
+          <div class="pub-card-title">Data driven nonlinear dynamical systems identification using multi-step CLDNN</div>
+          <div class="pub-card-venue">AIP Advances, 2019</div>
+          <div class="pub-card-meta">
+            <span class="badge badge-gradient">📖 35 引用</span>
+            <span class="badge badge-primary">journal</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-content">
+      <p>&copy; 2025 滕起 | 郑州大学信息管理学院</p>
+      <p>邮箱: teqi159@gmail.com</p>
+      
+      <div class="social-links">
+        <a href="https://scholar.google.com/citations?user=D5kHbeAAAAAJ&hl=en" target="_blank" title="Google Scholar">🎓</a>
+        <a href="https://github.com/tengqi159" target="_blank" title="GitHub">💻</a>
+        <a href="https://www.researchgate.net/profile/Qi-Teng" target="_blank" title="ResearchGate">🔬</a>
+        <a href="https://orcid.org/0000-0003-3573-4146" target="_blank" title="ORCID">🆔</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
