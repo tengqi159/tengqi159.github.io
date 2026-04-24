@@ -6,12 +6,12 @@
     <title>Qi Teng | Academic Homepage</title>
     <meta
       name="description"
-      content="Academic homepage for Qi Teng, featuring research profile, affiliation, Google Scholar metrics, and publications."
+      content="Academic homepage for Qi Teng, featuring affiliation, direct contact details, Scholar metrics, and publications."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="assets/styles.css" />
@@ -19,9 +19,20 @@
     <script defer src="assets/site.js"></script>
   </head>
   <body>
+    <div class="page-backdrop" aria-hidden="true">
+      <div class="backdrop-grid"></div>
+      <div class="backdrop-orb orb-one"></div>
+      <div class="backdrop-orb orb-two"></div>
+      <div class="backdrop-orb orb-three"></div>
+      <div class="cursor-glow" id="cursor-glow"></div>
+    </div>
+
     <div class="page-shell">
       <header class="site-header">
-        <a class="brand" href="#top">Qi Teng</a>
+        <a class="brand" href="#top">
+          <span class="brand-mark">QT</span>
+          <span class="brand-text">Qi Teng</span>
+        </a>
         <nav class="site-nav" aria-label="Primary">
           <a href="#profile">Profile</a>
           <a href="#research">Research</a>
@@ -32,22 +43,25 @@
       </header>
 
       <main>
-        <section class="hero" id="top">
-          <div class="hero-copy">
+        <section class="hero" id="top" data-reveal>
+          <div class="hero-copy tilt-card">
             <p class="eyebrow">Academic Homepage</p>
-            <h1>Qi Teng</h1>
-            <p class="name-native">滕起</p>
+            <div class="hero-heading">
+              <h1>Qi Teng</h1>
+              <p class="name-native">滕起</p>
+            </div>
+            <div class="hero-ribbons" id="hero-ribbons"></div>
             <p class="tagline">
-              Associate Researcher (直聘副研究员) working on wearable sensing,
-              time-series modeling, and human activity recognition.
+              Associate Researcher (直聘副研究员), School of Management,
+              Zhengzhou University
             </p>
             <p class="summary">
-              Qi Teng is currently with the School of Information Management at
-              Zhengzhou University and received the Ph.D. degree from Nanjing
-              University. Current research focuses on sensor-based human
-              activity recognition, efficient neural architectures, temporal and
-              spatial attention modeling, wearable computing, and data-driven
-              nonlinear dynamical systems.
+              Qi Teng is currently an Associate Researcher (直聘副研究员) at the
+              School of Management, Zhengzhou University, and received the Ph.D.
+              degree from Nanjing University. His recent work focuses on
+              sensor-based human activity recognition, efficient neural
+              architectures, attention-driven time-series modeling, wearable
+              computing, and data-driven nonlinear dynamical systems.
             </p>
             <div class="cta-row">
               <a
@@ -60,97 +74,124 @@
               </a>
               <a
                 class="button button-secondary"
-                href="https://orcid.org/0000-0003-3573-4146"
+                href="https://github.com/tengqi159"
                 target="_blank"
                 rel="noreferrer"
               >
-                ORCID
+                GitHub
               </a>
-              <a
-                class="button button-secondary"
-                href="mailto:teqi159@gmail.com"
-              >
-                Email
-              </a>
+              <a class="button button-secondary" href="#links">Research Links</a>
             </div>
+            <div class="contact-grid" id="contact-grid"></div>
             <div class="fact-strip">
               <article>
                 <span>Current Affiliation</span>
-                <strong>Zhengzhou University, School of Information Management</strong>
+                <strong>Zhengzhou University, School of Management</strong>
+                <small>郑州大学管理学院</small>
               </article>
               <article>
                 <span>Location</span>
                 <strong>Zhengzhou, China</strong>
+                <small>Main academic base</small>
               </article>
               <article>
                 <span>Education</span>
                 <strong>Ph.D., Nanjing University</strong>
+                <small>Information studies background</small>
               </article>
             </div>
           </div>
 
-          <aside class="profile-card" aria-label="Profile overview">
-            <img
-              class="profile-photo"
-              src="assets/profile.jpg"
-              alt="Profile portrait for Qi Teng"
-            />
+          <aside class="profile-card tilt-card" aria-label="Profile overview">
+            <div class="profile-frame">
+              <span class="profile-glow"></span>
+              <img
+                class="profile-photo"
+                src="assets/profile.jpg"
+                alt="Profile portrait for Qi Teng"
+              />
+            </div>
             <div class="profile-card-body">
-              <p class="profile-label">Research Profile</p>
-              <h2>Public Research Snapshot</h2>
+              <p class="profile-label">Research Signature</p>
+              <h2>Wearable Intelligence and Efficient Learning</h2>
+              <p class="profile-intro">
+                A polished public-facing academic profile for collaboration,
+                talks, student contact, and research visibility.
+              </p>
               <ul class="profile-points">
-                <li>Google Scholar metrics are refreshed from the public profile.</li>
-                <li>Current position is taken from the public GitHub academic page.</li>
-                <li>Publication entries combine Scholar, ORCID, and DOI data.</li>
+                <li>Scholar metrics refreshed from the public profile.</li>
+                <li>Direct identifiers and contact details surfaced clearly.</li>
+                <li>Interaction design upgraded while preserving academic tone.</li>
               </ul>
             </div>
           </aside>
         </section>
 
-        <section class="stats-section" id="profile">
+        <section class="stats-section" id="profile" data-reveal>
           <div class="section-heading">
             <p class="section-kicker">Profile</p>
-            <h2>Academic Metrics and Focus</h2>
+            <h2>Academic Metrics and Research Profile</h2>
             <p>
-              The overview below is assembled from public sources and highlights
-              the main areas visible across recent publications.
+              A concise overview of citation indicators, current appointment,
+              and the major themes that run through the publication record.
             </p>
           </div>
 
           <div class="stats-grid" id="metrics-grid"></div>
 
-          <div class="section-heading" id="research">
+          <article class="profile-note-card tilt-card">
+            <div>
+              <p class="section-kicker">Keywords</p>
+              <h3>Research Themes</h3>
+            </div>
+            <div class="keyword-row">
+              <span>Human Activity Recognition</span>
+              <span>Wearable Computing</span>
+              <span>Time-Series Learning</span>
+              <span>Efficient Deep Networks</span>
+              <span>Attention Mechanisms</span>
+              <span>Nonlinear Dynamical Systems</span>
+            </div>
+          </article>
+        </section>
+
+        <section class="research-section" id="research" data-reveal>
+          <div class="section-heading">
             <p class="section-kicker">Research</p>
             <h2>Research Directions</h2>
             <p>
-              Themes that appear consistently across the publication record and
-              recent public profile materials.
+              Themes that appear consistently across recent work, from wearable
+              sensing pipelines to efficient neural training strategies.
             </p>
           </div>
 
           <div class="focus-grid">
-            <article class="focus-card">
+            <article class="focus-card tilt-card">
+              <span class="focus-index">01</span>
               <h3>Wearable Sensing</h3>
               <p>
                 Sensor-based human activity recognition using multimodal and
-                multi-channel time-series signals.
+                multi-channel time-series signals in realistic settings.
               </p>
             </article>
-            <article class="focus-card">
+            <article class="focus-card tilt-card">
+              <span class="focus-index">02</span>
               <h3>Efficient Deep Models</h3>
               <p>
                 Layer-wise training, decoupling strategies, and lightweight
                 convolutional designs for practical deployment.
               </p>
             </article>
-            <article class="focus-card">
+            <article class="focus-card tilt-card">
+              <span class="focus-index">03</span>
               <h3>Attention Mechanisms</h3>
               <p>
                 Temporal, spatial, channel, and cross-domain attention for
                 structured sensor intelligence.
               </p>
             </article>
-            <article class="focus-card">
+            <article class="focus-card tilt-card">
+              <span class="focus-index">04</span>
               <h3>Dynamical Systems</h3>
               <p>
                 Data-driven approximation and identification of nonlinear
@@ -160,7 +201,7 @@
           </div>
         </section>
 
-        <section class="selected-section" id="selected">
+        <section class="selected-section" id="selected" data-reveal>
           <div class="section-heading">
             <p class="section-kicker">Highlights</p>
             <h2>Selected Publications</h2>
@@ -172,7 +213,7 @@
           <div class="selected-grid" id="selected-publications"></div>
         </section>
 
-        <section class="publications-section" id="publications">
+        <section class="publications-section" id="publications" data-reveal>
           <div class="section-heading">
             <p class="section-kicker">Archive</p>
             <h2>Full Publication List</h2>
@@ -196,59 +237,63 @@
           <div class="publication-list" id="publication-list"></div>
         </section>
 
-        <section class="links-section" id="links">
+        <section class="links-section" id="links" data-reveal>
           <div class="section-heading">
             <p class="section-kicker">Links</p>
-            <h2>Research Profiles</h2>
+            <h2>Research Profiles and Public Resources</h2>
             <p>
-              External resources for citation data, persistent identifiers, and
-              future profile expansion.
+              External resources for citation data, persistent identifiers, code
+              visibility, and academic networking.
             </p>
           </div>
 
           <div class="links-grid">
             <a
-              class="link-card"
+              class="link-card tilt-card"
               href="https://scholar.google.com/citations?user=D5kHbeAAAAAJ&hl=en"
               target="_blank"
               rel="noreferrer"
             >
               <span class="link-card-label">Google Scholar</span>
               <strong>Profile and citation record</strong>
+              <small>Public citation indicators and paper list</small>
             </a>
             <a
-              class="link-card"
+              class="link-card tilt-card"
               href="https://github.com/tengqi159"
               target="_blank"
               rel="noreferrer"
             >
               <span class="link-card-label">GitHub</span>
-              <strong>Code and public academic page repository</strong>
+              <strong>Code and academic webpage repository</strong>
+              <small>Projects, homepage source, and research-facing assets</small>
             </a>
             <a
-              class="link-card"
+              class="link-card tilt-card"
               href="https://orcid.org/0000-0003-3573-4146"
               target="_blank"
               rel="noreferrer"
             >
               <span class="link-card-label">ORCID</span>
-              <strong>Persistent researcher identifier</strong>
+              <strong>0000-0003-3573-4146</strong>
+              <small>Persistent researcher identifier</small>
             </a>
             <a
-              class="link-card"
+              class="link-card tilt-card"
               href="https://www.researchgate.net/profile/Qi-Teng"
               target="_blank"
               rel="noreferrer"
             >
               <span class="link-card-label">ResearchGate</span>
               <strong>Additional publication profile</strong>
+              <small>Further networking and publication presence</small>
             </a>
           </div>
 
           <p class="source-note">
-            Last updated on April 24, 2026. Public profile details were compiled
-            from Google Scholar, the existing public GitHub homepage, ORCID, and
-            Crossref metadata.
+            Last refreshed on April 24, 2026. Profile details reflect Google
+            Scholar data together with user-confirmed affiliation and contact
+            information.
           </p>
         </section>
       </main>
