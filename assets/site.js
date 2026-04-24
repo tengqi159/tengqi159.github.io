@@ -8,6 +8,42 @@ function createMetricCard(metric) {
   return article;
 }
 
+function createHeroBadge(label) {
+  const badge = document.createElement("span");
+  badge.className = "hero-ribbon";
+  badge.textContent = label;
+  return badge;
+}
+
+function createContactCard(contact) {
+  const article = document.createElement("article");
+  article.className = "contact-card tilt-card";
+
+  const linkLabel = contact.href?.startsWith("mailto:") ? "Compose" : "Open";
+  const externalAttributes = contact.href?.startsWith("http")
+    ? ' target="_blank" rel="noreferrer"'
+    : "";
+
+  article.innerHTML = `
+    <span class="contact-label">${contact.label}</span>
+    <strong class="contact-value">${contact.value}</strong>
+    <span class="contact-hint">${contact.hint}</span>
+    <div class="contact-actions">
+      ${
+        contact.href
+          ? `<a class="inline-action" href="${contact.href}"${externalAttributes}>${linkLabel}</a>`
+          : ""
+      }
+      ${
+        contact.copyValue
+          ? `<button class="inline-action copy-action" type="button" data-copy="${contact.copyValue}">Copy</button>`
+          : ""
+      }
+    </div>
+  `;
+  return article;
+}
+
 function createPublicationLink(publication) {
   const scholarSearch = new URL("https://scholar.google.com/scholar");
   scholarSearch.searchParams.set("q", publication.title);
@@ -26,7 +62,7 @@ function createPublicationLink(publication) {
 
 function createPublicationCard(publication, compact) {
   const wrapper = document.createElement("article");
-  wrapper.className = compact ? "selected-card" : "publication-item";
+  wrapper.className = compact ? "selected-card tilt-card" : "publication-item";
   wrapper.innerHTML = `
     <div class="${compact ? "paper-topline" : "publication-topline"}">
       <span class="paper-badge">${publication.year}</span>
@@ -52,6 +88,28 @@ function sortPublications(publications, mode) {
     return right.year - left.year || right.citations - left.citations;
   });
   return list;
+}
+
+function renderHeroBadges() {
+  const heroRibbons = document.getElementById("hero-ribbons");
+  if (!heroRibbons) {
+    return;
+  }
+
+  heroRibbons.replaceChildren(
+    ...window.siteData.profile.heroBadges.map((label) => createHeroBadge(label))
+  );
+}
+
+function renderContacts() {
+  const contactGrid = document.getElementById("contact-grid");
+  if (!contactGrid) {
+    return;
+  }
+
+  contactGrid.replaceChildren(
+    ...window.siteData.profile.contacts.map((contact) => createContactCard(contact))
+  );
 }
 
 function renderMetrics() {
@@ -110,9 +168,120 @@ function renderPublicationList(currentYear, currentSort) {
   );
 }
 
+function setupCopyButtons() {
+  document.querySelectorAll(".copy-action:not([data-copy-ready])").forEach((button) => {
+    button.dataset.copyReady = "true";
+    button.addEventListener("click", async () => {
+      const originalLabel = button.textContent;
+
+      try {
+        await navigator.clipboard.writeText(button.dataset.copy || "");
+        button.textContent = "Copied";
+      } catch (error) {
+        button.textContent = "Retry";
+      }
+
+      window.setTimeout(() => {
+        button.textContent = originalLabel;
+      }, 1400);
+    });
+  });
+}
+
+function setupRevealObserver() {
+  const sections = document.querySelectorAll("[data-reveal]");
+  if (!("IntersectionObserver" in window)) {
+    sections.forEach((section) => section.classList.add("is-visible"));
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    {
+      threshold: 0.18
+    }
+  );
+
+  sections.forEach((section) => observer.observe(section));
+}
+
+function setupCursorGlow() {
+  const glow = document.getElementById("cursor-glow");
+  if (!glow) {
+    return;
+  }
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const coarsePointer = window.matchMedia("(pointer: coarse)").matches;
+
+  if (reduceMotion || coarsePointer) {
+    glow.remove();
+    return;
+  }
+
+  const point = {
+    x: window.innerWidth / 2,
+    y: window.innerHeight * 0.2
+  };
+  let frame = null;
+
+  function paintGlow() {
+    glow.style.transform = `translate3d(${point.x}px, ${point.y}px, 0) translate(-50%, -50%)`;
+    frame = null;
+  }
+
+  window.addEventListener("pointermove", (event) => {
+    point.x = event.clientX;
+    point.y = event.clientY;
+    glow.classList.add("is-active");
+    if (!frame) {
+      frame = window.requestAnimationFrame(paintGlow);
+    }
+  });
+}
+
+function setupTiltCards() {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    return;
+  }
+
+  document.querySelectorAll(".tilt-card:not([data-tilt-ready])").forEach((card) => {
+    card.dataset.tiltReady = "true";
+
+    card.addEventListener("pointermove", (event) => {
+      const rect = card.getBoundingClientRect();
+      const offsetX = (event.clientX - rect.left) / rect.width - 0.5;
+      const offsetY = (event.clientY - rect.top) / rect.height - 0.5;
+
+      card.style.setProperty("--tilt-rotate-x", `${(offsetY * -7).toFixed(2)}deg`);
+      card.style.setProperty("--tilt-rotate-y", `${(offsetX * 8).toFixed(2)}deg`);
+      card.classList.add("is-tilting");
+    });
+
+    card.addEventListener("pointerleave", () => {
+      card.classList.remove("is-tilting");
+      card.style.removeProperty("--tilt-rotate-x");
+      card.style.removeProperty("--tilt-rotate-y");
+    });
+  });
+}
+
 function bootstrap() {
+  renderHeroBadges();
+  renderContacts();
   renderMetrics();
   renderSelectedPublications();
+  setupCopyButtons();
+  setupRevealObserver();
+  setupCursorGlow();
+  setupTiltCards();
 
   const sortSelect = document.getElementById("sort-select");
   let activeYear = "All";
@@ -124,6 +293,7 @@ function bootstrap() {
       refresh();
     });
     renderPublicationList(activeYear, activeSort);
+    setupTiltCards();
   }
 
   sortSelect.addEventListener("change", (event) => {

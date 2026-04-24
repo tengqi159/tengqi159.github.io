@@ -1,17 +1,63 @@
 window.siteData = {
   profile: {
     name: "Qi Teng",
-    affiliation: "School of Information Management, Zhengzhou University",
+    nativeName: "滕起",
+    position: "Associate Researcher (直聘副研究员)",
+    affiliation: "School of Management, Zhengzhou University",
+    affiliationNative: "郑州大学管理学院",
     location: "Zhengzhou, China",
+    education: "Ph.D., Nanjing University",
     scholar: "https://scholar.google.com/citations?user=D5kHbeAAAAAJ&hl=en",
+    github: "https://github.com/tengqi159",
+    researchgate: "https://www.researchgate.net/profile/Qi-Teng",
     orcid: "https://orcid.org/0000-0003-3573-4146",
-    verifiedDomain: "smail.nju.edu.cn",
+    orcidId: "0000-0003-3573-4146",
+    email: "teqi159@gmail.com",
+    institutionalEmail: "tq@zzu.edu.cn",
     updatedAt: "2026-04-24",
+    heroBadges: [
+      "Wearable Sensing",
+      "Time-Series Intelligence",
+      "Human Activity Recognition"
+    ],
+    contacts: [
+      {
+        label: "ORCID",
+        value: "0000-0003-3573-4146",
+        hint: "Persistent researcher identifier",
+        href: "https://orcid.org/0000-0003-3573-4146",
+        copyValue: "0000-0003-3573-4146"
+      },
+      {
+        label: "Gmail",
+        value: "teqi159@gmail.com",
+        hint: "Commonly used contact email",
+        href: "mailto:teqi159@gmail.com",
+        copyValue: "teqi159@gmail.com"
+      },
+      {
+        label: "Institutional Email",
+        value: "tq@zzu.edu.cn",
+        hint: "Zhengzhou University contact",
+        href: "mailto:tq@zzu.edu.cn",
+        copyValue: "tq@zzu.edu.cn"
+      },
+      {
+        label: "Google Scholar",
+        value: "Public citation profile",
+        hint: "Metrics, citations, and publication list",
+        href: "https://scholar.google.com/citations?user=D5kHbeAAAAAJ&hl=en"
+      }
+    ],
     metrics: [
-      { label: "Citations", value: "933", note: "Google Scholar" },
-      { label: "h-index", value: "11", note: "All years" },
-      { label: "i10-index", value: "11", note: "All years" },
-      { label: "Current role", value: "2025", note: "Joined Zhengzhou University" }
+      { label: "Citations", value: "933", note: "Google Scholar, all years" },
+      { label: "h-index", value: "11", note: "Public Scholar profile" },
+      { label: "i10-index", value: "11", note: "Public Scholar profile" },
+      {
+        label: "Current Position",
+        value: "Associate Researcher",
+        note: "School of Management, Zhengzhou University"
+      }
     ]
   },
   publications: [
