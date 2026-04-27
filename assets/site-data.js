@@ -25,21 +25,18 @@ window.siteData = {
         label: "ORCID",
         value: "0000-0003-3573-4146",
         hint: "Persistent researcher identifier",
-        href: "https://orcid.org/0000-0003-3573-4146",
         copyValue: "0000-0003-3573-4146"
       },
       {
         label: "Gmail",
         value: "teqi159@gmail.com",
         hint: "Commonly used contact email",
-        href: "mailto:teqi159@gmail.com",
         copyValue: "teqi159@gmail.com"
       },
       {
         label: "Institutional Email",
         value: "tq@zzu.edu.cn",
         hint: "Zhengzhou University contact",
-        href: "mailto:tq@zzu.edu.cn",
         copyValue: "tq@zzu.edu.cn"
       },
       {
