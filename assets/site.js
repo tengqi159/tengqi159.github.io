@@ -280,30 +280,63 @@ function setupRetroSprites() {
   }
 
   const sprites = [
-    ["pixel-star", 9, 18, 26],
-    ["pixel-coin", 18, 72, 32],
-    ["pixel-block", 27, 28, 30],
-    ["pixel-runner", 41, 82, 34],
-    ["pixel-handheld", 57, 14, 34],
-    ["pixel-kart", 72, 36, 38],
-    ["pixel-castle", 86, 68, 38],
-    ["pixel-ghost", 93, 22, 32],
-    ["pixel-star", 12, 88, 22],
-    ["pixel-coin", 49, 54, 26],
-    ["pixel-mushroom", 66, 91, 34],
-    ["pixel-rocket", 83, 9, 34],
-    ["pixel-leaf", 33, 8, 30],
-    ["pixel-capsule", 6, 44, 32],
-    ["pixel-kart", 12, 52, 34],
-    ["pixel-handheld", 92, 80, 32],
-    ["pixel-ghost", 24, 92, 28],
-    ["pixel-mushroom", 79, 84, 30],
-    ["pixel-castle", 42, 18, 32],
-    ["pixel-rocket", 5, 77, 28],
-    ["pixel-leaf", 97, 48, 28],
-    ["pixel-capsule", 58, 76, 30],
-    ["pixel-block", 74, 12, 26],
-    ["pixel-runner", 29, 60, 28]
+    ["pixel-star", 8, 18, 42],
+    ["pixel-coin", 18, 72, 48],
+    ["pixel-block", 27, 28, 46],
+    ["pixel-runner", 41, 82, 50],
+    ["pixel-handheld", 57, 14, 50],
+    ["pixel-kart", 72, 36, 56],
+    ["pixel-castle", 86, 68, 56],
+    ["pixel-ghost", 93, 22, 48],
+    ["pixel-heart", 12, 88, 42],
+    ["pixel-coin", 49, 54, 40],
+    ["pixel-mushroom", 66, 91, 54],
+    ["pixel-rocket", 83, 9, 54],
+    ["pixel-leaf", 33, 8, 46],
+    ["pixel-capsule", 6, 44, 50],
+    ["pixel-kart", 12, 52, 48],
+    ["pixel-handheld", 92, 80, 46],
+    ["pixel-ghost", 24, 92, 44],
+    ["pixel-mushroom", 79, 84, 46],
+    ["pixel-castle", 42, 18, 48],
+    ["pixel-rocket", 5, 77, 42],
+    ["pixel-leaf", 97, 48, 42],
+    ["pixel-capsule", 58, 76, 44],
+    ["pixel-block", 74, 12, 40],
+    ["pixel-runner", 29, 60, 42],
+    ["pixel-controller", 16, 12, 52],
+    ["pixel-dino", 38, 45, 58],
+    ["pixel-shield", 52, 92, 46],
+    ["pixel-squid", 63, 28, 50],
+    ["pixel-shell", 88, 38, 48],
+    ["pixel-flower", 96, 64, 42],
+    ["pixel-trophy", 74, 63, 48],
+    ["pixel-cloud", 22, 38, 54],
+    ["pixel-controller", 46, 6, 44],
+    ["pixel-dino", 69, 72, 50],
+    ["pixel-shield", 3, 58, 40],
+    ["pixel-squid", 35, 76, 42],
+    ["pixel-shell", 54, 37, 42],
+    ["pixel-flower", 87, 15, 38],
+    ["pixel-trophy", 18, 25, 42],
+    ["pixel-cloud", 77, 93, 48],
+    ["pixel-star", 61, 58, 36],
+    ["pixel-coin", 94, 92, 40],
+    ["pixel-dino", 7, 28, 74],
+    ["pixel-controller", 53, 22, 66],
+    ["pixel-kart", 87, 51, 70],
+    ["pixel-ghost", 73, 17, 62],
+    ["pixel-flower", 14, 67, 58],
+    ["pixel-shield", 36, 89, 62],
+    ["pixel-shell", 64, 67, 60],
+    ["pixel-trophy", 91, 74, 58],
+    ["pixel-mushroom", 4, 92, 64],
+    ["pixel-rocket", 30, 14, 68],
+    ["pixel-cloud", 49, 84, 72],
+    ["pixel-handheld", 98, 34, 62],
+    ["pixel-block", 11, 6, 58],
+    ["pixel-runner", 82, 94, 58],
+    ["pixel-squid", 43, 33, 64]
   ];
 
   field.replaceChildren(
@@ -313,8 +346,9 @@ function setupRetroSprites() {
       item.style.left = `${left}%`;
       item.style.top = `${top}%`;
       item.style.setProperty("--sprite-size", `${size}px`);
-      item.style.setProperty("--sprite-speed", `${12 + (index % 5) * 2}s`);
-      item.style.setProperty("--sprite-delay", `${index * -0.9}s`);
+      item.style.setProperty("--sprite-speed", `${14 + (index % 7) * 2.4}s`);
+      item.style.setProperty("--sprite-delay", `${index * -0.72}s`);
+      item.style.setProperty("--sprite-opacity", `${0.5 + (index % 5) * 0.045}`);
       return item;
     })
   );
@@ -323,8 +357,11 @@ function setupRetroSprites() {
 function setupVisitorMap() {
   const button = document.getElementById("locate-visitor");
   const dot = document.getElementById("visitor-dot");
+  const dotLabel = document.getElementById("visitor-dot-label");
+  const map = document.getElementById("visitor-map-canvas");
   const status = document.getElementById("visitor-status");
-  if (!button || !dot || !status) {
+  const details = document.getElementById("visitor-details");
+  if (!button || !dot || !map || !status || !details) {
     return;
   }
 
@@ -332,39 +369,139 @@ function setupVisitorMap() {
     status.textContent = message;
   }
 
-  button.addEventListener("click", () => {
-    if (!("geolocation" in navigator)) {
-      setStatus("This browser does not expose a location signal.");
-      return;
+  function projectLocation(latitude, longitude) {
+    return {
+      left: Math.min(97, Math.max(3, ((longitude + 180) / 360) * 100)),
+      top: Math.min(94, Math.max(6, ((90 - latitude) / 180) * 100))
+    };
+  }
+
+  function createDetail(label, value) {
+    const item = document.createElement("span");
+    const strong = document.createElement("strong");
+    const small = document.createElement("small");
+
+    strong.textContent = value;
+    small.textContent = label;
+    item.replaceChildren(strong, small);
+    return item;
+  }
+
+  function renderDetails(location) {
+    const items = [
+      ["Location", location.place],
+      ["Method", location.method],
+      ["Coordinates", `${location.latitude.toFixed(2)}, ${location.longitude.toFixed(2)}`]
+    ];
+
+    if (location.accuracy) {
+      items.push(["Accuracy", location.accuracy]);
     }
 
-    button.disabled = true;
-    setStatus("Waiting for browser permission...");
+    details.replaceChildren(...items.map(([label, value]) => createDetail(label, value)));
+    details.hidden = false;
+  }
 
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        const left = Math.min(97, Math.max(3, ((longitude + 180) / 360) * 100));
-        const top = Math.min(95, Math.max(5, ((90 - latitude) / 180) * 100));
+  function placeDot(location) {
+    const point = projectLocation(location.latitude, location.longitude);
 
-        dot.hidden = false;
-        dot.style.left = `${left}%`;
-        dot.style.top = `${top}%`;
-        setStatus(
-          `Approximate marker placed at ${latitude.toFixed(2)}, ${longitude.toFixed(2)}. It stays in this browser session.`
-        );
-        button.disabled = false;
-      },
-      () => {
-        setStatus("Location permission was not shared, so the map stays anonymous.");
-        button.disabled = false;
-      },
-      {
-        enableHighAccuracy: false,
-        maximumAge: 600000,
-        timeout: 9000
-      }
+    dot.hidden = false;
+    dot.classList.remove("is-placed");
+    dot.style.left = `${point.left}%`;
+    dot.style.top = `${point.top}%`;
+    dotLabel.textContent = location.shortLabel || "You";
+    window.requestAnimationFrame(() => dot.classList.add("is-placed"));
+
+    map.classList.add("has-visitor");
+    renderDetails(location);
+    setStatus(
+      `${location.place} is now glowing on the map. The marker is rendered locally in this browser session.`
     );
+  }
+
+  function getBrowserLocation() {
+    if (!("geolocation" in navigator)) {
+      return Promise.reject(new Error("Browser geolocation is unavailable."));
+    }
+
+    return new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude, accuracy } = position.coords;
+          resolve({
+            latitude,
+            longitude,
+            accuracy: accuracy ? `about ${Math.round(accuracy / 1000)} km` : "",
+            place: "Browser-approved location",
+            shortLabel: "Here",
+            method: "Browser permission"
+          });
+        },
+        reject,
+        {
+          enableHighAccuracy: false,
+          maximumAge: 600000,
+          timeout: 7000
+        }
+      );
+    });
+  }
+
+  async function getIpLocation() {
+    const response = await fetch("https://ipapi.co/json/", {
+      cache: "no-store"
+    });
+
+    if (!response.ok) {
+      throw new Error("The IP location service did not respond.");
+    }
+
+    const data = await response.json();
+    const latitude = Number(data.latitude);
+    const longitude = Number(data.longitude);
+
+    if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
+      throw new Error("The IP location service returned an incomplete location.");
+    }
+
+    const place = [data.city, data.region, data.country_name].filter(Boolean).join(", ");
+
+    return {
+      latitude,
+      longitude,
+      place: place || "Approximate IP location",
+      shortLabel: data.city || data.country_code || "IP",
+      method: "Approximate IP lookup",
+      accuracy: "city or region level"
+    };
+  }
+
+  button.addEventListener("click", async () => {
+    const originalLabel = button.textContent;
+    button.disabled = true;
+    button.textContent = "Locating...";
+    details.hidden = true;
+    map.classList.add("is-scanning");
+
+    try {
+      setStatus("Asking the browser for a location signal...");
+      const browserLocation = await getBrowserLocation();
+      placeDot(browserLocation);
+    } catch (browserError) {
+      try {
+        setStatus("Browser location was unavailable. Trying an approximate IP lookup...");
+        const ipLocation = await getIpLocation();
+        placeDot(ipLocation);
+      } catch (ipError) {
+        setStatus(
+          "No location signal could be resolved. The map stays anonymous until the visitor allows a signal."
+        );
+      }
+    } finally {
+      button.disabled = false;
+      button.textContent = originalLabel;
+      map.classList.remove("is-scanning");
+    }
   });
 }
 
@@ -388,9 +525,12 @@ function setupPlaygroundEffects() {
   let height = 0;
   let dpr = 1;
   let particles = [];
+  let gravityWaves = [];
   let snake = null;
   let idleTimer = null;
   let running = false;
+  let lastPointerAt = 0;
+  let lastGravityRipple = 0;
   const snakeColors = {
     head: "#e85d75",
     body: "#13727a",
@@ -428,6 +568,21 @@ function setupPlaygroundEffects() {
     pointer.x = event.clientX;
     pointer.y = event.clientY;
     pointer.ready = true;
+    lastPointerAt = performance.now();
+
+    if (lastPointerAt - lastGravityRipple > 62) {
+      gravityWaves.push({
+        x: pointer.x,
+        y: pointer.y,
+        radius: 8,
+        life: 36,
+        maxLife: 36,
+        drift: -0.9 + Math.random() * 1.8
+      });
+      lastGravityRipple = lastPointerAt;
+    }
+
+    startLoop();
   }
 
   function resizeCanvas() {
@@ -490,6 +645,76 @@ function setupPlaygroundEffects() {
     });
   }
 
+  function updateGravityWaves() {
+    gravityWaves = gravityWaves.filter((wave) => wave.life > 0);
+    gravityWaves.forEach((wave) => {
+      wave.radius += 4.2;
+      wave.y += wave.drift;
+      wave.life -= 1;
+    });
+  }
+
+  function drawGravityField() {
+    if (!pointer.ready) {
+      return;
+    }
+
+    const now = performance.now();
+    const activeAlpha = Math.max(0, 1 - (now - lastPointerAt) / 1600);
+    if (activeAlpha <= 0 && !gravityWaves.length) {
+      return;
+    }
+
+    const pulse = now / 520;
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+
+    if (activeAlpha > 0) {
+      for (let index = 0; index < 4; index += 1) {
+        const radius = 18 + index * 15 + Math.sin(pulse + index * 0.8) * 4;
+        ctx.globalAlpha = activeAlpha * (0.34 - index * 0.055);
+        ctx.strokeStyle = index % 2 ? "#13727a" : "#b9892c";
+        ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        ctx.arc(pointer.x, pointer.y, radius, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      for (let index = 0; index < 10; index += 1) {
+        const angle = pulse * 0.8 + index * ((Math.PI * 2) / 10);
+        const radius = 24 + Math.sin(pulse * 1.4 + index) * 12;
+        ctx.globalAlpha = activeAlpha * 0.45;
+        ctx.fillStyle = colors[index % colors.length];
+        ctx.beginPath();
+        ctx.arc(
+          pointer.x + Math.cos(angle) * radius,
+          pointer.y + Math.sin(angle) * radius,
+          1.6 + (index % 3) * 0.45,
+          0,
+          Math.PI * 2
+        );
+        ctx.fill();
+      }
+    }
+
+    gravityWaves.forEach((wave, index) => {
+      const alpha = Math.max(0, wave.life / wave.maxLife);
+      ctx.globalAlpha = alpha * 0.28;
+      ctx.strokeStyle = colors[index % colors.length];
+      ctx.lineWidth = 1 + alpha * 2.2;
+      ctx.beginPath();
+      ctx.arc(wave.x, wave.y, wave.radius, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.globalAlpha = alpha * 0.12;
+      ctx.beginPath();
+      ctx.arc(wave.x, wave.y, wave.radius * 0.55, 0, Math.PI * 2);
+      ctx.stroke();
+    });
+
+    ctx.restore();
+  }
+
   function drawParticles() {
     particles.forEach((particle) => {
       const alpha = Math.max(0, particle.life / particle.maxLife);
@@ -548,6 +773,13 @@ function setupPlaygroundEffects() {
   }
 
   function createSnakePath(targetX, targetY) {
+    if (!Number.isFinite(targetX) || !Number.isFinite(targetY)) {
+      return [
+        { x: 0, y: 0 },
+        { x: width / 2 || window.innerWidth / 2, y: height / 2 || window.innerHeight / 2 }
+      ];
+    }
+
     const safeWidth = Math.min(
       Math.max(Number.isFinite(width) && width > 0 ? width : window.innerWidth || 1280, 320),
       2600
@@ -1138,11 +1370,18 @@ function setupPlaygroundEffects() {
 
   function tick() {
     ctx.clearRect(0, 0, width, height);
+    updateGravityWaves();
     updateParticles();
+    drawGravityField();
     drawSnake();
     drawParticles();
 
-    if (particles.length || snake) {
+    if (
+      particles.length ||
+      gravityWaves.length ||
+      snake ||
+      (pointer.ready && performance.now() - lastPointerAt < 1400)
+    ) {
       window.requestAnimationFrame(tick);
       return;
     }
