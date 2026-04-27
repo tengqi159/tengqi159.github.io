@@ -14,9 +14,9 @@
       href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="assets/styles.css?v=20260427-orbit2" />
-    <script defer src="assets/site-data.js?v=20260427-orbit2"></script>
-    <script defer src="assets/site.js?v=20260427-orbit2"></script>
+    <link rel="stylesheet" href="assets/styles.css?v=20260427-atlas4" />
+    <script defer src="assets/site-data.js?v=20260427-atlas4"></script>
+    <script defer src="assets/site.js?v=20260427-atlas4"></script>
   </head>
   <body>
     <div class="page-backdrop" aria-hidden="true">
@@ -239,38 +239,80 @@
 
         <section class="visitor-section" id="visitor-map" data-reveal>
           <div class="section-heading">
-            <p class="section-kicker">Visitor Constellation</p>
-            <h2>A Tiny Map for Curious Visitors</h2>
+            <p class="section-kicker">Visitor Atlas</p>
+            <h2>A Live Map for Curious Visitors</h2>
             <p>
-              A privacy-friendly visitor marker can place an approximate dot
-              only after the visitor chooses to share a browser location.
+              A more expressive world map can light up an approximate visitor
+              location after the visitor actively asks to place a dot.
             </p>
           </div>
 
           <div class="visitor-panel">
-            <div class="visitor-map" id="visitor-map-canvas" aria-label="Approximate visitor map">
-              <svg class="world-sketch" viewBox="0 0 1000 520" role="img" aria-label="World map sketch">
-                <path d="M104 172c38-58 111-77 178-53 46 17 75 49 127 43 49-6 87-48 139-33 38 11 54 49 37 82-16 31-58 43-96 39-37-4-69-21-106-15-49 8-73 52-122 61-62 11-148-22-164-84-4-15-2-28 7-40Z" />
-                <path d="M166 325c39-21 83 8 102 41 25 43 13 96-22 126-23 20-58 15-70-16-10-27 5-55-10-82-11-21-37-30-35-52 1-8 13-13 35-17Z" />
-                <path d="M552 138c50-60 149-68 206-14 38 36 57 83 114 85 33 1 67-12 97 8 30 20 32 59 6 82-34 30-90 16-132 36-41 20-54 70-98 82-42 11-82-22-77-63 4-31 33-48 42-78 10-34-15-65-49-66-42-1-75 34-114 21-35-12-27-58 5-93Z" />
-                <path d="M722 424c32-24 86-15 109 17 22 31 16 72-15 93-28 19-72 7-97-19-28-30-27-68 3-91Z" />
+            <div class="visitor-map" id="visitor-map-canvas" aria-label="Approximate visitor world map">
+              <div class="atlas-grid" aria-hidden="true"></div>
+              <div class="atlas-orbit orbit-one" aria-hidden="true"></div>
+              <div class="atlas-orbit orbit-two" aria-hidden="true"></div>
+              <img
+                class="world-map-image"
+                src="assets/world-map-equirectangular.svg"
+                alt="Equirectangular world map"
+              />
+              <svg class="world-map" viewBox="0 0 1200 620" aria-hidden="true">
+                <g class="map-graticule">
+                  <path d="M120 90H1080M120 190H1080M120 310H1080M120 430H1080M120 530H1080" />
+                  <path d="M180 52V568M340 52V568M500 52V568M660 52V568M820 52V568M980 52V568" />
+                </g>
+                <g class="map-city-lights" aria-hidden="true">
+                  <circle cx="192" cy="180" r="4" />
+                  <circle cx="353" cy="170" r="5" />
+                  <circle cx="600" cy="133" r="5" />
+                  <circle cx="988" cy="172" r="5" />
+                  <circle cx="1005" cy="202" r="4" />
+                  <circle cx="1104" cy="427" r="5" />
+                </g>
               </svg>
               <div class="visitor-dot" id="visitor-dot" hidden>
                 <span></span>
+                <strong id="visitor-dot-label">You</strong>
               </div>
             </div>
             <div class="visitor-copy">
-              <p class="section-kicker">Local Marker</p>
-              <h3>Click to place your point on the map</h3>
+              <p class="section-kicker">Opt-in Location</p>
+              <h3>Light up your city on the world map</h3>
               <p>
-                The page does not store IP addresses. The marker is rendered in
-                the browser from an optional location permission.
+                The button first asks for browser location. If that is declined,
+                it can fall back to an approximate IP lookup through ipapi.co.
+                This page itself does not store visitor IP addresses.
               </p>
+              <div class="visitor-services" aria-label="Common academic visitor map services">
+                <a href="https://pulsemaps.com/" target="_blank" rel="noreferrer">PulseMaps</a>
+                <a href="https://clustrmaps.com/" target="_blank" rel="noreferrer">ClustrMaps</a>
+                <a href="https://flagcounter.com/" target="_blank" rel="noreferrer">Flag Counter</a>
+              </div>
+              <div class="visitor-counter">
+                <span>Live aggregate visitor map</span>
+                <a href="https://s01.flagcounter.com/more/uuf" target="_blank" rel="noreferrer">
+                  <img
+                    src="https://s01.flagcounter.com/map/uuf/size_l/txt_112133/border_D7EEF0/pageviews_1/viewers_0/flags_0/"
+                    alt="Flag Counter visitor map"
+                    loading="lazy"
+                    decoding="async"
+                    referrerpolicy="origin"
+                  />
+                </a>
+                <small>
+                  Powered by Flag Counter. Loading this map lets the service
+                  count approximate country-level visits.
+                </small>
+              </div>
               <button class="button button-primary" id="locate-visitor" type="button">
-                Place My Dot
+                Locate My Visitor Dot
               </button>
+              <div class="visitor-details" id="visitor-details" hidden></div>
               <p class="visitor-status" id="visitor-status">
-                Waiting for an optional visitor signal.
+                Waiting for an optional visitor signal. Aggregate visitor maps
+                usually require a third-party widget such as PulseMaps,
+                ClustrMaps, or Flag Counter.
               </p>
             </div>
           </div>
