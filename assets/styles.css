@@ -1170,6 +1170,10 @@ h3 {
 
 .visitor-map {
   position: relative;
+  --atlas-left: 3%;
+  --atlas-top: 5%;
+  --atlas-width: 94%;
+  --atlas-height: 88%;
   min-height: 31rem;
   overflow: hidden;
   border-radius: calc(var(--radius-xl) - 10px);
@@ -1216,17 +1220,19 @@ h3 {
 }
 
 .world-map {
-  inset: 3% 2.5%;
-  width: 95%;
-  height: 94%;
+  left: var(--atlas-left);
+  top: var(--atlas-top);
+  width: var(--atlas-width);
+  height: var(--atlas-height);
   overflow: visible;
   filter: drop-shadow(0 12px 26px rgba(19, 114, 122, 0.14));
 }
 
 .world-map-image {
-  inset: 3.5% 2.8%;
-  width: 94.4%;
-  height: 93%;
+  left: var(--atlas-left);
+  top: var(--atlas-top);
+  width: var(--atlas-width);
+  height: var(--atlas-height);
   object-fit: fill;
   opacity: 0.78;
   mix-blend-mode: multiply;
@@ -1305,6 +1311,20 @@ h3 {
   font-size: 0.72rem;
   white-space: nowrap;
   box-shadow: 0 10px 26px rgba(17, 33, 51, 0.18);
+}
+
+.visitor-dot.is-east strong {
+  right: 1.1rem;
+  left: auto;
+}
+
+.visitor-dot.is-north strong {
+  top: 0.75rem;
+}
+
+.visitor-dot.is-south strong {
+  top: auto;
+  bottom: 0.75rem;
 }
 
 .visitor-dot.is-placed {

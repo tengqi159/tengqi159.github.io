@@ -359,20 +359,52 @@ function setupVisitorMap() {
   const dot = document.getElementById("visitor-dot");
   const dotLabel = document.getElementById("visitor-dot-label");
   const map = document.getElementById("visitor-map-canvas");
+  const mapImage = map ? map.querySelector(".world-map-image") : null;
   const status = document.getElementById("visitor-status");
   const details = document.getElementById("visitor-details");
-  if (!button || !dot || !map || !status || !details) {
+  if (!button || !dot || !dotLabel || !map || !status || !details) {
     return;
   }
+
+  let activeLocation = null;
 
   function setStatus(message) {
     status.textContent = message;
   }
 
-  function projectLocation(latitude, longitude) {
+  function clamp(value, min, max) {
+    return Math.min(max, Math.max(min, value));
+  }
+
+  function normalizeLongitude(longitude) {
+    return ((((longitude + 180) % 360) + 360) % 360) - 180;
+  }
+
+  function getProjectionRect() {
+    const mapRect = map.getBoundingClientRect();
+    const imageRect = mapImage ? mapImage.getBoundingClientRect() : mapRect;
+
     return {
-      left: Math.min(97, Math.max(3, ((longitude + 180) / 360) * 100)),
-      top: Math.min(94, Math.max(6, ((90 - latitude) / 180) * 100))
+      left: imageRect.left - mapRect.left,
+      top: imageRect.top - mapRect.top,
+      width: imageRect.width || mapRect.width,
+      height: imageRect.height || mapRect.height
+    };
+  }
+
+  function projectLocation(latitude, longitude) {
+    const rect = getProjectionRect();
+    const safeLatitude = clamp(Number(latitude), -86, 86);
+    const safeLongitude = normalizeLongitude(Number(longitude));
+    const xRatio = (safeLongitude + 180) / 360;
+    const yRatio = (90 - safeLatitude) / 180;
+
+    return {
+      left: rect.left + rect.width * xRatio,
+      top: rect.top + rect.height * yRatio,
+      xRatio,
+      yRatio,
+      clamped: safeLatitude !== Number(latitude)
     };
   }
 
@@ -398,24 +430,33 @@ function setupVisitorMap() {
       items.push(["Accuracy", location.accuracy]);
     }
 
+    if (location.note) {
+      items.push(["Note", location.note]);
+    }
+
     details.replaceChildren(...items.map(([label, value]) => createDetail(label, value)));
     details.hidden = false;
   }
 
   function placeDot(location) {
     const point = projectLocation(location.latitude, location.longitude);
+    activeLocation = location;
 
     dot.hidden = false;
     dot.classList.remove("is-placed");
-    dot.style.left = `${point.left}%`;
-    dot.style.top = `${point.top}%`;
+    dot.classList.toggle("is-east", point.xRatio > 0.78);
+    dot.classList.toggle("is-west", point.xRatio < 0.2);
+    dot.classList.toggle("is-north", point.yRatio < 0.16);
+    dot.classList.toggle("is-south", point.yRatio > 0.84);
+    dot.style.left = `${point.left}px`;
+    dot.style.top = `${point.top}px`;
     dotLabel.textContent = location.shortLabel || "You";
     window.requestAnimationFrame(() => dot.classList.add("is-placed"));
 
     map.classList.add("has-visitor");
     renderDetails(location);
     setStatus(
-      `${location.place} is now glowing on the map. The marker is rendered locally in this browser session.`
+      `${location.place} is now glowing on the calibrated map. The marker is approximate and rendered locally in this browser session.`
     );
   }
 
@@ -431,7 +472,12 @@ function setupVisitorMap() {
           resolve({
             latitude,
             longitude,
-            accuracy: accuracy ? `about ${Math.round(accuracy / 1000)} km` : "",
+            accuracy: accuracy
+              ? accuracy >= 1000
+                ? `about ${Math.round(accuracy / 1000)} km`
+                : `about ${Math.round(accuracy)} m`
+              : "",
+            accuracyMeters: Number.isFinite(accuracy) ? accuracy : null,
             place: "Browser-approved location",
             shortLabel: "Here",
             method: "Browser permission"
@@ -439,9 +485,9 @@ function setupVisitorMap() {
         },
         reject,
         {
-          enableHighAccuracy: false,
-          maximumAge: 600000,
-          timeout: 7000
+          enableHighAccuracy: true,
+          maximumAge: 60000,
+          timeout: 10000
         }
       );
     });
@@ -486,7 +532,24 @@ function setupVisitorMap() {
     try {
       setStatus("Asking the browser for a location signal...");
       const browserLocation = await getBrowserLocation();
-      placeDot(browserLocation);
+      if (browserLocation.accuracyMeters && browserLocation.accuracyMeters > 100000) {
+        try {
+          setStatus("Browser location was very broad. Refining with an approximate IP lookup...");
+          const ipLocation = await getIpLocation();
+          placeDot({
+            ...ipLocation,
+            note: "Used because the browser signal was broader than 100 km."
+          });
+        } catch (ipError) {
+          placeDot({
+            ...browserLocation,
+            method: "Browser permission (coarse)",
+            note: "Browser coordinates were broad, so the dot may only indicate a region."
+          });
+        }
+      } else {
+        placeDot(browserLocation);
+      }
     } catch (browserError) {
       try {
         setStatus("Browser location was unavailable. Trying an approximate IP lookup...");
@@ -501,6 +564,12 @@ function setupVisitorMap() {
       button.disabled = false;
       button.textContent = originalLabel;
       map.classList.remove("is-scanning");
+    }
+  });
+
+  window.addEventListener("resize", () => {
+    if (activeLocation) {
+      placeDot(activeLocation);
     }
   });
 }
