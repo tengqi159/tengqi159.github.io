@@ -431,7 +431,7 @@ async function setupLivePublications() {
     if (archiveApi) archiveApi.refresh();
     updateMetricsFromOpenAlex(
       author.summary_stats,
-      works.reduce((sum, work) => sum + (work.cited_by_count || 0), 0)
+      works.reduce((sum, work) => sum + (work.citations || 0), 0)
     );
 
     if (badge) {
