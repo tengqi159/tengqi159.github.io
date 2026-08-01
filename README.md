@@ -14,6 +14,8 @@ sensor-signal canvas drawn behind the page — a nod to the research itself.
   publication search/filter/sort, live OpenAlex sync, visitor map, signal field.
 - `assets/profile.jpg` — portrait.
 - `assets/world-map-equirectangular.svg` — base map for the visitor atlas.
+- `scripts/refresh-data.mjs` — scheduled sync that keeps the fallback dataset fresh.
+- `.github/workflows/refresh-data.yml` — daily auto-refresh workflow.
 
 ## Live publications
 
@@ -28,6 +30,24 @@ remains on screen unchanged.
 
 A `Live · OpenAlex` badge next to "Full archive" indicates the live feed is
 active.
+
+## Automatic data refresh
+
+Nothing needs to be maintained by hand. A scheduled GitHub Action
+(`refresh-data.yml`, daily at 01:17 UTC / 09:17 Beijing) pulls the author
+profile and works from OpenAlex, updates the metrics snapshot, per-paper
+citation counts, and the `updatedAt` stamp in `assets/site-data.js`, appends
+newly indexed works (non-featured), and commits the change back to `main`
+when anything moved. The Pages deployment follows automatically, so the
+fallback dataset is never stale. On every visit the page still fetches live
+OpenAlex data first; the snapshot is only what visitors see when the live API
+is unreachable.
+
+Run the sync locally with:
+
+```sh
+node scripts/refresh-data.mjs
+```
 
 ## Visitor atlas
 

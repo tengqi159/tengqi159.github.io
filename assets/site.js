@@ -357,11 +357,32 @@ function applyCuration(works) {
   return works;
 }
 
-function updateMetricsFromOpenAlex(stats) {
+/* ---------- live data stamp ---------- */
+
+function updateDataStamp(info) {
+  const stamp = document.getElementById("data-stamp");
+  if (!stamp) return;
+  if (info.live) {
+    const now = new Date();
+    const time = now.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+    stamp.textContent =
+      `Live · fetched just now (${time}) — ${info.count} works from OpenAlex. No manual maintenance needed.`;
+  } else {
+    const snapshot = window.siteData.profile.updatedAt || "unknown date";
+    stamp.textContent =
+      `Live API unreachable — showing the latest auto-synced snapshot (${snapshot}). ` +
+      "Publications, citations, and metrics refresh automatically from OpenAlex on every visit.";
+  }
+}
+
+function updateMetricsFromOpenAlex(stats, totalCitations) {
   if (!stats) return;
 
   const mapping = {
-    Citations: stats.cited_by_count,
+    Citations: totalCitations,
     "h-index": stats.h_index,
     "i10-index": stats.i10_index
   };
@@ -408,13 +429,18 @@ async function setupLivePublications() {
     state.publications = applyCuration(works);
     renderSelectedPublications();
     if (archiveApi) archiveApi.refresh();
-    updateMetricsFromOpenAlex(author.summary_stats);
+    updateMetricsFromOpenAlex(
+      author.summary_stats,
+      works.reduce((sum, work) => sum + (work.cited_by_count || 0), 0)
+    );
 
     if (badge) {
       badge.hidden = false;
       badge.textContent = `Live · OpenAlex · ${works.length} works`;
     }
+    updateDataStamp({ live: true, count: works.length });
   } catch (error) {
+    updateDataStamp({ live: false });
     // The curated local dataset stays on screen as the offline fallback.
   }
 }
