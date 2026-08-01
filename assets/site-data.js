@@ -34,13 +34,13 @@ window.siteData = {
         copyValue: "teqi159@gmail.com"
       },
       {
-        label: "Institutional Email",
+        label: "Work Email",
         value: "tq@zzu.edu.cn",
         hint: "Zhengzhou University contact",
         copyValue: "tq@zzu.edu.cn"
       },
       {
-        label: "Google Scholar",
+        label: "Scholar",
         value: "Public citation profile",
         hint: "Metrics, citations, and publication list",
         href: "https://scholar.google.com/citations?user=D5kHbeAAAAAJ&hl=en"

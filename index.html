@@ -1,69 +1,99 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Qi Teng | Academic Homepage</title>
+    <title>Qi Teng — Academic Homepage</title>
     <meta
       name="description"
-      content="Academic homepage for Qi Teng, featuring affiliation, direct contact details, Scholar metrics, and publications."
+      content="Qi Teng (滕起), Associate Researcher at the School of Management, Zhengzhou University. Research on wearable sensing, human activity recognition, efficient neural architectures, and time-series intelligence."
     />
+    <meta name="theme-color" content="#f4f1e9" />
+    <meta property="og:title" content="Qi Teng — Academic Homepage" />
+    <meta
+      property="og:description"
+      content="Qi Teng (滕起), Associate Researcher at the School of Management, Zhengzhou University — wearable sensing, human activity recognition, efficient neural architectures, time-series intelligence."
+    />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23171b21'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-size='27' fill='%23f4f1e9' text-anchor='middle'%3EQT%3C/text%3E%3C/svg%3E"
+    />
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem("qt-theme");
+          var theme =
+            saved === "dark" || saved === "light"
+              ? saved
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.content = theme === "dark" ? "#101315" : "#f4f1e9";
+        } catch (error) {}
+      })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Manrope:wght@400..800&family=IBM+Plex+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="assets/styles.css?v=20260427-mapfix1" />
-    <script defer src="assets/site-data.js?v=20260427-mapfix1"></script>
-    <script defer src="assets/site.js?v=20260427-mapfix1"></script>
+    <link rel="stylesheet" href="assets/styles.css?v=signal2" />
+    <script defer src="assets/site-data.js?v=signal2"></script>
+    <script defer src="assets/site.js?v=signal2"></script>
   </head>
   <body>
-    <div class="page-backdrop" aria-hidden="true">
-      <div class="backdrop-grid"></div>
-      <div class="retro-field" id="retro-field"></div>
-      <div class="cursor-glow" id="cursor-glow"></div>
-    </div>
-    <canvas class="play-canvas" id="play-canvas" aria-hidden="true"></canvas>
+    <a class="skip-link" href="#top">Skip to content</a>
+    <canvas class="signal-canvas" id="signal-canvas" aria-hidden="true"></canvas>
+    <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
 
-    <div class="page-shell">
-      <header class="site-header">
-        <a class="brand" href="#top">
-          <span class="brand-mark">QT</span>
-          <span class="brand-text">Qi Teng</span>
-        </a>
-        <nav class="site-nav" aria-label="Primary">
-          <a href="#profile">Profile</a>
-          <a href="#research">Research</a>
-          <a href="#selected">Selected Work</a>
-          <a href="#publications">Publications</a>
-          <a href="#visitor-map">Visitor Map</a>
-          <a href="#links">Links</a>
-        </nav>
-      </header>
+    <header class="site-header" id="site-header">
+      <a class="brand" href="#top" aria-label="Qi Teng — back to top">
+        <span class="brand-sig">QT</span>
+        <span class="brand-word">
+          <span class="brand-name">Qi Teng</span>
+          <span class="brand-native">滕起</span>
+        </span>
+      </a>
 
-      <main>
-        <section class="hero" id="top" data-reveal>
-          <div class="hero-copy tilt-card">
-            <p class="eyebrow">Academic Homepage</p>
-            <div class="hero-heading">
-              <h1>Qi Teng</h1>
-              <p class="name-native">滕起</p>
-            </div>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="#profile" data-nav="profile"><span class="nav-index">01</span>Profile</a>
+        <a href="#research" data-nav="research"><span class="nav-index">02</span>Research</a>
+        <a href="#publications" data-nav="publications"><span class="nav-index">03</span>Publications</a>
+        <a href="#atlas" data-nav="atlas"><span class="nav-index">04</span>Atlas</a>
+        <a href="#links" data-nav="links"><span class="nav-index">05</span>Links</a>
+      </nav>
+
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle color theme">
+        <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="4.2" />
+          <path d="M12 2.5v2.2M12 19.3v2.2M4.3 4.3l1.6 1.6M18.1 18.1l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.3 19.7l1.6-1.6M18.1 5.9l1.6-1.6" />
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M20.4 14.2A8.5 8.5 0 0 1 9.8 3.6a8.5 8.5 0 1 0 10.6 10.6Z" />
+        </svg>
+      </button>
+    </header>
+
+    <main id="top" tabindex="-1">
+      <section class="hero" aria-label="Introduction">
+        <div class="hero-grid">
+          <div class="hero-main" data-reveal>
+            <p class="kicker">Academic Homepage — Zhengzhou, China</p>
+            <h1 class="hero-name">Qi Teng</h1>
+            <p class="hero-native">滕起</p>
+            <p class="hero-statement">
+              I build <em>efficient neural models</em> that learn from
+              <em>wearable sensor signals</em> — spanning human activity
+              recognition, attention-driven time-series learning, and
+              data-driven dynamical systems.
+            </p>
             <div class="hero-ribbons" id="hero-ribbons"></div>
-            <p class="tagline">
-              Associate Researcher (直聘副研究员), School of Management,
-              Zhengzhou University
-            </p>
-            <p class="summary">
-              Qi Teng is currently an Associate Researcher (直聘副研究员) at the
-              School of Management, Zhengzhou University, and received the Ph.D.
-              degree from Nanjing University. His recent work focuses on
-              sensor-based human activity recognition, efficient neural
-              architectures, attention-driven time-series modeling, wearable
-              computing, and data-driven nonlinear dynamical systems.
-            </p>
-            <div class="cta-row">
+            <div class="hero-cta">
               <a
                 class="button button-primary"
                 href="https://scholar.google.com/citations?user=D5kHbeAAAAAJ&hl=en"
@@ -71,79 +101,66 @@
                 rel="noreferrer"
               >
                 Google Scholar
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" /></svg>
               </a>
               <a
-                class="button button-secondary"
+                class="button button-ghost"
                 href="https://github.com/tengqi159"
                 target="_blank"
                 rel="noreferrer"
               >
                 GitHub
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" /></svg>
               </a>
-              <a class="button button-secondary" href="#links">Research Links</a>
+              <a class="button button-ghost" href="mailto:tq@zzu.edu.cn">
+                Email
+              </a>
             </div>
-            <div class="contact-grid" id="contact-grid"></div>
-            <div class="fact-strip">
-              <article>
-                <span>Current Affiliation</span>
-                <strong>Zhengzhou University, School of Management</strong>
-                <small>郑州大学管理学院</small>
-              </article>
-              <article>
-                <span>Location</span>
-                <strong>Zhengzhou, China</strong>
-                <small>Main academic base</small>
-              </article>
-              <article>
-                <span>Education</span>
-                <strong>Ph.D., Nanjing University</strong>
-                <small>Information studies background</small>
-              </article>
-            </div>
+            <div class="hero-contacts" id="contact-strip"></div>
           </div>
 
-          <aside class="profile-card tilt-card" aria-label="Profile overview">
-            <div class="profile-frame">
-              <span class="profile-glow"></span>
-              <img
-                class="profile-photo"
-                src="assets/profile.jpg"
-                alt="Profile portrait for Qi Teng"
-              />
-            </div>
-            <div class="profile-card-body">
-              <p class="profile-label">Research Signature</p>
-              <h2>Wearable Intelligence and Efficient Learning</h2>
-              <p class="profile-intro">
-                A polished public-facing academic profile for collaboration,
-                talks, student contact, and research visibility.
-              </p>
-              <ul class="profile-points">
-                <li>Scholar metrics refreshed from the public profile.</li>
-                <li>Direct identifiers and contact details surfaced clearly.</li>
-                <li>Interaction design upgraded while preserving academic tone.</li>
-              </ul>
-            </div>
+          <aside class="hero-aside" data-reveal aria-label="Portrait and facts">
+            <figure class="portrait">
+              <img src="assets/profile.jpg" alt="Portrait of Qi Teng" decoding="async" />
+              <figcaption>
+                <span class="portrait-role">Associate Researcher · 直聘副研究员</span>
+                <span class="portrait-org">School of Management, Zhengzhou University</span>
+              </figcaption>
+            </figure>
+            <dl class="hero-facts">
+              <div>
+                <dt>Affiliation</dt>
+                <dd>Zhengzhou University<br /><span>郑州大学管理学院</span></dd>
+              </div>
+              <div>
+                <dt>Education</dt>
+                <dd>Ph.D., Nanjing University</dd>
+              </div>
+              <div>
+                <dt>ORCID</dt>
+                <dd><a href="https://orcid.org/0000-0003-3573-4146" target="_blank" rel="noreferrer">0000-0003-3573-4146</a></dd>
+              </div>
+            </dl>
           </aside>
-        </section>
+        </div>
 
-        <section class="stats-section" id="profile" data-reveal>
-          <div class="section-heading">
-            <p class="section-kicker">Profile</p>
-            <h2>Academic Metrics and Research Profile</h2>
-            <p>
-              A concise overview of citation indicators, current appointment,
-              and the major themes that run through the publication record.
-            </p>
-          </div>
+        <a class="scroll-cue" href="#profile" aria-label="Scroll to profile">
+          <span>Scroll</span>
+          <i aria-hidden="true"></i>
+        </a>
+      </section>
 
-          <div class="stats-grid" id="metrics-grid"></div>
+      <section class="section" id="profile" data-reveal>
+        <header class="section-head">
+          <p class="section-kicker"><span>01</span>Profile</p>
+          <h2>A quiet record of measurable work.</h2>
+        </header>
 
-          <article class="profile-note-card tilt-card">
-            <div>
-              <p class="section-kicker">Keywords</p>
-              <h3>Research Themes</h3>
-            </div>
+        <div class="metrics-strip" id="metrics-grid"></div>
+
+        <div class="profile-columns">
+          <div class="profile-block">
+            <h3 class="block-label">Research themes</h3>
             <div class="keyword-row">
               <span>Human Activity Recognition</span>
               <span>Wearable Computing</span>
@@ -152,79 +169,116 @@
               <span>Attention Mechanisms</span>
               <span>Nonlinear Dynamical Systems</span>
             </div>
+          </div>
+          <div class="profile-block">
+            <h3 class="block-label">Appointments &amp; education</h3>
+            <ul class="journey-list">
+              <li>
+                <span class="journey-tag">Now</span>
+                <div>
+                  <strong>Associate Researcher (直聘副研究员)</strong>
+                  <p>School of Management, Zhengzhou University — Zhengzhou, China</p>
+                </div>
+              </li>
+              <li>
+                <span class="journey-tag">Ph.D.</span>
+                <div>
+                  <strong>Nanjing University</strong>
+                  <p>Doctor of Philosophy — Nanjing, China</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="research" data-reveal>
+        <header class="section-head">
+          <p class="section-kicker"><span>02</span>Research</p>
+          <h2>Four directions, one signal.</h2>
+          <p class="section-lede">
+            The common thread across recent work: extracting trustworthy
+            structure from noisy, multi-channel sensor time series — and doing
+            it with models small enough to matter in practice.
+          </p>
+        </header>
+
+        <div class="direction-list">
+          <article class="direction-row">
+            <span class="direction-index">01</span>
+            <div class="direction-body">
+              <h3>Wearable Sensing &amp; Activity Recognition</h3>
+              <p>
+                Sensor-based human activity recognition with multimodal,
+                multi-channel time-series signals in realistic, long-tailed
+                settings.
+              </p>
+            </div>
+            <svg class="direction-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
           </article>
-        </section>
-
-        <section class="research-section" id="research" data-reveal>
-          <div class="section-heading">
-            <p class="section-kicker">Research</p>
-            <h2>Research Directions</h2>
-            <p>
-              Themes that appear consistently across recent work, from wearable
-              sensing pipelines to efficient neural training strategies.
-            </p>
-          </div>
-
-          <div class="focus-grid">
-            <article class="focus-card tilt-card">
-              <span class="focus-index">01</span>
-              <h3>Wearable Sensing</h3>
+          <article class="direction-row">
+            <span class="direction-index">02</span>
+            <div class="direction-body">
+              <h3>Efficient Neural Architectures</h3>
               <p>
-                Sensor-based human activity recognition using multimodal and
-                multi-channel time-series signals in realistic settings.
+                Layer-wise and block-wise training, decoupled and re-parameterized
+                convolutions, and accuracy–speed trade-offs for practical
+                deployment.
               </p>
-            </article>
-            <article class="focus-card tilt-card">
-              <span class="focus-index">02</span>
-              <h3>Efficient Deep Models</h3>
+            </div>
+            <svg class="direction-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+          </article>
+          <article class="direction-row">
+            <span class="direction-index">03</span>
+            <div class="direction-body">
+              <h3>Attention for Time Series</h3>
               <p>
-                Layer-wise training, decoupling strategies, and lightweight
-                convolutional designs for practical deployment.
+                Temporal, spatial, channel, and cross-domain attention
+                mechanisms for structured sensor intelligence.
               </p>
-            </article>
-            <article class="focus-card tilt-card">
-              <span class="focus-index">03</span>
-              <h3>Attention Mechanisms</h3>
+            </div>
+            <svg class="direction-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+          </article>
+          <article class="direction-row">
+            <span class="direction-index">04</span>
+            <div class="direction-body">
+              <h3>Data-Driven Dynamical Systems</h3>
               <p>
-                Temporal, spatial, channel, and cross-domain attention for
-                structured sensor intelligence.
+                Neural sequence models that approximate and identify nonlinear
+                governing equations directly from data.
               </p>
-            </article>
-            <article class="focus-card tilt-card">
-              <span class="focus-index">04</span>
-              <h3>Dynamical Systems</h3>
-              <p>
-                Data-driven approximation and identification of nonlinear
-                governing equations with neural sequence models.
-              </p>
-            </article>
-          </div>
-        </section>
+            </div>
+            <svg class="direction-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+          </article>
+        </div>
+      </section>
 
-        <section class="selected-section" id="selected" data-reveal>
-          <div class="section-heading">
-            <p class="section-kicker">Highlights</p>
-            <h2>Selected Publications</h2>
-            <p>
-              Representative work spanning human activity recognition, efficient
-              neural training, and recent long-tailed sensing research.
-            </p>
-          </div>
-          <div class="selected-grid" id="selected-publications"></div>
-        </section>
+      <section class="section" id="publications" data-reveal>
+        <header class="section-head">
+          <p class="section-kicker"><span>03</span>Publications</p>
+          <h2>Selected work.</h2>
+          <p class="section-lede">
+            Representative papers on activity recognition, efficient training,
+            and attention design — ranked by their citation footprint.
+          </p>
+        </header>
 
-        <section class="publications-section" id="publications" data-reveal>
-          <div class="section-heading">
-            <p class="section-kicker">Archive</p>
-            <h2>Full Publication List</h2>
-            <p>
-              Publications can be filtered by year and sorted by recency or
-              citation count.
-            </p>
-          </div>
+        <div class="selected-grid" id="selected-publications"></div>
 
-          <div class="publication-controls">
-            <div class="filter-group" id="year-filters" aria-label="Filter by year"></div>
+        <div class="archive-head">
+          <h3 class="block-label">Full archive</h3>
+          <span class="live-badge" id="publications-live" hidden></span>
+          <div class="archive-tools">
+            <label class="search-box" for="publication-search">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" /><path d="m16 16 4.5 4.5" /></svg>
+              <input
+                id="publication-search"
+                type="search"
+                placeholder="Search title, author, venue"
+                autocomplete="off"
+              />
+              <kbd>/</kbd>
+            </label>
             <label class="sort-control" for="sort-select">
               Sort
               <select id="sort-select">
@@ -233,158 +287,126 @@
               </select>
             </label>
           </div>
+        </div>
 
-          <div class="publication-list" id="publication-list"></div>
-        </section>
+        <div class="filter-group" id="year-filters" aria-label="Filter by year"></div>
+        <div class="publication-list" id="publication-list"></div>
+        <p class="archive-empty" id="archive-empty" hidden>No publications match this filter.</p>
+      </section>
 
-        <section class="visitor-section" id="visitor-map" data-reveal>
-          <div class="section-heading">
-            <p class="section-kicker">Visitor Atlas</p>
-            <h2>A Live Map for Curious Visitors</h2>
-            <p>
-              A more expressive world map can light up an approximate visitor
-              location after the visitor actively asks to place a dot.
-            </p>
-          </div>
-
-          <div class="visitor-panel">
-            <div class="visitor-map" id="visitor-map-canvas" aria-label="Approximate visitor world map">
-              <div class="atlas-grid" aria-hidden="true"></div>
-              <div class="atlas-orbit orbit-one" aria-hidden="true"></div>
-              <div class="atlas-orbit orbit-two" aria-hidden="true"></div>
-              <img
-                class="world-map-image"
-                src="assets/world-map-equirectangular.svg"
-                alt="Calibrated equirectangular world map"
-              />
-              <svg class="world-map" viewBox="0 0 1200 600" aria-hidden="true">
-                <g class="map-graticule">
-                  <path d="M0 100H1200M0 200H1200M0 300H1200M0 400H1200M0 500H1200" />
-                  <path d="M200 0V600M400 0V600M600 0V600M800 0V600M1000 0V600" />
-                </g>
-                <g class="map-city-lights" aria-hidden="true">
-                  <circle cx="192" cy="174" r="4" />
-                  <circle cx="353" cy="164" r="5" />
-                  <circle cx="606" cy="137" r="5" />
-                  <circle cx="979" cy="184" r="5" />
-                  <circle cx="1066" cy="181" r="4" />
-                  <circle cx="1103" cy="413" r="5" />
-                </g>
-              </svg>
-              <div class="visitor-dot" id="visitor-dot" hidden>
-                <span></span>
-                <strong id="visitor-dot-label">You</strong>
-              </div>
-            </div>
-            <div class="visitor-copy">
-              <p class="section-kicker">Opt-in Location</p>
-              <h3>Light up your city on the world map</h3>
-              <p>
-                The button first asks for browser location. If that signal is
-                unavailable or too broad, it can fall back to an approximate IP
-                lookup through ipapi.co. This page itself does not store visitor
-                IP addresses.
-              </p>
-              <div class="visitor-services" aria-label="Common academic visitor map services">
-                <a href="https://pulsemaps.com/" target="_blank" rel="noreferrer">PulseMaps</a>
-                <a href="https://clustrmaps.com/" target="_blank" rel="noreferrer">ClustrMaps</a>
-                <a href="https://flagcounter.com/" target="_blank" rel="noreferrer">Flag Counter</a>
-              </div>
-              <div class="visitor-counter">
-                <span>Live aggregate visitor map</span>
-                <a href="https://s01.flagcounter.com/more/uuf" target="_blank" rel="noreferrer">
-                  <img
-                    src="https://s01.flagcounter.com/map/uuf/size_l/txt_112133/border_D7EEF0/pageviews_1/viewers_0/flags_0/"
-                    alt="Flag Counter visitor map"
-                    loading="lazy"
-                    decoding="async"
-                    referrerpolicy="origin"
-                  />
-                </a>
-                <small>
-                  Powered by Flag Counter. Loading this map lets the service
-                  count approximate country-level visits.
-                </small>
-              </div>
-              <button class="button button-primary" id="locate-visitor" type="button">
-                Locate My Visitor Dot
-              </button>
-              <div class="visitor-details" id="visitor-details" hidden></div>
-              <p class="visitor-status" id="visitor-status">
-                Waiting for an optional visitor signal. Aggregate visitor maps
-                usually require a third-party widget such as PulseMaps,
-                ClustrMaps, or Flag Counter.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <section class="links-section" id="links" data-reveal>
-          <div class="section-heading">
-            <p class="section-kicker">Links</p>
-            <h2>Research Profiles and Public Resources</h2>
-            <p>
-              External resources for citation data, persistent identifiers, code
-              visibility, and academic networking.
-            </p>
-          </div>
-
-          <div class="links-grid">
-            <a
-              class="link-card tilt-card"
-              href="https://scholar.google.com/citations?user=D5kHbeAAAAAJ&hl=en"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <span class="link-card-label">Google Scholar</span>
-              <strong>Profile and citation record</strong>
-              <small>Public citation indicators and paper list</small>
-            </a>
-            <a
-              class="link-card tilt-card"
-              href="https://github.com/tengqi159"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <span class="link-card-label">GitHub</span>
-              <strong>Code and academic webpage repository</strong>
-              <small>Projects, homepage source, and research-facing assets</small>
-            </a>
-            <a
-              class="link-card tilt-card"
-              href="https://orcid.org/0000-0003-3573-4146"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <span class="link-card-label">ORCID</span>
-              <strong>0000-0003-3573-4146</strong>
-              <small>Persistent researcher identifier</small>
-            </a>
-            <a
-              class="link-card tilt-card"
-              href="https://www.researchgate.net/profile/Qi-Teng"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <span class="link-card-label">ResearchGate</span>
-              <strong>Additional publication profile</strong>
-              <small>Further networking and publication presence</small>
-            </a>
-          </div>
-
-          <p class="source-note">
-            Last refreshed on April 24, 2026. Profile details reflect Google
-            Scholar data together with user-confirmed affiliation and contact
-            information.
+      <section class="section" id="atlas" data-reveal>
+        <header class="section-head">
+          <p class="section-kicker"><span>04</span>Visitor Atlas</p>
+          <h2>A live map for curious visitors.</h2>
+          <p class="section-lede">
+            The map lights up an approximate location only when a visitor
+            actively asks to place a dot. Nothing is stored on this page.
           </p>
-        </section>
-      </main>
+        </header>
 
-      <footer class="site-footer">
-        <p>Qi Teng Academic Homepage</p>
-        <a href="#top">Back to top</a>
-      </footer>
-    </div>
+        <div class="visitor-panel">
+          <div class="visitor-map" id="visitor-map-canvas" aria-label="Approximate visitor world map">
+            <div class="atlas-grid" aria-hidden="true"></div>
+            <img
+              class="world-map-image"
+              src="assets/world-map-equirectangular.svg"
+              alt="Equirectangular world map"
+              loading="lazy"
+              decoding="async"
+            />
+            <svg class="world-map" viewBox="0 0 1200 620" aria-hidden="true">
+              <g class="map-graticule">
+                <path d="M120 90H1080M120 190H1080M120 310H1080M120 430H1080M120 530H1080" />
+                <path d="M180 52V568M340 52V568M500 52V568M660 52V568M820 52V568M980 52V568" />
+              </g>
+              <g class="map-city-lights" aria-hidden="true">
+                <circle cx="192" cy="180" r="4" />
+                <circle cx="353" cy="170" r="5" />
+                <circle cx="600" cy="133" r="5" />
+                <circle cx="988" cy="172" r="5" />
+                <circle cx="1005" cy="202" r="4" />
+                <circle cx="1104" cy="427" r="5" />
+              </g>
+            </svg>
+            <div class="visitor-dot" id="visitor-dot" hidden>
+              <span></span>
+              <strong id="visitor-dot-label">You</strong>
+            </div>
+          </div>
+          <div class="visitor-copy">
+            <p class="block-label">Automatic detection</p>
+            <h3>Your visit is already glowing</h3>
+            <p>
+              When this page loads, it quietly places an approximate,
+              city-level dot from your IP — no permission prompt, and nothing
+              is stored on this page. Prefer precision? The button upgrades
+              the dot to a browser-approved location.
+            </p>
+            <div class="visitor-services" aria-label="Common academic visitor map services">
+              <a href="https://pulsemaps.com/" target="_blank" rel="noreferrer">PulseMaps</a>
+              <a href="https://clustrmaps.com/" target="_blank" rel="noreferrer">ClustrMaps</a>
+              <a href="https://flagcounter.com/" target="_blank" rel="noreferrer">Flag Counter</a>
+            </div>
+            <button class="button button-primary" id="locate-visitor" type="button">
+              Refine with precise location
+            </button>
+            <div class="visitor-details" id="visitor-details" hidden></div>
+            <p class="visitor-status" id="visitor-status">
+              Detecting an approximate location for this visit…
+            </p>
+            <p class="aggregate-note">
+              Want a dot for every visitor, kept over time? A static page
+              cannot store them — embed a free ClustrMaps or PulseMaps widget
+              (see README) and it renders here.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="links" data-reveal>
+        <header class="section-head">
+          <p class="section-kicker"><span>05</span>Links</p>
+          <h2>Elsewhere on the record.</h2>
+        </header>
+
+        <div class="link-list">
+          <a class="link-row" href="https://scholar.google.com/citations?user=D5kHbeAAAAAJ&hl=en" target="_blank" rel="noreferrer">
+            <span class="link-label">Google Scholar</span>
+            <span class="link-desc">Profile and citation record</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" /></svg>
+          </a>
+          <a class="link-row" href="https://github.com/tengqi159" target="_blank" rel="noreferrer">
+            <span class="link-label">GitHub</span>
+            <span class="link-desc">Code and homepage source</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" /></svg>
+          </a>
+          <a class="link-row" href="https://orcid.org/0000-0003-3573-4146" target="_blank" rel="noreferrer">
+            <span class="link-label">ORCID</span>
+            <span class="link-desc">0000-0003-3573-4146</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" /></svg>
+          </a>
+          <a class="link-row" href="https://www.researchgate.net/profile/Qi-Teng" target="_blank" rel="noreferrer">
+            <span class="link-label">ResearchGate</span>
+            <span class="link-desc">Additional publication profile</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" /></svg>
+          </a>
+        </div>
+
+        <p class="source-note">
+          Last refreshed on April 24, 2026. Profile details reflect Google
+          Scholar data together with user-confirmed affiliation and contact
+          information.
+        </p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Qi Teng · 滕起 — Academic Homepage</p>
+      <p class="colophon">
+        Set in Fraunces, Manrope &amp; IBM Plex Mono. The signal field behind
+        this page is drawn in real time.
+      </p>
+      <a class="to-top" href="#top">Back to top ↑</a>
+    </footer>
   </body>
 </html>
-
