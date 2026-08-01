@@ -31,7 +31,20 @@ const normalize = (s) =>
     .slice(0, 64);
 
 async function fetchText(url) {
-  const res = await fetch(url, { headers: { "User-Agent": UA } });
+  const res = await fetch(url, {
+    headers: {
+      "User-Agent": UA,
+      Accept:
+        "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+      "Accept-Language": "en-US,en;q=0.9",
+      "Cache-Control": "no-cache",
+      Pragma: "no-cache",
+      "Upgrade-Insecure-Requests": "1",
+      "Sec-Fetch-Dest": "document",
+      "Sec-Fetch-Mode": "navigate",
+      "Sec-Fetch-Site": "none"
+    }
+  });
   if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
   return res.text();
 }
@@ -129,12 +142,27 @@ async function main() {
   const data = parseSiteData(code);
 
   // 1) Scholar is authoritative. If Scholar is unreachable we keep the
-  //    previous snapshot untouched and exit without writing anything.
-  const [scholarPapers, metrics, openAlexWorks] = await Promise.all([
-    fetchScholarPapers(SCHOLAR_USER),
-    fetchScholarMetrics(SCHOLAR_USER),
-    fetchOpenAlexWorks(ORCID, MAILTO)
-  ]);
+  //    previous snapshot untouched and exit cleanly (the schedule keeps
+  //    retrying; a blocked run must never corrupt the published data).
+  let scholarPapers;
+  let metrics;
+  let openAlexWorks;
+  try {
+    [scholarPapers, metrics, openAlexWorks] = await Promise.all([
+      fetchScholarPapers(SCHOLAR_USER),
+      fetchScholarMetrics(SCHOLAR_USER),
+      fetchOpenAlexWorks(ORCID, MAILTO)
+    ]);
+  } catch (error) {
+    console.log(
+      `scholar/unreachable: ${error.message} — keeping the existing snapshot`
+    );
+    return;
+  }
+  if (!scholarPapers.length || !metrics.citations) {
+    console.log("scholar/unparseable — keeping the existing snapshot");
+    return;
+  }
 
   const scholarNorm = new Set(scholarPapers.map((p) => normalize(p.title)));
   const byScholarTitle = new Map(
