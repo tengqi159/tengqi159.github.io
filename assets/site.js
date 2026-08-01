@@ -10,6 +10,14 @@ const COPY_ICON =
 const CHECK_ICON =
   '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5" /></svg>';
 
+/* ---------- title matching (Scholar whitelist) ---------- */
+
+const normalizeTitle = (value) =>
+  String(value || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "")
+    .slice(0, 64);
+
 /* ---------- shared state ---------- */
 
 const state = {
@@ -369,38 +377,14 @@ function updateDataStamp(info) {
       minute: "2-digit"
     });
     stamp.textContent =
-      `Live · fetched just now (${time}) — ${info.count} works from OpenAlex. No manual maintenance needed.`;
+      `Live · ${info.count} Scholar-verified works · citations and metrics from Google Scholar (synced ${time}, daily auto-update)`;
   } else {
     const snapshot = window.siteData.profile.updatedAt || "unknown date";
     stamp.textContent =
-      `Live API unreachable — showing the latest auto-synced snapshot (${snapshot}). ` +
-      "Publications, citations, and metrics refresh automatically from OpenAlex on every visit.";
+      `Google Scholar · auto-synced snapshot (${snapshot}) · citations refresh daily, no manual maintenance needed.`;
   }
 }
 
-function updateMetricsFromOpenAlex(stats, totalCitations) {
-  if (!stats) return;
-
-  const mapping = {
-    Citations: totalCitations,
-    "h-index": stats.h_index,
-    "i10-index": stats.i10_index
-  };
-
-  document.querySelectorAll("#metrics-grid .metric").forEach((card) => {
-    const label = card.querySelector(".metric-label");
-    const value = card.querySelector(".metric-value");
-    const note = card.querySelector(".metric-note");
-    if (!label || !value || !note) return;
-
-    const next = mapping[label.textContent.trim()];
-    if (!Number.isFinite(next)) return;
-
-    value.removeAttribute("data-count");
-    value.textContent = Number(next).toLocaleString("en-US");
-    note.textContent = "OpenAlex · live";
-  });
-}
 
 async function setupLivePublications() {
   const badge = document.getElementById("publications-live");
@@ -421,18 +405,33 @@ async function setupLivePublications() {
     if (!worksResponse.ok) throw new Error("OpenAlex works lookup failed");
     const worksData = await worksResponse.json();
 
+    const snapshot = window.siteData.publications || [];
+    const whitelist = new Set(
+      snapshot.map((pub) => normalizeTitle(pub.title))
+    );
+    const scholarCites = new Map(
+      snapshot.map((pub) => [
+        normalizeTitle(pub.title) + "|" + normalizeTitle(pub.link),
+        pub.citations
+      ])
+    );
     const works = (worksData.results || [])
       .map(mapOpenAlexWork)
-      .filter((work) => work.title && Number.isFinite(work.year));
+      .filter((work) => work.title && Number.isFinite(work.year))
+      .filter((work) => whitelist.has(normalizeTitle(work.title)));
     if (!works.length) throw new Error("OpenAlex returned no works");
+    // Citation counts stay aligned with Google Scholar, the
+    // authoritative source for the archive.
+    for (const work of works) {
+      const scholarValue = scholarCites.get(
+        normalizeTitle(work.title) + "|" + normalizeTitle(work.doi || work.link)
+      );
+      if (Number.isFinite(scholarValue)) work.citations = scholarValue;
+    }
 
     state.publications = applyCuration(works);
     renderSelectedPublications();
     if (archiveApi) archiveApi.refresh();
-    updateMetricsFromOpenAlex(
-      author.summary_stats,
-      works.reduce((sum, work) => sum + (work.citations || 0), 0)
-    );
 
     if (badge) {
       badge.hidden = false;

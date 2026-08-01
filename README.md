@@ -19,29 +19,26 @@ sensor-signal canvas drawn behind the page — a nod to the research itself.
 
 ## Live publications
 
-On every page load the site queries [OpenAlex](https://openalex.org) by ORCID
-(`0000-0003-3573-4146`) and re-renders the publication archive and citation
-metrics from the response. New papers appear automatically once OpenAlex
-indexes them — no rebuild, no redeploy. The `selected` flags in
-`assets/site-data.js` (matched by DOI) decide which papers stay featured; if
-fewer than five match, the most-cited works fill the grid. If the API is
-unreachable (offline, blocked), the curated local list in `site-data.js`
-remains on screen unchanged.
-
-A `Live · OpenAlex` badge next to "Full archive" indicates the live feed is
-active.
+[Google Scholar](https://scholar.google.com/citations?user=D5kHbeAAAAAJ) is the
+authoritative source: the archive only ever shows Scholar-indexed works plus
+explicitly verified entries, and every paper's "Cited by" count comes from
+the Scholar profile so the numbers match what Scholar shows (including the
+headline Citations / h-index / i10-index metrics). [OpenAlex](https://openalex.org)
+supplements DOIs, venues, and live metadata for the same Scholar-verified
+list. Because Scholar has no public API, the profile page is parsed by the
+daily sync below; if Scholar is unreachable the last snapshot stays on screen
+unchanged.
 
 ## Automatic data refresh
 
 Nothing needs to be maintained by hand. A scheduled GitHub Action
-(`refresh-data.yml`, daily at 01:17 UTC / 09:17 Beijing) pulls the author
-profile and works from OpenAlex, updates the metrics snapshot, per-paper
-citation counts, and the `updatedAt` stamp in `assets/site-data.js`, appends
-newly indexed works (non-featured), and commits the change back to `main`
-when anything moved. The Pages deployment follows automatically, so the
-fallback dataset is never stale. On every visit the page still fetches live
-OpenAlex data first; the snapshot is only what visitors see when the live API
-is unreachable.
+(`refresh-data.yml`, daily at 01:17 UTC / 09:17 Beijing) reads the Google
+Scholar profile (paper list, per-paper citations, and the 998 / 11 / 11
+metrics), merges it with verified entries in `assets/site-data.js`, and
+commits the change back to `main` when anything moved. The Pages deployment
+follows automatically. OpenAlex is queried in the same run to enrich DOIs and
+venues. New Scholar-indexed papers appear automatically; mis-associated
+OpenAlex records can never appear because the Scholar list is the whitelist.
 
 Run the sync locally with:
 
