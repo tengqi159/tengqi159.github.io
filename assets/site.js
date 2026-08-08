@@ -9,6 +9,53 @@ const COPY_ICON =
   '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2.5" /><path d="M5 15V6.5A2.5 2.5 0 0 1 7.5 4H15" /></svg>';
 const CHECK_ICON =
   '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5" /></svg>';
+const CITE_ICON =
+  '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 5h11A1.5 1.5 0 0 1 19 6.5v7a1.5 1.5 0 0 1-1.5 1.5H13l-3.6 3.3c-.3.3-.9.1-.9-.4v-2.9H6.5A1.5 1.5 0 0 1 5 13.5v-7A1.5 1.5 0 0 1 6.5 5Z" /><path d="M9 9.4h2.2M12.8 9.4H15" /></svg>';
+const DOC_ICON =
+  '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3.5h7L19 8.5V20.5H7V3.5Z" /><path d="M13.5 3.5V9H19" /></svg>';
+
+const METRIC_ICONS = {
+  Citations:
+    '<svg class="metric-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 5h11A1.5 1.5 0 0 1 19 6.5v7a1.5 1.5 0 0 1-1.5 1.5H13l-3.6 3.3c-.3.3-.9.1-.9-.4v-2.9H6.5A1.5 1.5 0 0 1 5 13.5v-7A1.5 1.5 0 0 1 6.5 5Z" /></svg>',
+  "h-index":
+    '<svg class="metric-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16" /><path d="M7.5 20v-5.5M12 20V9.5M16.5 20v-7.5" /></svg>',
+  "i10-index":
+    '<svg class="metric-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 4 7.5 20M16.5 4l-2 16M4 9h16.5M3.5 15h16.5" /></svg>',
+  "Current Position":
+    '<svg class="metric-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3.5 8 4.5H4l8-4.5Z" /><path d="M5.6 11v6M9.9 11v6M14.1 11v6M18.4 11v6M4 20.5h16" /></svg>'
+};
+
+const NEWS_ICONS = {
+  paper:
+    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3.5h7L19 8.5V20.5H7V3.5Z" /><path d="M13.5 3.5V9H19" /><path d="M9.8 13h4.4M9.8 16.2h4.4" /></svg>',
+  award:
+    '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="9.5" r="4.5" /><path d="m9.7 13.3-1.8 7.2 4.1-2.4 4.1 2.4-1.8-7.2" /></svg>',
+  grant:
+    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3.5 8 4.5H4l8-4.5Z" /><path d="M5.6 11v6M9.9 11v6M14.1 11v6M18.4 11v6M4 20.5h16" /></svg>',
+  talk:
+    '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9.5" y="3.5" width="5" height="9" rx="2.5" /><path d="M6.5 11a5.5 5.5 0 0 0 11 0M12 16.5V20M9 20h6" /></svg>',
+  code:
+    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8.5 8-4 4 4 4M15.5 8l4 4-4 4" /></svg>',
+  service:
+    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5 5 6v5.5c0 4.3 2.8 7.4 7 9 4.2-1.6 7-4.7 7-9V6l-7-2.5Z" /><path d="m9 11.8 2.2 2.2 4-4.2" /></svg>',
+  misc:
+    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 4 2.1 4.9 5.4.4-4.1 3.5 1.2 5.2-4.6-2.7-4.6 2.7 1.2-5.2-4.1-3.5 5.4-.4L12 4Z" /></svg>'
+};
+
+const NEWS_TYPE_LABELS = {
+  paper: "Paper",
+  award: "Award",
+  grant: "Grant",
+  talk: "Talk",
+  code: "Code",
+  service: "Service",
+  misc: "News"
+};
+
+const MONTH_NAMES = [
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+];
 
 /* ---------- title matching (Scholar whitelist) ---------- */
 
@@ -98,7 +145,8 @@ function renderMetrics() {
 
       const label = document.createElement("span");
       label.className = "metric-label";
-      label.textContent = metric.label;
+      label.innerHTML = `${METRIC_ICONS[metric.label] || ""}<span></span>`;
+      label.lastElementChild.textContent = metric.label;
 
       const value = document.createElement("strong");
       value.className = "metric-value";
@@ -121,6 +169,93 @@ function renderMetrics() {
   );
 }
 
+/* ---------- BibTeX citation ---------- */
+
+const BIBTEX_TYPES = {
+  "Journal article": "article",
+  Article: "article",
+  Review: "article",
+  Preprint: "misc",
+  "Conference paper": "inproceedings",
+  "Book chapter": "incollection",
+  Correction: "misc",
+  Letter: "misc",
+  Editorial: "misc"
+};
+
+const BIBTEX_STOPWORDS = new Set([
+  "with", "from", "using", "based", "that", "this", "for", "and", "the"
+]);
+
+function bibtexFor(publication) {
+  const authors = String(publication.authors || "")
+    .split(",")
+    .map((name) => name.trim())
+    .filter(Boolean)
+    .map((name) => {
+      const parts = name.split(/\s+/);
+      const last = parts.pop();
+      return parts.length ? `${last}, ${parts.join(" ")}` : last;
+    })
+    .join(" and ");
+
+  const firstAuthor = String(publication.authors || "work").split(",")[0];
+  const lastName = (firstAuthor.trim().split(/\s+/).pop() || "work").toLowerCase();
+  const titleWord =
+    String(publication.title || "")
+      .toLowerCase()
+      .replace(/[^a-z\s]/g, " ")
+      .split(/\s+/)
+      .find((word) => word.length > 3 && !BIBTEX_STOPWORDS.has(word)) || "paper";
+  const key = `${lastName}${publication.year || ""}${titleWord}`;
+
+  const venue = String(publication.venue || "")
+    .replace(/\s+\d+[\d\s,().:-]*$/, "")
+    .trim();
+  const entryType = BIBTEX_TYPES[publication.type] || "misc";
+  const venueField =
+    entryType === "article"
+      ? `journal={${venue}}`
+      : entryType === "inproceedings"
+        ? `booktitle={${venue}}`
+        : `howpublished={${venue}}`;
+
+  const fields = [
+    `title={${publication.title}}`,
+    authors && `author={${authors}}`,
+    venue && venueField,
+    publication.year && `year={${publication.year}}`,
+    publication.link &&
+      publication.link.includes("doi.org") &&
+      `doi={${publication.link.replace("https://doi.org/", "")}}`
+  ].filter(Boolean);
+
+  return `@${entryType}{${key}, ${fields.join(", ")}}`;
+}
+
+function escapeAttr(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;");
+}
+
+function venueLine(publication) {
+  const venue = publication.venue || "";
+  const details = publication.details || "";
+  if (venue && details && details.includes(venue)) return details;
+  return [venue, details].filter(Boolean).join(" · ");
+}
+
+function venueLineHtml(publication) {
+  const venue = publication.venue || "";
+  const details = publication.details || "";
+  if (venue && details && details.includes(venue)) return details;
+  return [venue ? `<em>${venue}</em>` : "", details]
+    .filter(Boolean)
+    .join(" · ");
+}
+
 function createPaperLinks(publication, extraClass) {
   const scholarSearch = new URL("https://scholar.google.com/scholar");
   scholarSearch.searchParams.set("q", publication.title);
@@ -133,6 +268,9 @@ function createPaperLinks(publication, extraClass) {
   }
   links.push(
     `<a class="paper-link ${extraClass}" href="${scholarSearch.toString()}" target="_blank" rel="noreferrer">Scholar${ARROW_ICON}</a>`
+  );
+  links.push(
+    `<button type="button" class="paper-link cite-btn ${extraClass}" data-copy="${escapeAttr(bibtexFor(publication))}" aria-label="Copy BibTeX citation">Cite${CITE_ICON}</button>`
   );
   return links.join("");
 }
@@ -158,7 +296,7 @@ function renderSelectedPublications() {
         </div>
         <h3>${publication.title}</h3>
         <p class="paper-authors">${publication.authors}</p>
-        <p class="paper-venue">${publication.venue} · ${publication.details}</p>
+        <p class="paper-venue">${venueLine(publication)}</p>
         <div class="paper-links">${createPaperLinks(publication, "")}</div>
       `;
       return card;
@@ -238,7 +376,7 @@ function setupArchive() {
           <div class="publication-main">
             <h3>${publication.title}</h3>
             <p class="publication-authors">${publication.authors}</p>
-            <p class="publication-meta"><em>${publication.venue}</em> · ${publication.details}</p>
+            <p class="publication-meta">${venueLineHtml(publication)}</p>
           </div>
           <div class="publication-side">
             <span class="cited-chip">Cited by ${publication.citations}</span>
@@ -294,6 +432,93 @@ function setupArchive() {
       renderList();
     }
   };
+}
+
+/* ---------- news timeline ---------- */
+
+function formatNewsDate(raw) {
+  const parts = String(raw || "").split("-");
+  const year = parts[0] || "";
+  const month = parts[1] ? MONTH_NAMES[Number(parts[1]) - 1] || "" : "";
+  const day = parts[2] ? String(Number(parts[2])) : "";
+  if (month && day) return `${day} ${month} ${year}`;
+  if (month) return `${month} ${year}`;
+  return year;
+}
+
+function isFreshNews(raw) {
+  const [year, month = 1] = String(raw || "").split("-").map(Number);
+  if (!Number.isFinite(year) || !year) return false;
+  const now = new Date();
+  const itemIndex = year * 12 + (month || 1);
+  const nowIndex = now.getFullYear() * 12 + (now.getMonth() + 1);
+  return nowIndex >= itemIndex && nowIndex - itemIndex <= 4;
+}
+
+function renderNews() {
+  const list = document.getElementById("news-timeline");
+  if (!list) return;
+
+  const items = [...(window.siteData.news || [])].sort((a, b) =>
+    String(b.date).localeCompare(String(a.date))
+  );
+
+  if (!items.length) {
+    const section = document.getElementById("news");
+    const navLink = document.querySelector('[data-nav="news"]');
+    if (section) section.hidden = true;
+    if (navLink) navLink.hidden = true;
+    return;
+  }
+
+  list.replaceChildren(
+    ...items.map((item, index) => {
+      const li = document.createElement("li");
+      li.className = "news-item";
+      li.style.setProperty("--d", `${Math.min(index, 8) * 70}ms`);
+
+      const type = NEWS_ICONS[item.type] ? item.type : "misc";
+      const dateLabel = formatNewsDate(item.date);
+      const venue = item.venue
+        ? ` <em class="news-venue">${item.venue}</em>.`
+        : "";
+      const link = item.link
+        ? `<a class="news-link" href="${item.link}" target="_blank" rel="noreferrer">${item.linkLabel || "Details"}${ARROW_ICON}</a>`
+        : "";
+
+      li.innerHTML = `
+        <span class="news-date">${dateLabel}</span>
+        <span class="news-node" aria-hidden="true">${NEWS_ICONS[type]}</span>
+        <div class="news-body">
+          <p>${item.text}${venue}</p>
+          <div class="news-meta">
+            <span class="news-date-inline">${dateLabel}</span>
+            <span class="news-type">${NEWS_TYPE_LABELS[type]}</span>
+            ${isFreshNews(item.date) ? '<span class="news-fresh">Fresh</span>' : ""}
+            ${link}
+          </div>
+        </div>
+      `;
+      return li;
+    })
+  );
+}
+
+/* ---------- optional CV button ---------- */
+
+function renderCvButton() {
+  const url = window.siteData.profile.cv;
+  if (!url) return;
+  const cta = document.querySelector(".hero-cta");
+  if (!cta || cta.querySelector("[data-cv]")) return;
+  const link = document.createElement("a");
+  link.className = "button button-ghost";
+  link.href = url;
+  link.target = "_blank";
+  link.rel = "noreferrer";
+  link.dataset.cv = "true";
+  link.innerHTML = `${DOC_ICON}CV`;
+  cta.appendChild(link);
 }
 
 /* ---------- live publications (OpenAlex) ---------- */
@@ -732,14 +957,21 @@ function setupSignalField() {
 
 /* ---------- visitor atlas ---------- */
 
+const HOME_BASE = { latitude: 34.76, longitude: 113.65 };
+
 function setupVisitorMap() {
   const button = document.getElementById("locate-visitor");
   const dot = document.getElementById("visitor-dot");
   const dotLabel = document.getElementById("visitor-dot-label");
   const map = document.getElementById("visitor-map-canvas");
   const status = document.getElementById("visitor-status");
-  const details = document.getElementById("visitor-details");
-  if (!button || !dot || !map || !status || !details) return;
+  const hud = document.getElementById("map-hud");
+  const hudPlace = document.getElementById("hud-place");
+  const hudMeta = document.getElementById("hud-meta");
+  const hudDistance = document.getElementById("hud-distance");
+  const arcBase = document.getElementById("arc-base");
+  const arcFlow = document.getElementById("arc-flow");
+  if (!button || !dot || !map || !status || !hud) return;
 
   function setStatus(message) {
     status.textContent = message;
@@ -752,27 +984,62 @@ function setupVisitorMap() {
     };
   }
 
-  function createDetail(label, value) {
-    const item = document.createElement("span");
-    const strong = document.createElement("strong");
-    const small = document.createElement("small");
-    strong.textContent = value;
-    small.textContent = label;
-    item.replaceChildren(strong, small);
-    return item;
+  function haversineKm(from, to) {
+    const rad = Math.PI / 180;
+    const dLat = (to.latitude - from.latitude) * rad;
+    const dLon = (to.longitude - from.longitude) * rad;
+    const h =
+      Math.sin(dLat / 2) ** 2 +
+      Math.cos(from.latitude * rad) *
+        Math.cos(to.latitude * rad) *
+        Math.sin(dLon / 2) ** 2;
+    return 2 * 6371 * Math.asin(Math.sqrt(h));
   }
 
-  function renderDetails(location) {
-    const items = [
-      ["Location", location.place],
-      ["Method", location.method],
-      ["Coordinates", `${location.latitude.toFixed(2)}, ${location.longitude.toFixed(2)}`]
-    ];
-    if (location.accuracy) {
-      items.push(["Accuracy", location.accuracy]);
+  function drawArc(location) {
+    if (!arcBase || !arcFlow) return false;
+    const start = projectLocation(location.latitude, location.longitude);
+    const end = projectLocation(HOME_BASE.latitude, HOME_BASE.longitude);
+    const span = Math.hypot(end.left - start.left, end.top - start.top);
+    if (span < 4) {
+      // The visitor is (approximately) at the home lab — no thread needed.
+      arcBase.hidden = true;
+      arcFlow.hidden = true;
+      return false;
     }
-    details.replaceChildren(...items.map(([label, value]) => createDetail(label, value)));
-    details.hidden = false;
+    const cx = (start.left + end.left) / 2;
+    const lift = Math.min(span * 0.32, 24);
+    const cy = Math.max(3, Math.min(start.top, end.top) - lift);
+    const d = `M ${start.left} ${start.top} Q ${cx} ${cy} ${end.left} ${end.top}`;
+    arcBase.setAttribute("d", d);
+    arcFlow.setAttribute("d", d);
+    arcBase.hidden = false;
+    arcFlow.hidden = false;
+    arcBase.classList.remove("is-drawn");
+    arcFlow.classList.remove("is-drawn");
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => arcBase.classList.add("is-drawn"));
+    });
+    window.setTimeout(() => arcFlow.classList.add("is-drawn"), 900);
+    return true;
+  }
+
+  function renderHud(location, arcDrawn) {
+    if (hudPlace) hudPlace.textContent = location.place;
+    if (hudMeta) {
+      hudMeta.textContent =
+        `${location.latitude.toFixed(2)}°, ${location.longitude.toFixed(2)}° · ${location.method}`;
+    }
+    const km = haversineKm(location, HOME_BASE);
+    if (hudDistance) {
+      if (arcDrawn && km > 50) {
+        hudDistance.textContent = `⇢ ~${Math.round(km).toLocaleString("en-US")} km to the home lab`;
+        hudDistance.hidden = false;
+      } else {
+        hudDistance.hidden = true;
+      }
+    }
+    hud.hidden = false;
   }
 
   function placeDot(location) {
@@ -783,9 +1050,10 @@ function setupVisitorMap() {
     dot.style.top = `${point.top}%`;
     dotLabel.textContent = location.shortLabel || "You";
     window.requestAnimationFrame(() => dot.classList.add("is-placed"));
-    renderDetails(location);
+    const arcDrawn = drawArc(location);
+    renderHud(location, arcDrawn);
     setStatus(
-      `${location.place} is now glowing on the map. The marker lives only in this browser session.`
+      `${location.place} — signal locked. The marker lives only in this browser session.`
     );
   }
 
@@ -838,7 +1106,7 @@ function setupVisitorMap() {
     const originalLabel = button.textContent;
     button.disabled = true;
     button.textContent = "Locating…";
-    details.hidden = true;
+    hud.hidden = true;
     map.classList.add("is-scanning");
 
     try {
@@ -886,6 +1154,8 @@ function bootstrap() {
   renderHeroBadges();
   renderContacts();
   renderMetrics();
+  renderNews();
+  renderCvButton();
   renderSelectedPublications();
   archiveApi = setupArchive();
   setupCopyButtons();

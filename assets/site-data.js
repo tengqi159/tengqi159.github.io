@@ -69,6 +69,48 @@ window.siteData = {
       }
     ]
   },
+  "news": [
+    {
+      "date": "2025",
+      "type": "paper",
+      "text": "Dual stage-wise decoupling networks for long-tailed activity recognition published in",
+      "venue": "Pattern Recognition",
+      "link": "https://doi.org/10.1016/j.patcog.2024.111234",
+      "linkLabel": "DOI"
+    },
+    {
+      "date": "2025",
+      "type": "paper",
+      "text": "CSFO, a category-specific flattening optimization method for long-tailed activity recognition, published in",
+      "venue": "IEEE Sensors Journal",
+      "link": "https://doi.org/10.1109/JSEN.2025.3534413",
+      "linkLabel": "DOI"
+    },
+    {
+      "date": "2025",
+      "type": "paper",
+      "text": "Single-camera frailty-focused movement monitoring with joint-angle exercise-quality assessment published in",
+      "venue": "Sensors",
+      "link": "https://doi.org/10.3390/s25133907",
+      "linkLabel": "DOI"
+    },
+    {
+      "date": "2024",
+      "type": "paper",
+      "text": "Dual-decoupling CNN with layer-wise temporal-spatial attention published in",
+      "venue": "IEEE Journal of Biomedical and Health Informatics",
+      "link": "https://doi.org/10.1109/JBHI.2024.3488528",
+      "linkLabel": "DOI"
+    },
+    {
+      "date": "2024",
+      "type": "paper",
+      "text": "Large receptive field attention via decomposed large-kernel convolution published in",
+      "venue": "IEEE Sensors Journal",
+      "link": "https://doi.org/10.1109/JSEN.2024.3364187",
+      "linkLabel": "DOI"
+    }
+  ],
   "publications": [
     {
       "title": "DanHAR: Dual attention network for multimodal human activity recognition using wearable sensors",

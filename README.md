@@ -7,15 +7,40 @@ sensor-signal canvas drawn behind the page — a nod to the research itself.
 
 ## Files
 
-- `index.html` — page structure (Hero, Profile, Research, Publications, Visitor Atlas, Links).
+- `index.html` — page structure (Hero, Profile, News, Research, Publications, Visitor Atlas, Links).
 - `assets/styles.css` — the full design system (light/dark themes, responsive, reduced-motion aware).
-- `assets/site-data.js` — profile, metrics, and the curated offline publication list (fallback).
+- `assets/site-data.js` — profile, metrics, the news timeline, and the curated
+  offline publication list (fallback).
 - `assets/site.js` — rendering, theme toggle, scroll progress, metric count-up,
-  publication search/filter/sort, live OpenAlex sync, visitor map, signal field.
+  news timeline, BibTeX cite buttons, publication search/filter/sort,
+  live OpenAlex sync, visitor map with signal arc, signal field.
 - `assets/profile.jpg` — portrait.
 - `assets/world-map-equirectangular.svg` — base map for the visitor atlas.
 - `scripts/refresh-data.mjs` — scheduled sync that keeps the fallback dataset fresh.
 - `.github/workflows/refresh-data.yml` — daily auto-refresh workflow.
+
+## News timeline
+
+The News section is fully data-driven. To post an update, add **one entry** at
+the top of the `news` array in `assets/site-data.js` — no HTML or CSS needed:
+
+```js
+{
+  "date": "2026-08",        // "2026", "2026-08", or "2026-08-15"
+  "type": "paper",          // paper | award | grant | talk | code | service | misc
+  "text": "Sentence without a trailing period. Venue appended automatically:",
+  "venue": "Nature Machine Intelligence",   // optional, rendered in italics
+  "link": "https://doi.org/…",              // optional
+  "linkLabel": "DOI"                        // optional, defaults to "Details"
+}
+```
+
+- Entries render newest first automatically; each type gets its own icon.
+- Items dated within the last ~4 months get a pulsing **Fresh** badge — no
+  manual cleanup, it expires by itself.
+- If the array is emptied, the section and its nav link hide themselves.
+- The daily refresh script preserves the `news` array; it only rewrites
+  publications and metrics.
 
 ## Live publications
 
@@ -49,7 +74,9 @@ node scripts/refresh-data.mjs
 ## Visitor atlas
 
 - **Current visitor**: on load, the page quietly resolves an approximate
-  city-level location via `ipapi.co` and places a dot — no permission prompt,
+  city-level location via `ipapi.co`, places a dot, and draws a signal arc
+  from the visitor back to the home-lab diamond in Zhengzhou, with the
+  great-circle distance shown in the floating HUD chip. No permission prompt,
   nothing stored. The button upgrades the dot to a precise browser-approved
   location.
 - **All visitors over time**: a purely static site cannot store other
@@ -58,15 +85,20 @@ node scripts/refresh-data.mjs
   1. Register the site at [ClustrMaps](https://clustrmaps.com/) (or PulseMaps
      / Flag Counter) and copy the provided snippet.
   2. Paste the snippet into `index.html` inside `.visitor-copy`, right after
-     the `#visitor-details` div.
+     the `.privacy-note` paragraph.
   3. The widget renders its own map/thumbnail and starts counting from that
      moment.
 
 ## Features
 
 - Light/dark theme with system preference detection and a manual toggle.
+- Data-driven news timeline with per-type icons and self-expiring Fresh badges.
+- One-click BibTeX citation copy on every publication.
 - Publication archive with year filters, citation/recency sorting, and
   instant search (press `/` to focus, `Esc` to clear).
+- Structured data (JSON-LD Person) and Open Graph tags for richer sharing.
+- Optional CV button: set `profile.cv` in `site-data.js` (e.g.
+  `"assets/cv.pdf"`) and a CV button appears in the hero.
 - Respects `prefers-reduced-motion`; print-friendly.
 
 ## Preview locally
