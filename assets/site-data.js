@@ -14,7 +14,7 @@ window.siteData = {
     "orcidId": "0000-0003-3573-4146",
     "email": "teqi159@gmail.com",
     "institutionalEmail": "tq@zzu.edu.cn",
-    "updatedAt": "2026-08-03",
+    "updatedAt": "2026-08-09",
     "heroBadges": [
       "Wearable Sensing",
       "Time-Series Intelligence",
@@ -49,7 +49,7 @@ window.siteData = {
     "metrics": [
       {
         "label": "Citations",
-        "value": "988",
+        "value": "991",
         "note": "Google Scholar · auto-synced snapshot"
       },
       {
@@ -131,7 +131,7 @@ window.siteData = {
       "venue": "IEEE Sensors Journal 20 (13), 7265-7274, 2020",
       "details": "IEEE Sensors Journal 20 (13), 7265-7274, 2020 · Vol. 20, 7265-7274 · 2020",
       "year": 2020,
-      "citations": 219,
+      "citations": 220,
       "link": "https://doi.org/10.1109/JSEN.2020.2978772",
       "linkLabel": "DOI",
       "selected": true,
@@ -209,7 +209,7 @@ window.siteData = {
       "venue": "IEEE Journal of Biomedical and Health Informatics 29 (2), 1035-1048, 2024",
       "details": "IEEE Journal of Biomedical and Health Informatics 29 (2), 1035-1048, 2024 · Vol. 29, 1035-1048 · 2024",
       "year": 2024,
-      "citations": 25,
+      "citations": 26,
       "link": "https://doi.org/10.1109/JBHI.2024.3488528",
       "linkLabel": "DOI",
       "selected": true,
@@ -235,7 +235,7 @@ window.siteData = {
       "venue": "IEEE Sensors Journal 24 (8), 13488-13499, 2024",
       "details": "IEEE Sensors Journal 24 (8), 13488-13499, 2024 · Vol. 24, 13488-13499 · 2024",
       "year": 2024,
-      "citations": 18,
+      "citations": 19,
       "link": "https://doi.org/10.1109/JSEN.2024.3364187",
       "linkLabel": "DOI",
       "selected": true,
