@@ -284,6 +284,13 @@ function renderSelectedPublications() {
     "citations"
   );
 
+  /* Meters are scaled by the square root of the count: the 200+ work
+     and the 3-citation work both stay readable on one bar. */
+  const peak = selected.reduce(
+    (max, item) => Math.max(max, Math.sqrt(Math.max(0, item.citations || 0))),
+    0
+  );
+
   container.replaceChildren(
     ...selected.map((publication) => {
       const card = document.createElement("article");
@@ -299,6 +306,20 @@ function renderSelectedPublications() {
         <p class="paper-venue">${venueLine(publication)}</p>
         <div class="paper-links">${createPaperLinks(publication, "")}</div>
       `;
+
+      const share =
+        peak > 0 ? Math.sqrt(Math.max(0, publication.citations || 0)) / peak : 0;
+      const foot = document.createElement("div");
+      foot.className = "cite-foot";
+      const meter = document.createElement("span");
+      meter.className = "cite-meter";
+      meter.setAttribute("aria-hidden", "true");
+      const bar = document.createElement("i");
+      bar.style.setProperty("--w", `${share > 0 ? Math.max(6, Math.round(share * 100)) : 0}%`);
+      meter.appendChild(bar);
+      foot.appendChild(meter);
+      card.appendChild(foot);
+
       return card;
     })
   );
@@ -706,14 +727,54 @@ function setupThemeToggle() {
   button.addEventListener("click", () => {
     const root = document.documentElement;
     const next = root.dataset.theme === "dark" ? "light" : "dark";
-    root.classList.add("is-theming");
-    root.dataset.theme = next;
-    try {
-      localStorage.setItem("qt-theme", next);
-    } catch (error) {}
-    syncThemeColor(next);
-    document.dispatchEvent(new CustomEvent("qt-themechange"));
-    window.setTimeout(() => root.classList.remove("is-theming"), 480);
+
+    const apply = (crossfade) => {
+      if (crossfade) root.classList.add("is-theming");
+      root.dataset.theme = next;
+      try {
+        localStorage.setItem("qt-theme", next);
+      } catch (error) {}
+      syncThemeColor(next);
+      document.dispatchEvent(new CustomEvent("qt-themechange"));
+      if (crossfade) {
+        window.setTimeout(() => root.classList.remove("is-theming"), 480);
+      }
+    };
+
+    const canSweep =
+      typeof document.startViewTransition === "function" &&
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (!canSweep) {
+      apply(true);
+      return;
+    }
+
+    /* Circular reveal that grows out of the toggle itself — the new
+       theme sweeps across the page like a signal crossing the field. */
+    const rect = button.getBoundingClientRect();
+    const originX = rect.left + rect.width / 2;
+    const originY = rect.top + rect.height / 2;
+    const radius = Math.ceil(
+      Math.hypot(
+        Math.max(originX, window.innerWidth - originX),
+        Math.max(originY, window.innerHeight - originY)
+      )
+    );
+    root.style.setProperty("--sx", `${originX.toFixed(1)}px`);
+    root.style.setProperty("--sy", `${originY.toFixed(1)}px`);
+    root.style.setProperty("--sr", `${radius}px`);
+    root.classList.add("fx-sweep");
+
+    const transition = document.startViewTransition(() => apply(false));
+    const settle = () => root.classList.remove("fx-sweep");
+    transition.finished.then(settle, () => {
+      /* the browser declined to animate (hidden tab, size change, …):
+         fall back to the ordinary crossfade instead of a hard cut */
+      root.classList.add("is-theming");
+      window.setTimeout(() => root.classList.remove("is-theming"), 480);
+      settle();
+    });
   });
 }
 
@@ -1005,6 +1066,7 @@ function setupVisitorMap() {
       // The visitor is (approximately) at the home lab — no thread needed.
       arcBase.hidden = true;
       arcFlow.hidden = true;
+      document.dispatchEvent(new CustomEvent("qt-arcclear"));
       return false;
     }
     const cx = (start.left + end.left) / 2;
@@ -1021,6 +1083,7 @@ function setupVisitorMap() {
       window.requestAnimationFrame(() => arcBase.classList.add("is-drawn"));
     });
     window.setTimeout(() => arcFlow.classList.add("is-drawn"), 900);
+    document.dispatchEvent(new CustomEvent("qt-arcdrawn", { detail: arcFlow }));
     return true;
   }
 
@@ -1052,9 +1115,25 @@ function setupVisitorMap() {
     window.requestAnimationFrame(() => dot.classList.add("is-placed"));
     const arcDrawn = drawArc(location);
     renderHud(location, arcDrawn);
-    setStatus(
-      `${location.place} — signal locked. The marker lives only in this browser session.`
-    );
+
+    /* Hand the position to the crowd layer. It refuses anything that is
+       not marked coarse, so a GPS fix stays on this screen. */
+    const crowd = window.QtAtlasCrowd;
+    if (crowd && typeof crowd.report === "function") {
+      crowd.report(location);
+    }
+
+    let note;
+    if (location.coarse === false) {
+      note = "signal locked here only — precise positions are never uploaded.";
+    } else if (crowd && crowd.isOptedOut()) {
+      note = "signal locked. Nothing was recorded.";
+    } else if (crowd) {
+      note = "signal locked — your city has joined the map.";
+    } else {
+      note = "signal locked.";
+    }
+    setStatus(`${location.place} — ${note}`);
   }
 
   function getBrowserLocation() {
@@ -1071,7 +1150,9 @@ function setupVisitorMap() {
             accuracy: accuracy ? `about ${Math.round(accuracy / 1000)} km` : "",
             place: "Browser-approved location",
             shortLabel: "Here",
-            method: "Browser permission"
+            method: "Browser permission",
+            /* GPS-grade: shown on this screen, never uploaded */
+            coarse: false
           });
         },
         reject,
@@ -1098,7 +1179,13 @@ function setupVisitorMap() {
       place: place || "Approximate IP location",
       shortLabel: data.city || data.country_code || "IP",
       method: "Approximate IP lookup",
-      accuracy: "city or region level"
+      accuracy: "city or region level",
+      /* city-level: this is the only kind of position ever uploaded */
+      coarse: true,
+      city: data.city || "",
+      region: data.region || "",
+      country: data.country_name || "",
+      countryCode: data.country_code || ""
     };
   }
 

@@ -6,3 +6,12 @@ _site/
 Gemfile.lock
 vendor/
 node_modules/
+
+# local verification artifacts (screenshots, playwright dumps, scratch pages)
+.playwright-cli/
+shot-*.png
+smoke-tmp.html
+
+# wrangler local secrets
+workers/.dev.vars
+workers/.wrangler/
