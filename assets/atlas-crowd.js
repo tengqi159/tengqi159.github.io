@@ -32,7 +32,6 @@
   const ATLAS_ENDPOINT = window.QT_ATLAS_ENDPOINT || DEPLOYED_ENDPOINT || "";
 
   const TOKEN_KEY = "qt-atlas-token";
-  const OPTOUT_KEY = "qt-atlas-optout";
   const REVEAL_MS = 900;
 
   /* ---------------------------------------------------------
@@ -83,8 +82,6 @@
     }
     return token;
   }
-
-  const isOptedOut = () => storageGet(OPTOUT_KEY) === "1";
 
   function round(value, digits) {
     const factor = 10 ** digits;
@@ -159,7 +156,7 @@
   }
 
   async function refresh() {
-    if (!ATLAS_ENDPOINT || isOptedOut()) return;
+    if (!ATLAS_ENDPOINT) return;
     let payload;
     try {
       payload = await api("/visits", { method: "GET", cache: "no-store" });
@@ -172,26 +169,12 @@
     reveal();
   }
 
-  async function forget() {
-    const token = storageGet(TOKEN_KEY);
-    if (!token || !ATLAS_ENDPOINT) return;
-    try {
-      await api("/visits", {
-        method: "DELETE",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ token })
-      });
-    } catch (error) {
-      /* nothing to do — the visitor's dot simply stays until pruned */
-    }
-  }
-
   /* Upload one city-level point.
      The `coarse` guard is the privacy boundary: site.js marks only
      IP-derived locations coarse, so a browser GPS fix — which the
      visitor approved for their own screen — is never sent. */
   async function report(location) {
-    if (!ATLAS_ENDPOINT || isOptedOut()) return;
+    if (!ATLAS_ENDPOINT) return;
     if (!location || location.coarse !== true) return;
 
     const latitude = Number(location.latitude);
@@ -352,33 +335,6 @@
   }
 
   /* ---------------------------------------------------------
-     opt-out
-     --------------------------------------------------------- */
-
-  function syncToggle() {
-    if (els.toggle) els.toggle.checked = isOptedOut();
-  }
-
-  async function handleToggle() {
-    const off = Boolean(els.toggle && els.toggle.checked);
-    storageSet(OPTOUT_KEY, off ? "1" : "");
-
-    if (off) {
-      await forget();
-      points = [];
-      hasRevealed = true;
-      paint(1);
-      renderStats(null, []);
-      if (els.stats) {
-        els.stats.textContent = "Your dot has been removed and nothing further is recorded.";
-      }
-    } else {
-      hasRevealed = false;
-      await refresh();
-    }
-  }
-
-  /* ---------------------------------------------------------
      init
      --------------------------------------------------------- */
 
@@ -391,13 +347,7 @@
 
     els.stats = document.getElementById("crowd-stats");
     els.top = document.getElementById("crowd-top");
-    els.toggle = document.getElementById("crowd-optout");
     els.panel = document.getElementById("atlas-crowd");
-
-    if (els.toggle) {
-      syncToggle();
-      els.toggle.addEventListener("change", handleToggle);
-    }
 
     if (ATLAS_ENDPOINT) {
       if (els.panel) els.panel.hidden = false;
@@ -421,7 +371,7 @@
     document.addEventListener("qt-themechange", repaint);
   }
 
-  window.QtAtlasCrowd = { report, refresh, isOptedOut };
+  window.QtAtlasCrowd = { report, refresh };
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", init);

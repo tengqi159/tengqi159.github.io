@@ -5,16 +5,17 @@
    Routes
      GET    /visits   → aggregated city points + running totals
      POST   /visits   → record (or bump) one visitor's city point
-     DELETE /visits   → forget one visitor (the opt-out path)
 
    Privacy rules enforced here, not just promised in the UI
      · only city-level coordinates are accepted; the browser never
        sends GPS-grade positions in the first place
      · no IP address, user agent or referrer is ever written to D1
-     · one row per anonymous token, so a visitor can delete their
-       own dot at any time without us being able to identify them
+     · one anonymous row per visitor token, which cannot be linked
+       back to any person — the owner cannot identify anyone either
      · a repeat visit within REVISIT_WINDOW_MS bumps nothing, so a
        refresh loop cannot inflate the counter
+     · there is no self-serve delete: rows live until the owner
+       prunes them via `wrangler d1 execute qt-atlas --remote`
 
    Bindings (see wrangler.toml)
      DB               D1Database   required
@@ -46,7 +47,7 @@ function corsFor(origin, allowedList) {
   const allow = allowedList.includes(origin) ? origin : allowedList[0] || "*";
   return {
     "access-control-allow-origin": allow,
-    "access-control-allow-methods": "GET, POST, DELETE, OPTIONS",
+    "access-control-allow-methods": "GET, POST, OPTIONS",
     "access-control-allow-headers": "content-type",
     "access-control-max-age": "86400",
     vary: "Origin"
@@ -179,23 +180,6 @@ async function recordVisit(request, env) {
   return { ok: true, recorded: true, hits: 1 };
 }
 
-/* ---------- DELETE /visits ---------- */
-
-async function forgetVisit(request, env) {
-  const payload = await readJsonBody(request);
-  if (!payload || typeof payload !== "object") {
-    return { ok: false, error: "Malformed request body." };
-  }
-
-  const token = typeof payload.token === "string" ? payload.token : "";
-  if (!TOKEN_RE.test(token)) {
-    return { ok: false, error: "Invalid token." };
-  }
-
-  await env.DB.prepare(`DELETE FROM visits WHERE token = ?`).bind(token).run();
-  return { ok: true, deleted: true };
-}
-
 /* ---------- router ---------- */
 
 export default {
@@ -217,7 +201,6 @@ export default {
       if (path === "/visits") {
         if (request.method === "GET") return json(await getVisits(env), cors);
         if (request.method === "POST") return json(await recordVisit(request, env), cors);
-        if (request.method === "DELETE") return json(await forgetVisit(request, env), cors);
         return json({ ok: false, error: "Method not allowed." }, cors, 405);
       }
       return json({ ok: false, error: "Not found." }, cors, 404);

@@ -51,11 +51,13 @@ local-only mode it already has — no errors, no broken map.
 | --- | --- | --- | --- |
 | `GET` | `/visits` | – | `{ ok, points: [{city, region, country, country_code, lat, lon, visitors, visits, last_seen}], totals: {visitors, visits, cities} }` |
 | `POST` | `/visits` | `{ token, lat, lon, city, region, country, country_code }` | `{ ok, recorded, hits }` |
-| `DELETE` | `/visits` | `{ token }` | `{ ok, deleted }` |
 
 `token` is a random string generated in the browser and kept in
-`localStorage`. It is the only handle on a visitor's row, which is what makes
-the opt-out button possible.
+`localStorage`. It is the only handle on a visitor's row and cannot be linked
+back to any person — not even by the site owner.
+
+There is no self-serve delete: rows live until pruned by the owner (see
+Housekeeping below).
 
 ## Privacy guarantees enforced by the worker
 
@@ -63,8 +65,8 @@ the opt-out button possible.
   "refine with precise location" result is shown locally and discarded.
 - **No IP address, user agent or referrer is written to D1.** The Worker could
   read them, and deliberately does not.
-- **One row per token.** A visitor can delete their own dot at any time and we
-  cannot tell who they were.
+- **One anonymous row per token.** Nothing in the database can be linked to a
+  person — the owner cannot identify anyone either.
 - **Repeat visits do not inflate counts.** A hit is only recorded once per
   30 minutes per token (`REVISIT_WINDOW_MS`), so a refresh loop is a no-op.
 - **Input is validated and bounded.** Coordinate ranges, token shape, text
