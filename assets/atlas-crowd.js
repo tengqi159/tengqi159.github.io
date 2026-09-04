@@ -25,7 +25,7 @@
   // │  e.g. "https://qt-atlas.your-subdomain.workers.dev"           │
   // │  Leave it as "" and the atlas just keeps its old behaviour.   │
   // └───────────────────────────────────────────────────────────────┘
-  const DEPLOYED_ENDPOINT = "";
+  const DEPLOYED_ENDPOINT = "https://qt-atlas.teqi159.workers.dev";
 
   // The window override exists so a local mock endpoint can be injected in
   // tests without editing this file.

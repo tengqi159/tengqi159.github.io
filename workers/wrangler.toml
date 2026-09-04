@@ -16,7 +16,7 @@ compatibility_date = "2026-09-03"
 [[d1_databases]]
 binding = "DB"
 database_name = "qt-atlas"
-database_id = "REPLACE_ME_WITH_YOUR_DATABASE_ID"
+database_id = "03afea88-6541-472d-b502-67d32821c503"
 
 [vars]
 # Comma separated. The first entry is also the CORS fallback.
