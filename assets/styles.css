@@ -1013,8 +1013,7 @@ a.contact-row-value:hover {
   transition:
     opacity 700ms ease var(--d, 0ms),
     transform 700ms var(--ease-out) var(--d, 0ms),
-    background-color 250ms ease,
-    padding-left 300ms var(--ease-out);
+    background-color 250ms ease;
 }
 
 .section.is-visible .news-item {
@@ -1027,22 +1026,22 @@ a.contact-row-value:hover {
   position: absolute;
   top: 0;
   bottom: 0;
-  left: calc(6.6rem + 1.2rem + 1.7rem);
+  /* 0.4rem item padding + 6.6rem date col + 1.2rem gap + half of the 3.4rem disc */
+  left: calc(0.4rem + 6.6rem + 1.2rem + 1.7rem);
   width: 1px;
   background: var(--line-soft);
 }
 
 .news-item:first-child::before {
-  top: 2.55rem;
+  top: 3.55rem; /* centre of the 3.4rem icon disc */
 }
 
 .news-item:last-child::before {
-  bottom: calc(100% - 2.55rem);
+  bottom: calc(100% - 3.55rem);
 }
 
 .news-item:hover {
   background: var(--teal-soft);
-  padding-left: 1rem;
 }
 
 .news-date {
@@ -1065,7 +1064,8 @@ a.contact-row-value:hover {
 
 .news-node {
   position: relative;
-  z-index: 1;
+  /* above the scroll rail (z-index 2) so the thread never crosses the disc */
+  z-index: 3;
   align-self: start;
   display: inline-flex;
   align-items: center;
@@ -2563,7 +2563,15 @@ button.paper-link {
   }
 
   .news-item::before {
-    left: 1.5rem;
+    left: calc(0.4rem + 1.5rem); /* padding + centre of the 3rem disc */
+  }
+
+  .news-item:first-child::before {
+    top: 3.35rem; /* 1.5rem padding + 0.35rem margin + half of the 3rem disc */
+  }
+
+  .news-item:last-child::before {
+    bottom: calc(100% - 3.35rem);
   }
 
   .news-date {

@@ -222,13 +222,27 @@
     let top = 0;
     let span = 0;
 
+    // Vertical centre of an item's icon, in timeline-local coordinates.
+    // Uses offsetTop/offsetHeight (layout boxes) rather than
+    // getBoundingClientRect so the entrance translateY transition and
+    // hover transforms can never skew the measurement.
+    function nodeCenterY(item) {
+      const node = item.querySelector(".news-node");
+      if (!node) return item.offsetTop + remToPx(3.55);
+      return item.offsetTop + node.offsetTop + node.offsetHeight / 2;
+    }
+
     function measure() {
-      const base = timeline.getBoundingClientRect().top;
-      const first = items[0].getBoundingClientRect().top - base;
-      const last = items[items.length - 1].getBoundingClientRect().top - base;
-      const nodeOffset = remToPx(2.55);
-      top = first + nodeOffset;
-      span = Math.max(0, last - first);
+      // X: derive from the real icon disc so the rail always matches the
+      // grid (padding, column widths and breakpoints included).
+      const node = items[0].querySelector(".news-node");
+      if (node) {
+        const nr = node.getBoundingClientRect();
+        const tr = timeline.getBoundingClientRect();
+        rail.style.left = `${(nr.left + nr.width / 2 - tr.left).toFixed(1)}px`;
+      }
+      top = nodeCenterY(items[0]);
+      span = Math.max(0, nodeCenterY(items[items.length - 1]) - top);
       rail.style.top = `${top.toFixed(1)}px`;
       fill.style.height = `${span.toFixed(1)}px`;
       update();
@@ -249,6 +263,9 @@
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize);
     measure();
+    // late font swaps change line wraps and item heights — re-measure
+    if (document.fonts?.ready) document.fonts.ready.then(measure);
+    window.addEventListener("load", measure);
 
     onceVisible(items, { threshold: 0.25, rootMargin: "0px 0px -6% 0px" }, (item) => {
       item.classList.add("is-locked");
