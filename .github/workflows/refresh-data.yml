@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
   refresh:
@@ -20,7 +21,7 @@ jobs:
         with:
           node-version: 20
 
-      - name: Refresh data from OpenAlex
+      - name: Refresh Scholar snapshot and publication metadata
         id: refresh
         run: node scripts/refresh-data.mjs
 
@@ -34,7 +35,7 @@ jobs:
             echo "changed=false" >> "$GITHUB_OUTPUT"
             echo "No data changes."
           else
-            git commit -m "chore: auto-refresh homepage data from OpenAlex"
+            git commit -m "chore: refresh Scholar snapshot and publication metadata"
             git push
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi

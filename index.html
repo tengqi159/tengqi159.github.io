@@ -68,16 +68,18 @@
       href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Manrope:wght@400..800&family=IBM+Plex+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="assets/styles.css?v=signal7" />
-    <link rel="stylesheet" href="assets/fx.css?v=signal7" />
-    <script defer src="assets/site-data.js?v=signal7"></script>
-    <script defer src="assets/atlas-crowd.js?v=signal7"></script>
-    <script defer src="assets/site.js?v=signal7"></script>
-    <script defer src="assets/fx.js?v=signal7"></script>
+    <link rel="stylesheet" href="assets/styles.css?v=release-20260905" />
+    <link rel="stylesheet" href="assets/fx.css?v=release-20260905" />
+    <link rel="stylesheet" href="assets/signal-studies.css?v=release-20260905" />
+    <link rel="stylesheet" href="assets/atlas.css?v=release-20260905" />
+    <script defer src="assets/site-data.js?v=release-20260905"></script>
+    <script defer src="assets/atlas-crowd.js?v=release-20260905"></script>
+    <script defer src="assets/site.js?v=release-20260905"></script>
+    <script defer src="assets/fx.js?v=release-20260905"></script>
+    <script defer src="assets/signal-studies.js?v=release-20260905"></script>
   </head>
   <body>
     <a class="skip-link" href="#top">Skip to content</a>
-    <canvas class="signal-canvas" id="signal-canvas" aria-hidden="true"></canvas>
     <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
 
     <header class="site-header" id="site-header">
@@ -111,17 +113,17 @@
 
     <main id="top" tabindex="-1">
       <section class="hero" aria-label="Introduction">
+        <canvas class="signal-canvas" id="signal-canvas" aria-hidden="true"></canvas>
         <div class="hero-grid">
           <div class="hero-main" data-reveal>
             <p class="kicker">Academic Homepage — Zhengzhou, China</p>
             <h1 class="hero-name" aria-label="Qi Teng">Qi Teng</h1>
             <p class="hero-native">滕起</p>
             <p class="hero-statement">
-              I build <em>efficient neural models</em> that learn from
-              <em>wearable sensor signals</em> — spanning human activity
-              recognition, attention-driven time-series learning, and
-              data-driven dynamical systems.
+              I build <em>efficient neural models</em> that turn
+              <em>wearable signals</em> into an understanding of human activity.
             </p>
+            <p class="hero-summary">My work spans attention-based time-series learning and data-driven dynamical systems.</p>
             <div class="hero-ribbons" id="hero-ribbons"></div>
             <div class="hero-cta">
               <a
@@ -234,9 +236,7 @@
           <p class="section-kicker"><span>02</span>News</p>
           <h2>Signals from the lab notebook.</h2>
           <p class="section-lede">
-            Milestones and updates, newest first. This timeline is data-driven
-            — adding one entry in <code>assets/site-data.js</code> is all it
-            takes to publish a new signal.
+            New papers and research milestones, newest first.
           </p>
         </header>
 
@@ -254,6 +254,17 @@
           </p>
         </header>
 
+        <div class="research-explorer">
+          <figure class="signal-study" id="signal-study" aria-labelledby="study-title" hidden>
+            <div class="study-topline"><span>Signal studies</span><span id="study-index">01 / 04</span></div>
+            <div class="study-viewport"><canvas id="study-canvas" aria-hidden="true"></canvas></div>
+            <figcaption class="study-caption" aria-live="polite" aria-atomic="true">
+              <span class="study-eyebrow" id="study-eyebrow">Sense / multichannel</span>
+              <h3 id="study-title">Movement becomes signal.</h3>
+              <p id="study-description">Different channels, one shared rhythm. Patterns emerge across wearable sensor streams.</p>
+            </figcaption>
+            <div class="study-footer"><span>Generative illustration</span><button type="button" id="study-motion" aria-pressed="false">Pause motion</button></div>
+          </figure>
         <div class="direction-list">
           <article class="direction-row">
             <span class="direction-icon" aria-hidden="true">
@@ -310,6 +321,7 @@
             <svg class="direction-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
           </article>
         </div>
+        </div>
       </section>
 
       <section class="section" id="publications" data-reveal>
@@ -353,105 +365,68 @@
         </div>
 
         <div class="filter-group" id="year-filters" aria-label="Filter by year"></div>
+        <div class="archive-feedback">
+          <p id="archive-count" role="status" aria-live="polite" aria-atomic="true"></p>
+          <button id="archive-reset" type="button" hidden>Clear filters</button>
+        </div>
         <div class="publication-list" id="publication-list"></div>
-        <p class="archive-empty" id="archive-empty" hidden>No publications match this filter.</p>
+        <p class="archive-empty" id="archive-empty" hidden>No matches. Try another title, author or venue, or clear the filters.</p>
       </section>
 
       <section class="section" id="atlas" data-reveal>
         <header class="section-head">
           <p class="section-kicker"><span>05</span>Visitor Atlas</p>
-          <h2>Every visit leaves a signal.</h2>
-          <p class="section-lede">
-            An approximate, city-level position is resolved from your IP as
-            the page loads — no permission prompt, and never a GPS fix. Each
-            visit leaves one dot behind, so the field fills in as the page
-            ages. The gold thread traces your signal back to the home lab in
-            Zhengzhou.
-          </p>
+          <h2>Where visitors connect.</h2>
+          <p class="section-lede">A growing map of visits, by city or region. One shared point for each place.</p>
         </header>
-
-        <div class="visitor-panel">
-          <div class="visitor-map" id="visitor-map-canvas" aria-label="Approximate visitor world map">
-            <div class="atlas-grid" aria-hidden="true"></div>
-            <img
-              class="world-map-image"
-              src="assets/world-map-equirectangular.svg"
-              alt="Equirectangular world map"
-              loading="lazy"
-              decoding="async"
-            />
-            <svg class="world-map" viewBox="0 0 1200 620" aria-hidden="true">
-              <g class="map-graticule">
-                <path d="M120 90H1080M120 190H1080M120 310H1080M120 430H1080M120 530H1080" />
-                <path d="M180 52V568M340 52V568M500 52V568M660 52V568M820 52V568M980 52V568" />
-              </g>
-              <g class="map-city-lights" aria-hidden="true">
-                <circle cx="192" cy="180" r="4" />
-                <circle cx="353" cy="170" r="5" />
-                <circle cx="600" cy="133" r="5" />
-                <circle cx="988" cy="172" r="5" />
-                <circle cx="1005" cy="202" r="4" />
-                <circle cx="1104" cy="427" r="5" />
-              </g>
-            </svg>
-            <canvas class="crowd-canvas" id="crowd-canvas" aria-hidden="true"></canvas>
-            <svg class="arc-layer" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-              <path id="arc-base" class="arc-base" pathLength="100" vector-effect="non-scaling-stroke" hidden />
-              <path id="arc-flow" class="arc-flow" pathLength="100" vector-effect="non-scaling-stroke" hidden />
-            </svg>
-            <span class="map-corner map-corner-n" aria-hidden="true">90°N</span>
-            <span class="map-corner map-corner-s" aria-hidden="true">90°S</span>
-            <span class="map-corner map-corner-w" aria-hidden="true">180°W</span>
-            <span class="map-corner map-corner-e" aria-hidden="true">180°E</span>
-            <span class="map-compass" aria-hidden="true">
-              <svg viewBox="0 0 24 24"><path d="M12 20V6M6.5 11.5 12 5.5l5.5 6" /></svg>N
-            </span>
-            <div class="home-marker" aria-hidden="true">
-              <i></i>
-              <span>Home · Zhengzhou</span>
-            </div>
-            <div class="visitor-dot" id="visitor-dot" hidden>
-              <span></span>
-              <strong id="visitor-dot-label">You</strong>
-            </div>
-            <div class="map-hud" id="map-hud" hidden>
-              <span class="hud-pulse" aria-hidden="true"></span>
-              <div class="hud-body">
-                <strong id="hud-place">Locating…</strong>
-                <span class="hud-meta" id="hud-meta"></span>
-                <span class="hud-distance" id="hud-distance" hidden></span>
+        <div class="atlas-shell" id="atlas-shell" data-state="loading">
+          <div class="atlas-toolbar">
+            <p id="atlas-map-status" role="status">Loading visitor map…</p>
+            <button class="atlas-refresh" id="atlas-refresh" type="button">Refresh map</button>
+          </div>
+          <dl class="atlas-totals" aria-label="Visitor map totals">
+            <div><dt>Visitors</dt><dd id="atlas-visitors">—</dd></div>
+            <div><dt>Visits</dt><dd id="atlas-visits">—</dd></div>
+            <div><dt>Places</dt><dd id="atlas-places">—</dd></div>
+            <div><dt>Countries</dt><dd id="atlas-countries">—</dd></div>
+          </dl>
+          <div class="atlas-layout">
+            <div class="visitor-map" id="visitor-map-canvas" role="group" aria-label="Visitor locations on a world map">
+              <div class="atlas-plot">
+                <div class="atlas-grid" aria-hidden="true"></div>
+                <img class="world-map-image" src="assets/atlas-world.svg?v=release-20260905" alt="World map" loading="lazy" decoding="async" />
+                <canvas class="crowd-canvas" id="crowd-canvas" aria-hidden="true"></canvas>
+                <svg class="arc-layer" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                  <path id="arc-base" class="arc-base" pathLength="100" vector-effect="non-scaling-stroke" hidden />
+                  <path id="arc-flow" class="arc-flow" pathLength="100" vector-effect="non-scaling-stroke" hidden />
+                </svg>
+                <div class="home-marker" aria-hidden="true"><i></i><span>Home · Zhengzhou</span></div>
+                <div class="visitor-dot" id="visitor-dot" hidden aria-hidden="true"><span></span><strong>You</strong></div>
               </div>
+              <div class="atlas-tooltip" id="atlas-tooltip" role="status" hidden></div>
+              <p class="atlas-map-note" id="atlas-map-note">Visitor points appear when the map is connected.</p>
             </div>
+            <aside class="atlas-summary" aria-label="About your visit">
+              <p class="atlas-eyebrow">Your connection</p>
+              <h3 id="visitor-place">Finding your region…</h3>
+              <p class="visitor-status" id="visitor-status" role="status">Looking up an approximate location.</p>
+              <button class="atlas-refresh" id="atlas-retry" type="button" hidden>Try again</button>
+              <ul class="atlas-legend" aria-label="Map legend">
+                <li><i class="legend-home" aria-hidden="true"></i>Home lab</li>
+                <li><i class="legend-you" aria-hidden="true"></i>Your approximate location</li>
+                <li><i class="legend-visits" aria-hidden="true"></i>Visitor places · size shows visits</li>
+              </ul>
+              <details class="atlas-details">
+                <summary>How it works</summary>
+                <p>Locations are estimated from the network IP, usually at city or region level. VPNs and mobile networks can point elsewhere. No GPS permission is requested.</p>
+                <p>A random browser ID limits repeat counts to one visit per place every 30 minutes. Only coarse locations and counts are saved; raw IP addresses are not stored in the atlas database. Visitor counts are approximate.</p>
+              </details>
+            </aside>
           </div>
-          <div class="visitor-copy">
-            <p class="block-label">
-              <svg class="label-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" /><path d="M3.5 12h17M12 3.5c2.6 2.2 3.9 5.1 3.9 8.5s-1.3 6.3-3.9 8.5c-2.6-2.2-3.9-5.1-3.9-8.5s1.3-6.3 3.9-8.5Z" /></svg>
-              Live · Privacy-first
-            </p>
-            <h3>Your visit, on the record</h3>
-            <p>
-              The diamond marks the home lab; the red dot is you, and the
-              gold field around it is everyone who came before. Only a
-              city-level coordinate is kept — no IP address, no name, no
-              identifier that could ever be traced back to you.
-            </p>
-            <button class="button button-primary" id="locate-visitor" type="button">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5" /><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3" /></svg>
-              Refine with precise location
-            </button>
-            <p class="visitor-status" id="visitor-status">
-              Detecting an approximate location for this visit…
-            </p>
-            <p class="privacy-note">
-              “Refine with precise location” asks your browser for a GPS fix,
-              but that position is drawn on this screen only and never
-              uploaded — only the city-level point is stored.
-            </p>
+          <div class="atlas-places-row" id="atlas-places-row" hidden>
+            <span>Most connected</span><ul id="crowd-top" aria-label="Most visited places"></ul>
           </div>
-          <div class="atlas-crowd" id="atlas-crowd" hidden>
-            <p class="crowd-stats" id="crowd-stats">Counting the field…</p>
-            <ol class="crowd-top" id="crowd-top"></ol>
-          </div>
+          <noscript><p class="atlas-noscript">Enable JavaScript to load the visitor map.</p></noscript>
         </div>
       </section>
 
@@ -506,10 +481,18 @@
       <p>Qi Teng · 滕起 — Academic Homepage</p>
       <p class="colophon">
         Set in Fraunces, Manrope &amp; IBM Plex Mono · Signal field drawn in
-        real time · No cookies, no trackers — the atlas keeps one anonymous
-        city dot per visitor
+        real time · Visitor atlas uses approximate city or region locations
       </p>
       <a class="to-top" href="#top">Back to top ↑</a>
     </footer>
+    <p class="copy-feedback" id="copy-feedback" role="status" aria-live="polite"></p>
+    <dialog class="copy-dialog" id="copy-dialog" aria-labelledby="copy-dialog-title">
+      <form method="dialog">
+        <h2 id="copy-dialog-title">Copy this text</h2>
+        <p>Automatic copying is unavailable. Select and copy the text below.</p>
+        <textarea id="copy-text" aria-label="Text to copy" readonly></textarea>
+        <button class="button primary" type="submit">Done</button>
+      </form>
+    </dialog>
   </body>
 </html>

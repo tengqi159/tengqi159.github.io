@@ -1,101 +1,44 @@
-# Visitor Atlas — backend
+# Visitor Atlas API v2
 
-The academic homepage is static (GitHub Pages), so it cannot store anything on
-its own. This tiny Cloudflare Worker + D1 database gives it a place to keep one
-dot per visitor, so the atlas on the homepage fills up over time.
+The static homepage uses this Cloudflare Worker and D1 database to aggregate approximate visitor places. The v2 Worker and schema were deployed on September 5, 2026. The migration preserved all 6 historical visits. Worker version: `d7634ad1-3751-4d65-b24c-d3a76cc058dd`.
 
-Everything runs on the free tier:
+## Behaviour
 
-| Resource | Free limit | This atlas uses |
-| --- | --- | --- |
-| Worker requests | 100,000 / day | 2 per visit (1 read, 1 write) |
-| D1 rows read | 5,000,000 / day | tens per visit |
-| D1 rows written | 100,000 / day | 1 per visit |
-| D1 storage | 5 GB | ~120 bytes per visitor |
-| Pausing | never | unlike Supabase free, this does not sleep |
+- `GET /location` resolves the current request's Cloudflare city/region estimate. It does not ask for browser GPS. Missing coordinates or missing city/region return a null location.
+- `POST /visits` accepts only a random browser `token` (16–64 characters). Coordinates come from `request.cf`, even if a client submits its own coordinates. Positions are rounded to one decimal degree before storage or display.
+- One row per `(token, place_key)` preserves earlier places. City, region and country together distinguish places with identical city names. An atomic upsert counts at most one visit per browser/place per 30-minute window; refreshes do not extend that window.
+- `GET /visits` returns aggregate points and totals: distinct browser tokens, visits, places and countries. At most 2,000 places are drawn, with an explicit truncation flag. Total counts include all places.
+- Recognized bots are skipped. Browser tokens and network locations are approximate measures, not exact people or physical positions. Clearing browser storage, using another browser, a VPN or a mobile carrier can affect counts/location.
+- D1 stores tokens, coarse place metadata, counts and timestamps. The Worker does not write raw IP addresses, user agents or referrers to D1. This does not make claims about infrastructure access logs.
 
-## Deploy (once)
+Cloudflare geolocation fields: https://developers.cloudflare.com/workers/runtime-apis/request/
 
-```bash
-cd workers
-npm i -g wrangler          # or: npx wrangler …
-wrangler login
+## Local verification
 
-# 1. create the database, then copy the printed database_id into wrangler.toml
-wrangler d1 create qt-atlas
-
-# 2. create the table
-wrangler d1 execute qt-atlas --file=./schema.sql --remote
-
-# 3. ship the worker
-wrangler deploy
-```
-
-Wrangler prints the worker URL, e.g.
-`https://qt-atlas.<your-subdomain>.workers.dev`.
-
-## Wire it into the homepage
-
-Open `assets/atlas-crowd.js` and set:
-
-```js
-const ATLAS_ENDPOINT = "https://qt-atlas.<your-subdomain>.workers.dev";
-```
-
-Leave it as an empty string and the atlas silently falls back to the
-local-only mode it already has — no errors, no broken map.
-
-## API
-
-| Method | Route | Body | Returns |
-| --- | --- | --- | --- |
-| `GET` | `/visits` | – | `{ ok, points: [{city, region, country, country_code, lat, lon, visitors, visits, last_seen}], totals: {visitors, visits, cities} }` |
-| `POST` | `/visits` | `{ token, lat, lon, city, region, country, country_code }` | `{ ok, recorded, hits }` |
-
-`token` is a random string generated in the browser and kept in
-`localStorage`. It is the only handle on a visitor's row and cannot be linked
-back to any person — not even by the site owner.
-
-There is no self-serve delete: rows live until pruned by the owner (see
-Housekeeping below).
-
-## Privacy guarantees enforced by the worker
-
-- **City-level coordinates only.** The browser never sends GPS positions; the
-  "refine with precise location" result is shown locally and discarded.
-- **No IP address, user agent or referrer is written to D1.** The Worker could
-  read them, and deliberately does not.
-- **One anonymous row per token.** Nothing in the database can be linked to a
-  person — the owner cannot identify anyone either.
-- **Repeat visits do not inflate counts.** A hit is only recorded once per
-  30 minutes per token (`REVISIT_WINDOW_MS`), so a refresh loop is a no-op.
-- **Input is validated and bounded.** Coordinate ranges, token shape, text
-  length (80 chars) and total body size (2 KB) are all enforced server-side;
-  every query uses bound parameters.
-
-## Kill switch
-
-Set the `RECORDING` variable to `off` to stop accepting new dots without
-redeploying code:
+Requires Node 24 with built-in `node:sqlite` (an experimental warning is expected).
 
 ```bash
-wrangler deploy --var RECORDING:off
+node --test workers/atlas-worker.test.mjs
+node scripts/preview-atlas.mjs
 ```
 
-Reads keep working, so the existing map stays visible.
+Open `http://127.0.0.1:8766/?atlas=demo#atlas`. A visible bilingual banner labels sample records and the simulated Berlin visitor. The preview uses the actual Worker module and an in-memory SQLite adapter. It makes no requests or writes to the production atlas.
 
-## Housekeeping
+Other `atlas` modes: `empty`, `no-location`, `offline`, `save-fails`, `timeout`, `cached`. In `cached`, the first two map reads succeed; subsequent reads fail so the retained snapshot can be checked. Restart the server to reset its fixtures.
 
-Prune visitors who have not come back in a year:
+`http://127.0.0.1:8765/` remains the normal static preview and contacts the configured production Worker. The v2 backend supports this local origin as well as the production origin. Network reachability still depends on the visitor's connection.
+
+## Future deployment
+
+Use the existing `qt-atlas` D1 database and Worker; do not create another database. `schema.sql` retains the legacy `visits` table and imports records into `atlas_visits` without duplicating them when rerun. To avoid writes landing in the legacy table during migration, briefly pause the existing Worker's recording before migration. Then deploy v2 with `RECORDING=on`, and update the frontend. Deploying the frontend by itself leaves the new location flow disconnected.
+
+From `workers/`, after pausing legacy writes:
 
 ```bash
-wrangler d1 execute qt-atlas --remote --command \
-  "DELETE FROM visits WHERE last_seen < datetime('now','-365 day')"
+npx wrangler d1 execute qt-atlas --file=./schema.sql --remote
+npx wrangler deploy
 ```
 
-Inspect current totals:
+Confirm `/location` returns `version: 2`, both intended origins receive the matching CORS header, `/visits` retains the legacy totals, and a real browser can record and refresh without increasing its count twice. D1's real binding and edge geolocation still require this post-deployment check; local SQLite tests do not prove cloud deployment.
 
-```bash
-wrangler d1 execute qt-atlas --remote --command \
-  "SELECT COUNT(*) visitors, SUM(hits) visits, COUNT(DISTINCT city) cities FROM visits"
-```
+The frontend endpoint defaults to `https://qt-atlas.teqi159.workers.dev`. For local verification only, the preview injects `window.QT_ATLAS_ENDPOINT` before `assets/atlas-crowd.js` loads. Every fetch has a 7.5-second timeout and explicit failure UI. Last successful aggregate maps are cached in browser storage for up to 7 days and labeled as saved when a refresh fails.

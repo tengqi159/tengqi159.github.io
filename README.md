@@ -1,115 +1,38 @@
 # Qi Teng Academic Homepage
 
-A static academic homepage for GitHub Pages, designed around an editorial
-"Signal in the Noise" concept: Fraunces display type, hairline structure,
-a warm paper palette with a dark counterpart, and a living multi-channel
-sensor-signal canvas drawn behind the page — a nod to the research itself.
+A static academic homepage for https://tengqi159.github.io/ — research, publications, contact information and a visitor atlas. Built with HTML, CSS and vanilla JavaScript; no client framework or build dependency.
 
-## Files
+## Page and interaction
 
-- `index.html` — page structure (Hero, Profile, News, Research, Publications, Visitor Atlas, Links).
-- `assets/styles.css` — the full design system (light/dark themes, responsive, reduced-motion aware).
-- `assets/site-data.js` — profile, metrics, the news timeline, and the curated
-  offline publication list (fallback).
-- `assets/site.js` — rendering, theme toggle, scroll progress, metric count-up,
-  news timeline, BibTeX cite buttons, publication search/filter/sort,
-  live OpenAlex sync, visitor map with signal arc, signal field.
-- `assets/profile.jpg` — portrait.
-- `assets/world-map-equirectangular.svg` — base map for the visitor atlas.
-- `scripts/refresh-data.mjs` — scheduled sync that keeps the fallback dataset fresh.
-- `.github/workflows/refresh-data.yml` — daily auto-refresh workflow.
+The warm paper / teal / gold design supports light and dark themes. A flowing signal illustration introduces the research, four selectable studies explain its directions, and publication cards include citation links and BibTeX copying. All studies are illustrations, not experimental results. Ambient motion can be paused and respects reduced-motion preferences.
 
-## News timeline
+The publication archive supports title, author and venue search, year filters, citation sorting and an explicit reset. `/` focuses search; Escape clears it. Clipboard failures open a selectable text dialog.
 
-The News section is fully data-driven. To post an update, add **one entry** at
-the top of the `news` array in `assets/site-data.js` — no HTML or CSS needed:
+## Publication data
 
-```js
-{
-  "date": "2026-08",        // "2026", "2026-08", or "2026-08-15"
-  "type": "paper",          // paper | award | grant | talk | code | service | misc
-  "text": "Sentence without a trailing period. Venue appended automatically:",
-  "venue": "Nature Machine Intelligence",   // optional, rendered in italics
-  "link": "https://doi.org/…",              // optional
-  "linkLabel": "DOI"                        // optional, defaults to "Details"
-}
-```
+`assets/site-data.js` holds the curated archive, contacts, news and saved Google Scholar metrics. The browser may enrich publication details from OpenAlex, but it never removes saved papers or replaces Scholar citation counts with OpenAlex counts. The visible date is the saved citation snapshot date, not the time the page opened.
 
-- Entries render newest first automatically; each type gets its own icon.
-- Items dated within the last ~4 months get a pulsing **Fresh** badge — no
-  manual cleanup, it expires by itself.
-- If the array is emptied, the section and its nav link hide themselves.
-- The daily refresh script preserves the `news` array; it only rewrites
-  publications and metrics.
+The scheduled workflow attempts a daily Scholar refresh and optional OpenAlex metadata enrichment. If Scholar is unavailable, the previous snapshot remains. If OpenAlex is unavailable, it does not prevent a successful Scholar refresh. A zero Scholar citation count remains zero. User-confirmed entries marked `verified: true` survive sync.
 
-## Live publications
-
-[Google Scholar](https://scholar.google.com/citations?user=D5kHbeAAAAAJ) is the
-authoritative source: the archive only ever shows Scholar-indexed works plus
-explicitly verified entries, and every paper's "Cited by" count comes from
-the Scholar profile so the numbers match what Scholar shows (including the
-headline Citations / h-index / i10-index metrics). [OpenAlex](https://openalex.org)
-supplements DOIs, venues, and live metadata for the same Scholar-verified
-list. Because Scholar has no public API, the profile page is parsed by the
-daily sync below; if Scholar is unreachable the last snapshot stays on screen
-unchanged.
-
-## Automatic data refresh
-
-Nothing needs to be maintained by hand. A scheduled GitHub Action
-(`refresh-data.yml`, daily at 01:17 UTC / 09:17 Beijing) reads the Google
-Scholar profile (paper list, per-paper citations, and the 998 / 11 / 11
-metrics), merges it with verified entries in `assets/site-data.js`, and
-commits the change back to `main` when anything moved. The Pages deployment
-follows automatically. OpenAlex is queried in the same run to enrich DOIs and
-venues. New Scholar-indexed papers appear automatically; mis-associated
-OpenAlex records can never appear because the Scholar list is the whitelist.
-
-Run the sync locally with:
-
-```sh
-node scripts/refresh-data.mjs
-```
+Run manually with `node scripts/refresh-data.mjs`. Update news in `siteData.news`; the sync preserves it. An optional CV link is shown when `profile.cv` contains a local PDF path.
 
 ## Visitor atlas
 
-- **Current visitor**: on load, the page quietly resolves an approximate
-  city-level location via `ipapi.co`, places a dot, and draws a signal arc
-  from the visitor back to the home-lab diamond in Zhengzhou, with the
-  great-circle distance shown in the floating HUD chip. No permission prompt,
-  nothing stored. The button upgrades the dot to a precise browser-approved
-  location.
-- **All visitors over time**: a purely static site cannot store other
-  visitors' locations. To collect and display an aggregate map, embed a free
-  third-party widget:
-  1. Register the site at [ClustrMaps](https://clustrmaps.com/) (or PulseMaps
-     / Flag Counter) and copy the provided snippet.
-  2. Paste the snippet into `index.html` inside `.visitor-copy`, right after
-     the `.privacy-note` paragraph.
-  3. The widget renders its own map/thumbnail and starts counting from that
-     moment.
+The configured Cloudflare Worker and D1 database aggregate approximate city/region locations. No browser GPS request is made. A random browser token deduplicates visits for 30 minutes per place. Maps use rounded coordinates; VPNs and carrier routing affect the estimate. The app does not write raw IP addresses to D1. Counts estimate browser visits rather than exact people.
 
-## Features
+The map supports location details, same-place aggregation, retry, explicit timeout/failure states and a labeled local cache of previously retrieved points. See `workers/README.md` for the API, schema and deployment notes.
 
-- Light/dark theme with system preference detection and a manual toggle.
-- Data-driven news timeline with per-type icons and self-expiring Fresh badges.
-- One-click BibTeX citation copy on every publication.
-- Publication archive with year filters, citation/recency sorting, and
-  instant search (press `/` to focus, `Esc` to clear).
-- Structured data (JSON-LD Person) and Open Graph tags for richer sharing.
-- Optional CV button: set `profile.cv` in `site-data.js` (e.g.
-  `"assets/cv.pdf"`) and a CV button appears in the hero.
-- Respects `prefers-reduced-motion`; print-friendly.
+The base map is derived from [Natural Earth 1:50m land](https://www.naturalearthdata.com/downloads/50m-physical-vectors/), a public-domain geographic dataset, projected consistently with the location markers.
 
-## Preview locally
+## Local preview and verification
 
 ```sh
-cd qi-teng-academic-homepage
-python3 -m http.server 8000
-# open http://localhost:8000
+python3 -m http.server 8765 --bind 127.0.0.1
+node --test scripts/site-content.test.mjs workers/atlas-worker.test.mjs
 ```
 
-## Deploy
+The Worker tests use Node 24's built-in SQLite and do not contact production. For a clearly labeled, sample-data atlas demo, run `node scripts/preview-atlas.mjs` and open port 8766. Demo data is never injected into the normal site.
 
-Publish these files to a GitHub repository and enable GitHub Pages from the
-main branch root.
+## Deployment
+
+GitHub Actions deploys `index.html` and `assets/` on pushes to `main`. Worker code, tests and development artifacts are excluded from the Pages artifact. Deploy the Worker separately from `workers/`; a schema migration must precede frontend changes that depend on it. Preserve the newest published data snapshot when copying UI changes into the release checkout.

@@ -1,212 +1,115 @@
-/* ============================================================
-   Qi Teng — Visitor Atlas · backend
-   Cloudflare Worker + D1
-   ------------------------------------------------------------
-   Routes
-     GET    /visits   → aggregated city points + running totals
-     POST   /visits   → record (or bump) one visitor's city point
+/* Visitor Atlas API v2. City/region estimates come from Cloudflare request.cf.
+   Client coordinates are never trusted; no raw IP or user agent is stored. */
+const WINDOW_MS = 30 * 60 * 1000;
+const MAX_POINTS = 2000;
+const TOKEN_RE = /^[A-Za-z0-9_-]{16,64}$/;
+const clean = value => typeof value === 'string' ? value.replace(/[\u0000-\u001f\u007f|]/g, ' ').trim().slice(0, 80) : '';
+const round = n => Math.round(n * 10) / 10;
 
-   Privacy rules enforced here, not just promised in the UI
-     · only city-level coordinates are accepted; the browser never
-       sends GPS-grade positions in the first place
-     · no IP address, user agent or referrer is ever written to D1
-     · one anonymous row per visitor token, which cannot be linked
-       back to any person — the owner cannot identify anyone either
-     · a repeat visit within REVISIT_WINDOW_MS bumps nothing, so a
-       refresh loop cannot inflate the counter
-     · there is no self-serve delete: rows live until the owner
-       prunes them via `wrangler d1 execute qt-atlas --remote`
-
-   Bindings (see wrangler.toml)
-     DB               D1Database   required
-     ALLOWED_ORIGINS  string       comma separated, first is fallback
-     RECORDING        string       "on" (default) or "off" kill switch
-   ============================================================ */
-
-const MAX_BODY_BYTES = 2048;
-const MAX_TEXT_LEN = 80;
-const MAX_CITY_ROWS = 2000;
-const REVISIT_WINDOW_MS = 30 * 60 * 1000;
-
-const TOKEN_RE = /^[A-Za-z0-9_-]{8,64}$/;
-
-/* ---------- helpers ---------- */
-
-function json(body, extraHeaders = {}, status = 200) {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: {
-      "content-type": "application/json; charset=utf-8",
-      "cache-control": "no-store",
-      ...extraHeaders
-    }
-  });
+function coordinate(value, min, max) {
+  if (value === null || value === undefined || value === '') return null;
+  const n = Number(value);
+  return Number.isFinite(n) && n >= min && n <= max ? round(n) : null;
 }
 
-function corsFor(origin, allowedList) {
-  const allow = allowedList.includes(origin) ? origin : allowedList[0] || "*";
-  return {
-    "access-control-allow-origin": allow,
-    "access-control-allow-methods": "GET, POST, OPTIONS",
-    "access-control-allow-headers": "content-type",
-    "access-control-max-age": "86400",
-    vary: "Origin"
-  };
+export function locationFromRequest(request) {
+  const cf = request.cf || {};
+  const latitude = coordinate(cf.latitude, -90, 90);
+  const longitude = coordinate(cf.longitude, -180, 180);
+  const city = clean(cf.city), region = clean(cf.region);
+  const countryCode = /^[A-Z]{2}$/.test(cf.country || '') ? cf.country : '';
+  if (latitude === null || longitude === null || (!city && !region)) return null;
+  let country = countryCode;
+  try { if (countryCode) country = new Intl.DisplayNames(['en'], {type:'region'}).of(countryCode); } catch {}
+  const placeKey = [countryCode || country, region, city].map(s => s.toLowerCase()).join('|');
+  return { latitude, longitude, city, region, country, countryCode, placeKey,
+    level: city ? 'city' : 'region', source: 'network', coarse: true };
 }
 
-function clampNumber(value, min, max) {
-  const n = typeof value === "number" ? value : Number(value);
-  if (!Number.isFinite(n)) return null;
-  return Math.min(max, Math.max(min, n));
+function response(data, headers, status = 200) {
+  return new Response(JSON.stringify(data), { status, headers: {
+    'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store', ...headers
+  }});
 }
 
-function cleanText(value) {
-  if (typeof value !== "string") return "";
-  // strip control characters before anything reaches the database
-  return value
-    .replace(/[\u0000-\u001f\u007f]/g, " ")
-    .trim()
-    .slice(0, MAX_TEXT_LEN);
-}
-
-async function readJsonBody(request) {
-  const raw = await request.text();
-  if (raw.length > MAX_BODY_BYTES) return null;
-  try {
-    return JSON.parse(raw);
-  } catch {
-    return null;
-  }
-}
-
-/* ---------- GET /visits ---------- */
-
-async function getVisits(env) {
-  const [cities, totals] = await Promise.all([
-    env.DB.prepare(
-      `SELECT city,
-              region,
-              country,
-              country_code,
-              ROUND(AVG(lat), 2)        AS lat,
-              ROUND(AVG(lon), 2)        AS lon,
-              COUNT(*)                  AS visitors,
-              COALESCE(SUM(hits), 0)    AS visits,
-              MAX(last_seen)            AS last_seen
-         FROM visits
-        GROUP BY city, country
-        ORDER BY visitors DESC, last_seen DESC
-        LIMIT ?`
-    )
-      .bind(MAX_CITY_ROWS)
-      .all(),
-    env.DB.prepare(
-      `SELECT COUNT(*)               AS visitors,
-              COALESCE(SUM(hits), 0) AS visits,
-              COUNT(DISTINCT city)   AS cities
-         FROM visits`
-    ).first()
+async function readVisits(env) {
+  const [places, totals] = await Promise.all([
+    env.DB.prepare(`SELECT place_key, city, region, country, country_code,
+      ROUND(AVG(lat),1) AS lat, ROUND(AVG(lon),1) AS lon,
+      COUNT(*) AS visitors, SUM(hits) AS visits, MAX(last_seen) AS last_seen
+      FROM atlas_visits GROUP BY place_key ORDER BY visits DESC, last_seen DESC LIMIT ?`).bind(MAX_POINTS).all(),
+    env.DB.prepare(`SELECT COUNT(DISTINCT token) AS visitors, COALESCE(SUM(hits),0) AS visits,
+      COUNT(DISTINCT place_key) AS places, COUNT(DISTINCT NULLIF(country_code,'')) AS countries
+      FROM atlas_visits`).first()
   ]);
-
-  return {
-    ok: true,
-    points: cities.results || [],
-    totals: totals || { visitors: 0, visits: 0, cities: 0 }
-  };
+  return {ok:true, version:2, points:places.results || [], totals:{...totals, cities:totals.places},
+    truncated: totals.places > MAX_POINTS, updatedAt:new Date().toISOString()};
 }
 
-/* ---------- POST /visits ---------- */
-
-async function recordVisit(request, env) {
-  if (env.RECORDING === "off") {
-    return { ok: false, error: "Recording is paused." };
+async function recordVisit(request, env, headers) {
+  if (env.RECORDING === 'off') return response({ok:false,code:'recording_paused'},headers,503);
+  const agent = request.headers.get('user-agent') || '';
+  if (request.cf?.botManagement?.verifiedBot || /bot\b|crawler|spider|headlesschrome/i.test(agent)) {
+    return response({ok:true,recorded:false,code:'automated_request'},headers);
   }
-
-  const payload = await readJsonBody(request);
-  if (!payload || typeof payload !== "object") {
-    return { ok: false, error: "Malformed request body." };
+  // Request bodies are tiny; stop reading at the limit rather than buffering an unbounded body.
+  const reader = request.body?.getReader();
+  if (!reader) return response({ok:false,code:'invalid_body'},headers,400);
+  const chunks = []; let bytes = 0;
+  while (true) {
+    const {done,value} = await reader.read();
+    if (done) break;
+    bytes += value.byteLength;
+    if (bytes > 2048) { await reader.cancel(); return response({ok:false,code:'body_too_large'},headers,413); }
+    chunks.push(value);
   }
-
-  const token = typeof payload.token === "string" ? payload.token : "";
-  if (!TOKEN_RE.test(token)) {
-    return { ok: false, error: "Invalid token." };
-  }
-
-  const lat = clampNumber(payload.lat, -90, 90);
-  const lon = clampNumber(payload.lon, -180, 180);
-  if (lat === null || lon === null) {
-    return { ok: false, error: "Invalid coordinates." };
-  }
-
-  const city = cleanText(payload.city);
-  const region = cleanText(payload.region);
-  const country = cleanText(payload.country);
-  const countryCode = cleanText(payload.country_code).slice(0, 8).toUpperCase();
-
+  let payload;
+  try {
+    const raw = new Uint8Array(bytes); let offset=0;
+    for (const chunk of chunks) {raw.set(chunk,offset);offset+=chunk.byteLength;}
+    payload = JSON.parse(new TextDecoder().decode(raw));
+  } catch { return response({ok:false,code:'invalid_body'},headers,400); }
+  if (!payload || typeof payload.token !== 'string' || !TOKEN_RE.test(payload.token)) return response({ok:false,code:'invalid_token'},headers,400);
+  const location = locationFromRequest(request);
+  if (!location) return response({ok:false,recorded:false,code:'location_unavailable'},headers,422);
+  const {latitude,longitude,city,region,country,countryCode,placeKey} = location;
   const now = new Date().toISOString();
-
-  const existing = await env.DB.prepare(
-    `SELECT hits, last_seen FROM visits WHERE token = ?`
-  )
-    .bind(token)
-    .first();
-
-  if (existing) {
-    const previous = Date.parse(existing.last_seen);
-    const fresh =
-      Number.isFinite(previous) && Date.now() - previous > REVISIT_WINDOW_MS;
-    const bump = fresh ? 1 : 0;
-
-    await env.DB.prepare(
-      `UPDATE visits
-          SET lat = ?, lon = ?, city = ?, region = ?, country = ?, country_code = ?,
-              hits = hits + ?, last_seen = ?
-        WHERE token = ?`
-    )
-      .bind(lat, lon, city, region, country, countryCode, bump, now, token)
-      .run();
-
-    return { ok: true, recorded: bump === 1, hits: (existing.hits || 0) + bump };
-  }
-
-  await env.DB.prepare(
-    `INSERT INTO visits
-       (token, lat, lon, city, region, country, country_code, hits, first_seen, last_seen)
-     VALUES (?, ?, ?, ?, ?, ?, ?, 1, ?, ?)`
-  )
-    .bind(token, lat, lon, city, region, country, countryCode, now, now)
-    .run();
-
-  return { ok: true, recorded: true, hits: 1 };
+  // Atomic upsert: simultaneous loads share a row; refreshes don't slide the 30-minute window.
+  const saved = await env.DB.prepare(`INSERT INTO atlas_visits
+    (token,place_key,lat,lon,city,region,country,country_code,hits,first_seen,last_seen)
+    VALUES (?,?,?,?,?,?,?,?,1,?,?)
+    ON CONFLICT(token,place_key) DO UPDATE SET
+      hits = atlas_visits.hits + CASE WHEN (julianday(excluded.last_seen)-julianday(atlas_visits.last_seen))*86400000 >= ? THEN 1 ELSE 0 END,
+      last_seen = CASE WHEN (julianday(excluded.last_seen)-julianday(atlas_visits.last_seen))*86400000 >= ? THEN excluded.last_seen ELSE atlas_visits.last_seen END
+    RETURNING hits`).bind(payload.token,placeKey,latitude,longitude,city,region,country,countryCode,now,now,WINDOW_MS,WINDOW_MS).first();
+  return response({ok:true,recorded:true,location,hits:saved.hits},headers);
 }
-
-/* ---------- router ---------- */
 
 export default {
   async fetch(request, env) {
-    const allowed = String(env.ALLOWED_ORIGINS || "")
-      .split(",")
-      .map((value) => value.trim())
-      .filter(Boolean);
-
-    const cors = corsFor(request.headers.get("Origin") || "", allowed);
-
-    if (request.method === "OPTIONS") {
-      return new Response(null, { status: 204, headers: cors });
-    }
-
+    const origin = request.headers.get('origin') || '';
+    const allowed = String(env.ALLOWED_ORIGINS || '').split(',').map(s=>s.trim()).filter(Boolean);
+    const headers = {vary:'Origin','access-control-allow-methods':'GET, POST, OPTIONS',
+      'access-control-allow-headers':'content-type','access-control-max-age':'86400'};
+    if (origin && allowed.includes(origin)) headers['access-control-allow-origin']=origin;
+    if (origin && !allowed.includes(origin)) return response({ok:false,code:'origin_not_allowed'},headers,403);
+    if (request.method==='OPTIONS') return new Response(null,{status:204,headers});
     const path = new URL(request.url).pathname;
-
     try {
-      if (path === "/visits") {
-        if (request.method === "GET") return json(await getVisits(env), cors);
-        if (request.method === "POST") return json(await recordVisit(request, env), cors);
-        return json({ ok: false, error: "Method not allowed." }, cors, 405);
+      if (path === '/location' && request.method === 'GET') {
+        return response({ok:true,version:2,location:locationFromRequest(request),recording:env.RECORDING!=='off'},headers);
       }
-      return json({ ok: false, error: "Not found." }, cors, 404);
-    } catch (error) {
-      // never leak internals to the client
-      return json({ ok: false, error: "Internal error." }, cors, 500);
+      if (path === '/visits') {
+        if (request.method === 'GET') return response(await readVisits(env),headers);
+        if (request.method === 'POST') {
+          if (!origin) return response({ok:false,code:'origin_required'},headers,403);
+          return await recordVisit(request,env,headers);
+        }
+        return response({ok:false,code:'method_not_allowed'},headers,405);
+      }
+      return response({ok:false,code:'not_found'},headers,404);
+    } catch {
+      return response({ok:false,code:'service_unavailable'},headers,503);
     }
   }
 };

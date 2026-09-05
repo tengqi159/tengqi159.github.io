@@ -11,16 +11,15 @@ name = "qt-atlas"
 main = "atlas-worker.js"
 compatibility_date = "2026-09-03"
 
-# Keep the atlas responsive even if a visitor is on the far side of
-# the world from the nearest D1 replica: reads are cached at the edge.
+# Aggregates are read from D1; responses are not cached across visitors.
 [[d1_databases]]
 binding = "DB"
 database_name = "qt-atlas"
 database_id = "03afea88-6541-472d-b502-67d32821c503"
 
 [vars]
-# Comma separated. The first entry is also the CORS fallback.
-ALLOWED_ORIGINS = "https://tengqi159.github.io,http://localhost:8000"
+# Exact allowed browser origins, comma separated.
+ALLOWED_ORIGINS = "https://tengqi159.github.io,http://localhost:8000,http://127.0.0.1:8765,http://localhost:8765"
 
 # Flip to "off" to stop collecting new dots without redeploying code.
 RECORDING = "on"

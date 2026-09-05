@@ -32,6 +32,7 @@ const normalize = (s) =>
 
 async function fetchText(url) {
   const res = await fetch(url, {
+    signal: AbortSignal.timeout(15000),
     headers: {
       "User-Agent": UA,
       Accept:
@@ -51,6 +52,7 @@ async function fetchText(url) {
 
 async function fetchJson(url) {
   const res = await fetch(url, {
+    signal: AbortSignal.timeout(15000),
     headers: { "User-Agent": `homepage-sync (mailto:${MAILTO})` }
   });
   if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
@@ -151,7 +153,10 @@ async function main() {
     [scholarPapers, metrics, openAlexWorks] = await Promise.all([
       fetchScholarPapers(SCHOLAR_USER),
       fetchScholarMetrics(SCHOLAR_USER),
-      fetchOpenAlexWorks(ORCID, MAILTO)
+      fetchOpenAlexWorks(ORCID, MAILTO).catch(error => {
+        console.log(`metadata/unavailable: ${error.message} — using saved metadata`);
+        return [];
+      })
     ]);
   } catch (error) {
     console.log(
@@ -218,7 +223,7 @@ async function main() {
       venue: paper.venue || source.display_name || "",
       details,
       year: Number(paper.year) || openAlex?.publication_year || null,
-      citations: Number(paper.cites) || openAlex?.cited_by_count || 0,
+      citations: Number(paper.cites) || 0,
       link:
         existing?.link ||
         doi ||

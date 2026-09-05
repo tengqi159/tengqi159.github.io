@@ -159,6 +159,7 @@
   function setupSpotlight(elements) {
     elements.forEach((element) => {
       if (!element) return;
+      if (element.classList.contains("fx-spotlight")) return;
       element.classList.add("fx-spotlight");
       const move = rafThrottle((event) => {
         const rect = element.getBoundingClientRect();
@@ -174,7 +175,7 @@
      ============================================================ */
 
   function setupTilt(element, maxDeg, glare) {
-    if (!element) return;
+    if (!element || element.classList.contains("fx-tilt")) return;
     element.classList.add("fx-tilt");
 
     const reset = () => {
@@ -450,7 +451,9 @@
     }
 
     function start() {
-      if (running || !points.length) return;
+      if (running || !points.length || !onScreen || document.hidden ||
+          document.documentElement.dataset.motionPaused === "true" ||
+          window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
       running = true;
       frame = window.requestAnimationFrame(render);
     }
@@ -485,6 +488,11 @@
     document.addEventListener("visibilitychange", () => {
       if (document.hidden) stop();
       else if (onScreen) start();
+    });
+
+    document.addEventListener("qt-motionchange", () => {
+      stop();
+      start();
     });
 
     document.addEventListener("qt-arcdrawn", (event) => {
@@ -526,6 +534,7 @@
       setupPackets();
     }
 
+    watchRenderedContent();
     if (!finePointer || reduceMotion) return;
 
     setupMagnetic(".hero-cta .button", 0.22);
@@ -544,7 +553,9 @@
       portrait.appendChild(glare);
       setupTilt(portrait, 5, glare);
     }
+  }
 
+  function watchRenderedContent() {
     /* the metrics strip and the publication grid are re-rendered by the
        live data sync, which drops the elements these effects hold */
     if ("MutationObserver" in window) {
@@ -555,7 +566,10 @@
         window.requestAnimationFrame(() => {
           queued = false;
           initCards();
-          setupSpotlight(Array.from(document.querySelectorAll(".metric")));
+          if (!reduceMotion) setupCiteMeters();
+          if (finePointer && !reduceMotion) {
+            setupSpotlight(Array.from(document.querySelectorAll(".metric")));
+          }
         });
       };
       ["metrics-grid", "selected-publications"].forEach((id) => {

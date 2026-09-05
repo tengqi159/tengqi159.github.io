@@ -444,6 +444,19 @@ main {
   transition: color 400ms ease;
 }
 
+.hero-summary { max-width: 34rem; margin: .85rem 0 0; font-size: .94rem; line-height: 1.75; color: var(--ink-2); }
+.archive-feedback { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 3.2rem; color: var(--ink-2); font: .72rem/1.5 "IBM Plex Mono", monospace; }
+.archive-feedback p { margin: 0; }
+.archive-feedback button { background: transparent; border: 0; color: var(--teal-strong); cursor: pointer; text-decoration: underline; text-underline-offset: .25em; min-height: 40px; }
+.copy-feedback { position: fixed; bottom: 1.5rem; left: 50%; transform: translate(-50%,10px); z-index: 100; max-width: calc(100vw - 2rem); padding: .7rem 1rem; margin: 0; border: 1px solid var(--line); border-radius: 99px; background: var(--paper-elev); box-shadow: var(--shadow); color: var(--ink); font-size: .85rem; opacity: 0; pointer-events: none; transition: opacity 160ms, transform 160ms; }
+.copy-feedback.is-visible { opacity: 1; transform: translate(-50%,0); }
+.copy-dialog { width: min(38rem,calc(100vw - 2rem)); max-height: 85vh; padding: 1.5rem; border: 1px solid var(--line); border-radius: var(--radius); color: var(--ink); background: var(--paper-elev); }
+.copy-dialog::backdrop { background: #10131599; backdrop-filter: blur(5px); }
+.copy-dialog h2 { margin: 0; font: 500 1.8rem "Fraunces",serif; }
+.copy-dialog p { color: var(--ink-2); line-height: 1.6; }
+.copy-dialog textarea { width: 100%; min-height: 10rem; padding: .8rem; margin-bottom: 1rem; border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--ink); font: .82rem/1.6 "IBM Plex Mono",monospace; resize: vertical; }
+[hidden] { display: none !important; }
+
 .hero-ribbons {
   display: flex;
   flex-wrap: wrap;
@@ -2619,7 +2632,14 @@ button.paper-link {
 
 /* ---------- print ---------- */
 
+html[data-motion-paused="true"] *,
+html[data-motion-paused="true"] *::before,
+html[data-motion-paused="true"] *::after { animation-play-state: paused !important; }
+
 @media print {
+  :root { --ink: #111; --ink-2: #333; --ink-3: #555; --paper: #fff; --paper-elev: #fff; --card: #fff; --teal-strong: #17494b; --line: #bbb; --line-soft: #ddd; }
+  [data-reveal], .fx-word { opacity: 1 !important; transform: none !important; filter: none !important; }
+  #atlas, .archive-feedback, .copy-feedback, .copy-dialog, .cite-btn { display: none !important; }
   body {
     background: #fff;
     color: #111;

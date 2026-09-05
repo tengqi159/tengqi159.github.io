@@ -62,8 +62,7 @@ const MONTH_NAMES = [
 const normalizeTitle = (value) =>
   String(value || "")
     .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "")
-    .slice(0, 64);
+    .replace(/[^a-z0-9]+/g, "");
 
 /* ---------- shared state ---------- */
 
@@ -243,17 +242,17 @@ function escapeAttr(value) {
 function venueLine(publication) {
   const venue = publication.venue || "";
   const details = publication.details || "";
+  // Scholar's venue often already includes the full bibliographic line.
+  if (publication.year && new RegExp(`(?:,|\\s)${publication.year}$`).test(venue.trim())) return venue;
   if (venue && details && details.includes(venue)) return details;
   return [venue, details].filter(Boolean).join(" · ");
 }
 
 function venueLineHtml(publication) {
   const venue = publication.venue || "";
-  const details = publication.details || "";
-  if (venue && details && details.includes(venue)) return details;
-  return [venue ? `<em>${venue}</em>` : "", details]
-    .filter(Boolean)
-    .join(" · ");
+  const line = venueLine(publication);
+  if (venue && line.startsWith(venue)) return `<em>${escapeAttr(venue)}</em>${escapeAttr(line.slice(venue.length))}`;
+  return escapeAttr(line);
 }
 
 function createPaperLinks(publication, extraClass) {
@@ -339,6 +338,8 @@ function createFilterChip(label, active, onClick) {
   button.type = "button";
   button.className = `filter-chip${active ? " is-active" : ""}`;
   button.textContent = label;
+  button.dataset.year = label;
+  button.setAttribute("aria-pressed", String(active));
   button.addEventListener("click", onClick);
   return button;
 }
@@ -349,6 +350,8 @@ function setupArchive() {
   const sortSelect = document.getElementById("sort-select");
   const searchInput = document.getElementById("publication-search");
   const emptyNote = document.getElementById("archive-empty");
+  const resultCount = document.getElementById("archive-count");
+  const reset = document.getElementById("archive-reset");
   if (!listContainer || !filtersContainer || !sortSelect || !searchInput) return;
 
   let activeYear = "All";
@@ -356,6 +359,7 @@ function setupArchive() {
   let query = "";
 
   function renderFilters() {
+    const focusedYear = filtersContainer.contains(document.activeElement) ? document.activeElement.dataset.year : null;
     const years = [
       "All",
       ...new Set(
@@ -373,6 +377,7 @@ function setupArchive() {
         })
       )
     );
+    if (focusedYear) [...filtersContainer.children].find(button=>button.dataset.year===focusedYear)?.focus({preventScroll:true});
   }
 
   function renderList() {
@@ -411,7 +416,15 @@ function setupArchive() {
     if (emptyNote) {
       emptyNote.hidden = sorted.length > 0;
     }
+    if (resultCount) resultCount.textContent = query || activeYear !== "All"
+      ? `${sorted.length} of ${state.publications.length} publications${activeYear !== "All" ? ` · ${activeYear}` : ""}`
+      : `${sorted.length} publications`;
+    if (reset) reset.hidden = !query && activeYear === "All";
   }
+
+  reset?.addEventListener("click",()=>{
+    activeYear="All";query="";searchInput.value="";renderFilters();renderList();searchInput.focus();
+  });
 
   sortSelect.addEventListener("change", (event) => {
     activeSort = event.target.value;
@@ -587,129 +600,99 @@ function mapOpenAlexWork(work) {
   };
 }
 
-function applyCuration(works) {
-  const curatedDois = new Set(
-    window.siteData.publications
-      .filter((item) => item.selected)
-      .map((item) => item.link)
-  );
-
-  works.forEach((work) => {
-    work.selected = curatedDois.has(work.doi);
+// Enrichment never removes a curated paper or substitutes citation counts.
+function mergePublicationMetadata(snapshot, works) {
+  const doiKey = value => String(value || "").replace(/^https?:\/\/(?:dx\.)?doi\.org\//i, "").toLowerCase();
+  const byDoi = new Map(works.filter(w=>w.doi).map(w=>[doiKey(w.doi),w]));
+  const uniqueTitle = title => {
+    const key=normalizeTitle(title);
+    const matches=works.filter(w=>normalizeTitle(w.title)===key);
+    return matches.length===1 && snapshot.filter(p=>normalizeTitle(p.title)===key).length===1 ? matches[0] : null;
+  };
+  return snapshot.map(publication=>{
+    const hasDoi=/doi\.org\//i.test(publication.link || "");
+    const match=hasDoi ? byDoi.get(doiKey(publication.link)) : uniqueTitle(publication.title);
+    if (!match) return {...publication};
+    return {...publication,
+      venue: match.venue && match.venue!=="Preprint" ? match.venue : publication.venue,
+      details: match.details || publication.details,
+      link: publication.link || match.link,
+      linkLabel: publication.linkLabel || match.linkLabel
+    };
   });
-
-  let selectedCount = works.filter((work) => work.selected).length;
-  if (selectedCount < 5) {
-    for (const work of sortPublications(works, "citations")) {
-      if (selectedCount >= 6) break;
-      if (!work.selected) {
-        work.selected = true;
-        selectedCount += 1;
-      }
-    }
-  }
-  return works;
 }
 
-/* ---------- live data stamp ---------- */
+/* ---------- publication metadata ---------- */
 
-function updateDataStamp(info) {
+function updateDataStamp(info = {}) {
   const stamp = document.getElementById("data-stamp");
   if (!stamp) return;
-  if (info.live) {
-    const now = new Date();
-    const time = now.toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit"
-    });
-    stamp.textContent =
-      `Live · ${info.count} Scholar-verified works · citations and metrics from Google Scholar (synced ${time}, daily auto-update)`;
-  } else {
-    const snapshot = window.siteData.profile.updatedAt || "unknown date";
-    stamp.textContent =
-      `Google Scholar · auto-synced snapshot (${snapshot}) · citations refresh daily, no manual maintenance needed.`;
-  }
+  const snapshot = window.siteData.profile.updatedAt;
+  stamp.textContent = `Citations: Google Scholar${snapshot ? ` · snapshot ${snapshot}` : " · saved snapshot"}${info.live ? " · Publication details updated from OpenAlex" : ""}`;
 }
-
 
 async function setupLivePublications() {
   const badge = document.getElementById("publications-live");
-
+  updateDataStamp();
+  // Keep the local archive immediately usable; metadata lookup is optional.
+  const controller = new AbortController();
+  const timeout = setTimeout(()=>controller.abort(),8000);
   try {
     const orcid = window.siteData.profile.orcidId;
     const mailto = encodeURIComponent(window.siteData.profile.email);
-
     const authorResponse = await fetch(
-      `https://api.openalex.org/authors/https://orcid.org/${orcid}?mailto=${mailto}`
+      `https://api.openalex.org/authors/https://orcid.org/${orcid}?mailto=${mailto}`,
+      {signal:controller.signal}
     );
     if (!authorResponse.ok) throw new Error("OpenAlex author lookup failed");
     const author = await authorResponse.json();
-
     const worksResponse = await fetch(
-      `https://api.openalex.org/works?filter=author.id:${encodeURIComponent(author.id)}&per-page=200&sort=publication_date:desc&mailto=${mailto}`
+      `https://api.openalex.org/works?filter=author.id:${encodeURIComponent(author.id)}&per-page=200&sort=publication_date:desc&mailto=${mailto}`,
+      {signal:controller.signal}
     );
     if (!worksResponse.ok) throw new Error("OpenAlex works lookup failed");
     const worksData = await worksResponse.json();
-
-    const snapshot = window.siteData.publications || [];
-    const whitelist = new Set(
-      snapshot.map((pub) => normalizeTitle(pub.title))
-    );
-    const scholarCites = new Map(
-      snapshot.map((pub) => [
-        normalizeTitle(pub.title) + "|" + normalizeTitle(pub.link),
-        pub.citations
-      ])
-    );
-    const works = (worksData.results || [])
-      .map(mapOpenAlexWork)
-      .filter((work) => work.title && Number.isFinite(work.year))
-      .filter((work) => whitelist.has(normalizeTitle(work.title)));
-    if (!works.length) throw new Error("OpenAlex returned no works");
-    // Citation counts stay aligned with Google Scholar, the
-    // authoritative source for the archive.
-    for (const work of works) {
-      const scholarValue = scholarCites.get(
-        normalizeTitle(work.title) + "|" + normalizeTitle(work.doi || work.link)
-      );
-      if (Number.isFinite(scholarValue)) work.citations = scholarValue;
-    }
-
-    state.publications = applyCuration(works);
+    const works=(worksData.results || []).map(mapOpenAlexWork).filter(w=>w.title && Number.isFinite(w.year));
+    if (!works.length) throw new Error("No metadata returned");
+    state.publications=mergePublicationMetadata(window.siteData.publications,works);
     renderSelectedPublications();
     if (archiveApi) archiveApi.refresh();
-
-    if (badge) {
-      badge.hidden = false;
-      badge.textContent = `Live · OpenAlex · ${works.length} works`;
-    }
-    updateDataStamp({ live: true, count: works.length });
-  } catch (error) {
-    updateDataStamp({ live: false });
-    // The curated local dataset stays on screen as the offline fallback.
-  }
+    if (badge) {badge.hidden=false;badge.textContent="Publication details updated";}
+    updateDataStamp({live:true});
+  } catch {
+    updateDataStamp();
+  } finally {clearTimeout(timeout);}
 }
 
 /* ---------- copy buttons ---------- */
 
 function setupCopyButtons() {
+  const feedback=document.getElementById("copy-feedback");
+  let feedbackTimer;
   document.addEventListener("click", async (event) => {
-    const button = event.target.closest("[data-copy]");
-    if (!button) return;
-
-    const original = button.innerHTML;
+    const button=event.target.closest("[data-copy]");
+    if (!button || button.disabled) return;
+    button.disabled=true;
+    const original=button.innerHTML, label=button.getAttribute("aria-label");
     try {
       await navigator.clipboard.writeText(button.dataset.copy || "");
       button.classList.add("is-copied");
-      button.innerHTML = CHECK_ICON;
-    } catch (error) {
-      button.innerHTML = COPY_ICON;
+      const icon=button.querySelector("svg");
+      if(icon)icon.outerHTML=CHECK_ICON;
+      button.setAttribute("aria-label","Copied to clipboard");
+      if(feedback) {
+        clearTimeout(feedbackTimer);feedback.textContent="Copied to clipboard.";feedback.classList.add("is-visible");
+        feedbackTimer=setTimeout(()=>feedback.classList.remove("is-visible"),2200);
+      }
+    } catch {
+      const dialog=document.getElementById("copy-dialog"), field=document.getElementById("copy-text");
+      if(dialog && field) {field.value=button.dataset.copy || "";dialog.showModal();field.focus();field.select();}
+    } finally {
+      setTimeout(()=>{
+        button.disabled=false;button.classList.remove("is-copied");button.innerHTML=original;
+        if(label)button.setAttribute("aria-label",label);
+      },1400);
     }
-
-    window.setTimeout(() => {
-      button.classList.remove("is-copied");
-      button.innerHTML = original;
-    }, 1400);
   });
 }
 
@@ -903,337 +886,6 @@ function setupMetricCountUp() {
   values.forEach((value) => observer.observe(value));
 }
 
-/* ---------- signal field ---------- */
-
-function setupSignalField() {
-  const canvas = document.getElementById("signal-canvas");
-  if (!canvas) return;
-
-  const ctx = canvas.getContext("2d");
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const coarsePointer = window.matchMedia("(pointer: coarse)").matches;
-
-  let width = 0;
-  let height = 0;
-  let colors = [];
-  let colorFrame = 0;
-
-  const pointer = { x: -9999, y: -9999, active: false };
-
-  const channels = [
-    { base: 0.16, freq: 0.0062, speed: 0.00021, amp: 0.045, drift: 0.9, wave: "--wave-1" },
-    { base: 0.33, freq: 0.0089, speed: -0.00016, amp: 0.06, drift: 1.4, wave: "--wave-3" },
-    { base: 0.52, freq: 0.0051, speed: 0.00012, amp: 0.075, drift: 0.6, wave: "--wave-2" },
-    { base: 0.7, freq: 0.0077, speed: -0.00024, amp: 0.055, drift: 1.1, wave: "--wave-4" },
-    { base: 0.86, freq: 0.0104, speed: 0.00018, amp: 0.04, drift: 1.7, wave: "--wave-5" }
-  ];
-
-  function readColors() {
-    const styles = getComputedStyle(document.documentElement);
-    colors = channels.map((channel) =>
-      styles.getPropertyValue(channel.wave).trim()
-    );
-  }
-
-  function resize() {
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    width = window.innerWidth;
-    height = window.innerHeight;
-    canvas.width = Math.floor(width * dpr);
-    canvas.height = Math.floor(height * dpr);
-    canvas.style.width = `${width}px`;
-    canvas.style.height = `${height}px`;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  }
-
-  function channelY(channel, x, time) {
-    const slow = Math.sin(x * channel.freq + time * channel.speed + channel.drift * 7.3);
-    const fast = Math.sin(x * channel.freq * 2.7 - time * channel.speed * 1.6 + channel.drift * 3.1);
-    const jitter = Math.sin(x * 0.09 + channel.drift * 11) * Math.sin(x * 0.023 + time * 0.00035 + channel.drift);
-    let gain = 1;
-    if (pointer.active) {
-      const distance = Math.abs(x - pointer.x);
-      gain += 0.85 * Math.exp(-(distance * distance) / (2 * 190 * 190));
-    }
-    return (
-      channel.base * height +
-      (slow * 0.72 + fast * 0.34 + jitter * 0.22) * channel.amp * height * gain
-    );
-  }
-
-  function draw(time) {
-    colorFrame += 1;
-    if (colorFrame % 45 === 1) readColors();
-
-    ctx.clearRect(0, 0, width, height);
-    ctx.lineWidth = 1;
-
-    channels.forEach((channel, index) => {
-      ctx.strokeStyle = colors[index] || "rgba(120,120,120,0.4)";
-      ctx.beginPath();
-      for (let x = -8; x <= width + 8; x += 5) {
-        const y = channelY(channel, x, time);
-        if (x === -8) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
-      }
-      ctx.stroke();
-    });
-  }
-
-  function loop(time) {
-    draw(time);
-    window.requestAnimationFrame(loop);
-  }
-
-  readColors();
-  resize();
-  window.addEventListener("resize", resize);
-  document.addEventListener("qt-themechange", readColors);
-
-  if (!coarsePointer) {
-    window.addEventListener(
-      "pointermove",
-      (event) => {
-        pointer.x = event.clientX;
-        pointer.y = event.clientY;
-        pointer.active = true;
-      },
-      { passive: true }
-    );
-    document.addEventListener("mouseleave", () => {
-      pointer.active = false;
-    });
-    window.addEventListener("blur", () => {
-      pointer.active = false;
-    });
-  }
-
-  if (reduceMotion) {
-    draw(4200);
-    return;
-  }
-
-  window.requestAnimationFrame(loop);
-}
-
-/* ---------- visitor atlas ---------- */
-
-const HOME_BASE = { latitude: 34.76, longitude: 113.65 };
-
-function setupVisitorMap() {
-  const button = document.getElementById("locate-visitor");
-  const dot = document.getElementById("visitor-dot");
-  const dotLabel = document.getElementById("visitor-dot-label");
-  const map = document.getElementById("visitor-map-canvas");
-  const status = document.getElementById("visitor-status");
-  const hud = document.getElementById("map-hud");
-  const hudPlace = document.getElementById("hud-place");
-  const hudMeta = document.getElementById("hud-meta");
-  const hudDistance = document.getElementById("hud-distance");
-  const arcBase = document.getElementById("arc-base");
-  const arcFlow = document.getElementById("arc-flow");
-  if (!button || !dot || !map || !status || !hud) return;
-
-  function setStatus(message) {
-    status.textContent = message;
-  }
-
-  function projectLocation(latitude, longitude) {
-    return {
-      left: Math.min(97, Math.max(3, ((longitude + 180) / 360) * 100)),
-      top: Math.min(94, Math.max(6, ((90 - latitude) / 180) * 100))
-    };
-  }
-
-  function haversineKm(from, to) {
-    const rad = Math.PI / 180;
-    const dLat = (to.latitude - from.latitude) * rad;
-    const dLon = (to.longitude - from.longitude) * rad;
-    const h =
-      Math.sin(dLat / 2) ** 2 +
-      Math.cos(from.latitude * rad) *
-        Math.cos(to.latitude * rad) *
-        Math.sin(dLon / 2) ** 2;
-    return 2 * 6371 * Math.asin(Math.sqrt(h));
-  }
-
-  function drawArc(location) {
-    if (!arcBase || !arcFlow) return false;
-    const start = projectLocation(location.latitude, location.longitude);
-    const end = projectLocation(HOME_BASE.latitude, HOME_BASE.longitude);
-    const span = Math.hypot(end.left - start.left, end.top - start.top);
-    if (span < 4) {
-      // The visitor is (approximately) at the home lab — no thread needed.
-      arcBase.hidden = true;
-      arcFlow.hidden = true;
-      document.dispatchEvent(new CustomEvent("qt-arcclear"));
-      return false;
-    }
-    const cx = (start.left + end.left) / 2;
-    const lift = Math.min(span * 0.32, 24);
-    const cy = Math.max(3, Math.min(start.top, end.top) - lift);
-    const d = `M ${start.left} ${start.top} Q ${cx} ${cy} ${end.left} ${end.top}`;
-    arcBase.setAttribute("d", d);
-    arcFlow.setAttribute("d", d);
-    arcBase.hidden = false;
-    arcFlow.hidden = false;
-    arcBase.classList.remove("is-drawn");
-    arcFlow.classList.remove("is-drawn");
-    window.requestAnimationFrame(() => {
-      window.requestAnimationFrame(() => arcBase.classList.add("is-drawn"));
-    });
-    window.setTimeout(() => arcFlow.classList.add("is-drawn"), 900);
-    document.dispatchEvent(new CustomEvent("qt-arcdrawn", { detail: arcFlow }));
-    return true;
-  }
-
-  function renderHud(location, arcDrawn) {
-    if (hudPlace) hudPlace.textContent = location.place;
-    if (hudMeta) {
-      hudMeta.textContent =
-        `${location.latitude.toFixed(2)}°, ${location.longitude.toFixed(2)}° · ${location.method}`;
-    }
-    const km = haversineKm(location, HOME_BASE);
-    if (hudDistance) {
-      if (arcDrawn && km > 50) {
-        hudDistance.textContent = `⇢ ~${Math.round(km).toLocaleString("en-US")} km to the home lab`;
-        hudDistance.hidden = false;
-      } else {
-        hudDistance.hidden = true;
-      }
-    }
-    hud.hidden = false;
-  }
-
-  function placeDot(location) {
-    const point = projectLocation(location.latitude, location.longitude);
-    dot.hidden = false;
-    dot.classList.remove("is-placed");
-    dot.style.left = `${point.left}%`;
-    dot.style.top = `${point.top}%`;
-    dotLabel.textContent = location.shortLabel || "You";
-    window.requestAnimationFrame(() => dot.classList.add("is-placed"));
-    const arcDrawn = drawArc(location);
-    renderHud(location, arcDrawn);
-
-    /* Hand the position to the crowd layer. It refuses anything that is
-       not marked coarse, so a GPS fix stays on this screen. */
-    const crowd = window.QtAtlasCrowd;
-    if (crowd && typeof crowd.report === "function") {
-      crowd.report(location);
-    }
-
-    let note;
-    if (location.coarse === false) {
-      note = "signal locked here only — precise positions are never uploaded.";
-    } else if (crowd && crowd.isOptedOut()) {
-      note = "signal locked. Nothing was recorded.";
-    } else if (crowd) {
-      note = "signal locked — your city has joined the map.";
-    } else {
-      note = "signal locked.";
-    }
-    setStatus(`${location.place} — ${note}`);
-  }
-
-  function getBrowserLocation() {
-    if (!("geolocation" in navigator)) {
-      return Promise.reject(new Error("Browser geolocation is unavailable."));
-    }
-    return new Promise((resolve, reject) => {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude, accuracy } = position.coords;
-          resolve({
-            latitude,
-            longitude,
-            accuracy: accuracy ? `about ${Math.round(accuracy / 1000)} km` : "",
-            place: "Browser-approved location",
-            shortLabel: "Here",
-            method: "Browser permission",
-            /* GPS-grade: shown on this screen, never uploaded */
-            coarse: false
-          });
-        },
-        reject,
-        { enableHighAccuracy: false, maximumAge: 600000, timeout: 7000 }
-      );
-    });
-  }
-
-  async function getIpLocation() {
-    const response = await fetch("https://ipapi.co/json/", { cache: "no-store" });
-    if (!response.ok) {
-      throw new Error("The IP location service did not respond.");
-    }
-    const data = await response.json();
-    const latitude = Number(data.latitude);
-    const longitude = Number(data.longitude);
-    if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
-      throw new Error("The IP location service returned an incomplete location.");
-    }
-    const place = [data.city, data.region, data.country_name].filter(Boolean).join(", ");
-    return {
-      latitude,
-      longitude,
-      place: place || "Approximate IP location",
-      shortLabel: data.city || data.country_code || "IP",
-      method: "Approximate IP lookup",
-      accuracy: "city or region level",
-      /* city-level: this is the only kind of position ever uploaded */
-      coarse: true,
-      city: data.city || "",
-      region: data.region || "",
-      country: data.country_name || "",
-      countryCode: data.country_code || ""
-    };
-  }
-
-  button.addEventListener("click", async () => {
-    const originalLabel = button.textContent;
-    button.disabled = true;
-    button.textContent = "Locating…";
-    hud.hidden = true;
-    map.classList.add("is-scanning");
-
-    try {
-      setStatus("Asking the browser for a location signal…");
-      const browserLocation = await getBrowserLocation();
-      placeDot(browserLocation);
-    } catch (browserError) {
-      try {
-        setStatus("Browser location unavailable. Trying an approximate IP lookup…");
-        const ipLocation = await getIpLocation();
-        placeDot(ipLocation);
-      } catch (ipError) {
-        setStatus(
-          "No location signal could be resolved. The map stays anonymous until you allow a signal."
-        );
-      }
-    } finally {
-      button.disabled = false;
-      button.textContent = originalLabel;
-      map.classList.remove("is-scanning");
-    }
-  });
-
-  window.setTimeout(async () => {
-    if (!dot.hidden) return;
-    map.classList.add("is-scanning");
-    setStatus("Detecting an approximate location for this visit…");
-    try {
-      const ipLocation = await getIpLocation();
-      placeDot(ipLocation);
-    } catch (error) {
-      setStatus(
-        "Automatic detection was unavailable. You can still place a dot manually with the button above."
-      );
-    } finally {
-      map.classList.remove("is-scanning");
-    }
-  }, 700);
-}
-
 /* ---------- bootstrap ---------- */
 
 function bootstrap() {
@@ -1251,8 +903,6 @@ function bootstrap() {
   setupRevealObserver();
   setupActiveNav();
   setupMetricCountUp();
-  setupSignalField();
-  setupVisitorMap();
   setupLivePublications();
 }
 
