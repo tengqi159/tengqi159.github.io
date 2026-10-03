@@ -361,20 +361,6 @@ window.siteData = {
       "citationsUpdatedAt": "2026-10-03"
     },
     {
-      "title": "CSFO: A Category-Specific Flattening Optimization Method for Sensor-Based Long-Tailed Activity Recognition (Correction)",
-      "authors": "X Wang, Q Teng",
-      "venue": "IEEE Sensors Journal",
-      "details": "2025 correction notice",
-      "year": 2025,
-      "citations": null,
-      "link": "https://doi.org/10.1109/JSEN.2025.3610164",
-      "linkLabel": "DOI",
-      "selected": false,
-      "type": "Correction",
-      "verified": true,
-      "storyId": "csfo-correction"
-    },
-    {
       "title": "DanHAR: Dual Attention Network For Multimodal Human Activity Recognition Using Wearable Sensors",
       "authors": "Wenbin Gao, Lei Zhang, Qi Teng, Jun He, Hao Wu",
       "venue": "arXiv (Cornell University)",
@@ -415,6 +401,11 @@ window.siteData = {
       "title": "Innovative Chair and System Designs to Enhance Resistance Training Outcomes for the Elderly",
       "doi": "10.3390/healthcare12191926",
       "reason": "Different researcher with the same name; excluded by the homepage owner."
+    },
+    {
+      "title": "CSFO: A Category-Specific Flattening Optimization Method for Sensor-Based Long-Tailed Activity Recognition (Correction)",
+      "doi": "10.1109/JSEN.2025.3610164",
+      "reason": "Correction notice hidden at the homepage owner's request; the original article remains listed."
     }
   ]
 };

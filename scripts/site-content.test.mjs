@@ -51,7 +51,7 @@ test('withheld paper links still match each accepted work to its own visual stor
     assert.equal(story.publicationStatus,'accepted');assert.equal(story.link,undefined);assert.equal(story.evidenceUrl,undefined);
   }
 });
-test('every archive record maps to a story and verified figures have three matching steps',()=>{
+test('every archive record maps to a story with matching figure regions',()=>{
   const dataContext={window:{}};vm.createContext(dataContext);
   vm.runInContext(readFileSync(new URL('../assets/site-data.js',import.meta.url),'utf8'),dataContext);
   vm.runInContext(readFileSync(new URL('../assets/paper-stories.js',import.meta.url),'utf8'),dataContext);
@@ -59,7 +59,7 @@ test('every archive record maps to a story and verified figures have three match
   for(const pub of dataContext.window.siteData.publications){
     assert.ok(stories.has(pub.storyId),pub.title);
     const story=stories.get(pub.storyId);
-    if(story.figure) assert.equal(story.steps.length,3);
+    if(story.figure) { assert.ok(story.steps.length>=2 && story.steps.length<=6); assert.equal(story.steps.length,(story.walkthroughFigure||story.figure).regions.length); }
     else assert.equal(story.steps.length,0);
   }
 });

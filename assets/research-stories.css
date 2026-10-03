@@ -36,7 +36,7 @@
 .publication-preview-open { display: inline-flex; align-items: center; gap: .3rem; color: var(--teal-strong); font-weight: 700; }
 .publication-preview-open svg { width: 15px; height: 15px; }
 .publication-figure-caption { margin: .5rem 0 0; color: var(--ink-2); font-size: .82rem; line-height: 1.5; }
-.pe-image-stage { display: block; position: relative; margin: 0; background: #fff; flex-shrink: 0; }
+.pe-image-stage { display: block; position: relative; margin: 0 auto; background: #fff; flex-shrink: 0; }
 .pe-original-image { display: block; width: 100%; height: auto; max-width: none; margin: 0; background: #fff; }
 .pe-image-thumbnail { width: 100%; }
 .pe-image-thumbnail .pe-original-image { max-height: 280px; object-fit: contain; object-position: center; }
@@ -67,12 +67,12 @@
 .pe-modal-open { overflow: hidden; }
 .paper-dialog { width: min(1080px,calc(100vw - 2rem)); max-height: calc(100dvh - 2rem); padding: 0; border: 1px solid var(--line); border-radius: 18px; background: var(--paper-elev); color: var(--ink); box-shadow: var(--shadow); overflow-y: auto; overscroll-behavior: contain; }
 .paper-dialog::backdrop { background: #101315ba; backdrop-filter: blur(8px); }
-.pe-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; padding: 1.8rem 2rem 1.2rem; }
+.pe-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; padding: 1rem 2rem .8rem; }
 .pe-header { position: sticky; top: 0; background: var(--paper-elev); z-index: 1; }
-.pe-header p { font: .875rem "IBM Plex Mono",monospace; color: var(--teal-strong); margin: 0 0 .6rem; }
-.pe-header h2 { font: 500 clamp(1.3rem,2.5vw,1.9rem)/1.35 "Fraunces",serif; margin: 0; max-width: 52rem; }
+.pe-header p { font: .8rem "IBM Plex Mono",monospace; color: var(--teal-strong); margin: 0 0 .4rem; }
+.pe-header h2 { font: 500 clamp(1.2rem,2vw,1.45rem)/1.35 "Fraunces",serif; margin: 0; max-width: 52rem; }
 #pe-close { flex-shrink: 0; min-height: 42px; border: 1px solid var(--line); border-radius: 7px; padding: .5rem .9rem; background: transparent; cursor: pointer; }
-.pe-mode-bar { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; padding: 0 2rem 1rem; }
+.pe-mode-bar { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; padding: 0 2rem .6rem; }
 .pe-mode-bar button { border: 1px solid var(--line); border-radius: 7px; padding: .65rem .8rem; background: transparent; font-size: .9rem; cursor: pointer; }
 .pe-mode-bar button[aria-pressed="true"] { background: var(--teal); color: var(--paper-elev); border-color: var(--teal); }
 #pe-motion-note { width: 100%; color: var(--ink-2); font-size: .85rem; line-height: 1.5; }
@@ -86,10 +86,15 @@
 .pe-image-viewport { overflow: auto; width: 100%; max-height: min(58dvh,650px); background: #fff; overscroll-behavior: contain; }
 .pe-image-viewport:focus-visible { outline: 3px solid var(--teal); outline-offset: -3px; }
 #pe-caption { font-size: 1rem; line-height: 1.65; color: var(--ink-2); min-height: 3.3rem; margin: .7rem 1rem .8rem; }
-.pe-steps { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: .6rem; margin: 1rem 2rem; }
-.pe-steps button { text-align: left; display: flex; flex-direction: column; gap: .35rem; min-width: 0; padding: .9rem; border: 1px solid var(--line); border-radius: 9px; background: transparent; cursor: pointer; }
+.pe-context { margin: 0 2rem .7rem; border-top: 1px solid var(--line); }
+.pe-context > summary { padding: .35rem 0; font-size: .9rem; color: var(--teal-strong); cursor: pointer; }
+.pe-context-content { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 1.2rem; padding: .3rem 0 .7rem; }
+.pe-context h3 { margin: 0 0 .35rem; color: var(--teal-strong); font-size: .85rem; }
+.pe-context p { margin: 0; color: var(--ink-2); font-size: .9rem; line-height: 1.6; }
+.pe-steps { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: .6rem; margin: 0 2rem .8rem; }
+.pe-steps button { text-align: left; display: flex; align-items: center; gap: .5rem; min-width: 0; padding: .65rem; border: 1px solid var(--line); border-radius: 9px; background: transparent; cursor: pointer; }
 .pe-steps button > span:first-child { font: .875rem "IBM Plex Mono",monospace; color: var(--teal-strong); }
-.pe-steps strong { font-size: .95rem; }
+.pe-steps strong { font-size: .8rem; line-height: 1.45; font-weight: 600; }
 .pe-step-description { font-size: .875rem; color: var(--ink-2); line-height: 1.6; }
 .pe-steps .is-active { background: var(--teal-soft); border-color: var(--teal); }
 .pe-footer { display: flex; align-items: center; flex-wrap: wrap; gap: .6rem; padding: .5rem 2rem 1.5rem; }
@@ -101,4 +106,6 @@
 @media (max-width: 820px) { .news-papers { grid-template-columns: 1fr; } .news-paper-figure { max-width: 560px; } .pe-steps { grid-template-columns: 1fr; } .pe-steps button { display: grid; grid-template-columns: 25px 1fr; } .pe-step-description { grid-column: 2; } .hero { padding-top: 6rem; } }
 @media (max-width: 640px) { .news-paper { padding: 1.1rem; } .paper-dialog { width: calc(100vw - 1rem); max-height: calc(100dvh - 1rem); } .pe-header { padding: 1.2rem 1rem 1rem; } .pe-header h2 { font-size: 1.2rem; } .pe-mode-bar { padding: 0 1rem .7rem; } .pe-zoom-bar { padding: 0 1rem .7rem; } .pe-zoom-hint { margin: 0; width: 100%; } #pe-progress { width: 100%; margin-left: 0; } .pe-figure-wrap { margin: 0 .7rem; } .pe-image-viewport { max-height: 48dvh; } #pe-caption { margin: .5rem .8rem 0; } .pe-steps { margin: 1rem; } .pe-footer { padding: 0 1rem 1rem; } }
 @media (prefers-reduced-motion: reduce) { .paper-dialog * { animation: none !important; transition: none !important; } }
+@media (max-width: 640px) { .pe-context { margin: 0 1rem .7rem; } .pe-context-content { grid-template-columns: 1fr; gap: .8rem; } }
+@media (max-width: 820px) { .pe-steps { display: flex; overflow-x: auto; padding-bottom: .35rem; margin: 0 1rem .8rem; } .pe-steps button { display: flex; flex: 0 0 160px; } }
 @media print { .paper-dialog { position: static; max-height: none; width: 100%; } .pe-footer,.pe-mode-bar,.pe-zoom-bar,#pe-close { display: none; } .pe-image-viewport { max-height: none; overflow: visible; } .pe-image-stage { width: 100% !important; } }

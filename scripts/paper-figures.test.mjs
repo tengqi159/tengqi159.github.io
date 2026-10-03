@@ -39,14 +39,44 @@ test('the viewer displays the source figure rather than generating a replacement
   }
 });
 
+test('reviewed method figures preserve source assets and enable matching walkthroughs',()=>{
+  assert.equal(stories.length,15);
+  assert.equal(stories.filter(s=>s.walkthroughFigure).length,3);
+  for(const story of stories){
+    assert.equal(viewer.hasReviewedContent(story),true,story.id);
+    assert.equal(viewer.hasAnimation(story),true,story.id);
+    assert.ok(story.problem?.length>20 && story.summary?.length>20 && story.takeaway?.length>20);
+    const figure=story.walkthroughFigure||story.figure;
+    const html=viewer.figureMarkup(story,{presentation:'animation',active:0});
+    assert.ok(html.includes(`src="${figure.src}"`));
+    assert.match(html,/data-pe-region="0"/);
+    assert.equal(figure.regions.length,story.steps.length);
+    if(story.walkthroughFigure){
+      const bytes=readFileSync(new URL('../'+figure.src,import.meta.url));
+      assert.equal(bytes.toString('ascii',0,4),'RIFF');assert.equal(bytes.toString('ascii',8,12),'WEBP');
+      const offset=bytes.indexOf(Buffer.from('VP8L'));assert.ok(offset>=12);
+      const bits=bytes.readUInt32LE(offset+9);
+      assert.equal((bits&0x3fff)+1,figure.width);assert.equal(((bits>>>14)&0x3fff)+1,figure.height);
+      assert.ok(figure.sourceFigureNumber && figure.sourceUrl);
+    }
+  }
+});
+
+test('invalid step and region shapes safely disable the walkthrough',()=>{
+  for(const malformed of [s=>s.steps='ab',s=>s.steps[0]=null,s=>s.steps[0].description=3,s=>s.figure.regions='abc',s=>s.figure.regions[0]=null,s=>s.figure.regions[0]=[]]){
+    const story=JSON.parse(JSON.stringify(stories[0]));malformed(story);
+    assert.equal(viewer.hasAnimation(story),false);
+  }
+});
+
 test('missing figures cannot produce a substitute graphic or animation entry',()=>{
-  const notice=stories.find(s=>s.id==='csfo-correction');
+  const notice={id:'unverified-figure',title:'Unverified figure',steps:[]};
   assert.equal(viewer.figureMarkup(notice),'');
-  assert.equal(viewer.buttons(siteData.publications.find(p=>p.storyId===notice.id)),'');
+  assert.equal(viewer.buttons({storyId:notice.id}),'');
   assert.equal(viewer.hasAnimation(notice),false);
 });
 
-test('animation requires three valid regions within the actual image',()=>{
+test('a method walkthrough requires matching valid regions within the actual image',()=>{
   const story=JSON.parse(JSON.stringify(stories[0]));
   story.contentReview={status:'verified',basis:'full-manuscript'};
   assert.equal(viewer.hasAnimation(story),true);
@@ -64,7 +94,7 @@ test('figure extraction alone cannot enable a manuscript explanation',()=>{
   context.window.paperStories.unshift(story);
   const buttons=viewer.buttons({storyId:story.id});
   assert.match(buttons,/Paper framework/);
-  assert.doesNotMatch(buttons,/Animated intro/);
+  assert.doesNotMatch(buttons,/Method walkthrough/);
   context.window.paperStories.shift();
   story.contentReview={status:'verified',basis:'figure-only'};
   assert.equal(viewer.hasAnimation(story),false);

@@ -6,19 +6,23 @@ window.paperStories = [
     "presentationLabel": "Accepted · NeurIPS 2026 · Proceedings forthcoming",
     "evidenceLevel": "primary-framework",
     "shortName": "MIRAGE",
-    "summary": "MIRAGE calibrates cross-view agreement through bounded node-wise alignment budgets and dual-view MI-surrogate stabilization.",
+    "summary": "MIRAGE addresses uneven agreement between graph views: some nodes benefit from strong alignment, while noisy or boundary nodes may not. It learns bounded node-specific MI-surrogate targets and stabilizes each branch, with a gated structural supplement for weak anchors.",
     "steps": [
       {
-        "label": "Graph branches",
-        "description": "The attributed graph and a KNN graph provide attribute and structural representations."
+        "label": "Construct attribute and structural views",
+        "description": "The attribute branch forms GCN and adaptive-propagation views. The structural branch encodes the original and feature-space KNN graphs, then mixes their representations. Contrastive learning aligns views within each branch."
       },
       {
-        "label": "Hierarchical MI regulation",
-        "description": "Anchor-wise MI targets and view-level stabilization regulate alignment; a reliability-gated structural supplement supports weak anchors."
+        "label": "Give each node a bounded target",
+        "description": "A learned setpoint assigns each node a target for its InfoNCE-based MI surrogate. The allocation loss increases alignment pressure below the target and limits further surrogate growth above it."
       },
       {
-        "label": "Fused prediction",
-        "description": "Fuse attribute and structural representations before the downstream classification head."
+        "label": "Stabilize the branch-level signal",
+        "description": "The stability loss penalizes drift of each branch's mean surrogate from a target and excessive spread across nodes. This complements the node-specific allocation targets."
+      },
+      {
+        "label": "Supplement weak anchors and fuse",
+        "description": "After warmup, low-setpoint structural anchors can receive filtered higher-order neighbor features. A label-free reliability gate limits this supplement; the resulting structural view is fused with both attribute views for node classification."
       }
     ],
     "figure": {
@@ -31,23 +35,44 @@ window.paperStories = [
       "regions": [
         {
           "x": 0,
-          "y": 0,
-          "width": 0.41,
-          "height": 0.96
-        },
-        {
-          "x": 0.41,
-          "y": 0,
-          "width": 0.3,
-          "height": 1
-        },
-        {
-          "x": 0.7,
-          "y": 0.07,
-          "width": 0.3,
+          "y": 0.02,
+          "width": 0.417,
           "height": 0.82
-        }
+        },
+        {
+          "x": 0.417,
+          "y": 0.328,
+          "width": 0.288,
+          "height": 0.366
+        },
+        {
+          "x": 0.436,
+          "y": 0,
+          "width": 0.253,
+          "height": 0.315
+        },
+        [
+          {
+            "x": 0.447,
+            "y": 0.712,
+            "width": 0.255,
+            "height": 0.282
+          },
+          {
+            "x": 0.719,
+            "y": 0.097,
+            "width": 0.278,
+            "height": 0.79
+          }
+        ]
       ]
+    },
+    "problem": "Should every graph node be pushed equally hard to agree across views, even when its attributes and neighborhood provide conflicting evidence?",
+    "takeaway": "Node-classification experiments on six small-to-medium graphs show competitive representations. Training trajectories and fixed-target sweeps demonstrate that the MI-surrogate targets affect both optimization and downstream accuracy.",
+    "contentReview": {
+      "status": "verified",
+      "basis": "full-manuscript",
+      "reviewedAt": "2026-10-03"
     }
   },
   {
@@ -57,19 +82,23 @@ window.paperStories = [
     "presentationLabel": "Accepted · NeurIPS 2026 · Proceedings forthcoming",
     "evidenceLevel": "primary-framework",
     "shortName": "PSDNet",
-    "summary": "PSDNet combines local phase evidence with recent history and selectively checks class-specific phase scripts when a sliding window remains ambiguous.",
+    "summary": "A fixed sensor window may contain only part of an action, or a fragment shared by several activities. PSDNet interprets it using learned phase primitives and recent history, then adds script-aware residual correction when the local prediction remains uncertain.",
     "steps": [
       {
-        "label": "Window and recent history",
-        "description": "Encode the current sensor window into phase primitives and summarize the available short-term history."
+        "label": "Represent partial motion and recent history",
+        "description": "A shared encoder maps the current window to a mixture of learned phase primitives. Valid preceding windows use the same encoder and are summarized separately as recent phase context."
       },
       {
-        "label": "Phase-script local recognition",
-        "description": "Evaluate compatibility with learned class-specific phase scripts and form an evidential local prediction."
+        "label": "Check class-specific phase scripts",
+        "description": "Combine the current phase vector with the history summary, then score compatibility with each learned class script. These scores help form an evidential local prediction and its uncertainty."
       },
       {
-        "label": "Uncertainty-triggered deliberation",
-        "description": "Use uncertainty to activate targeted residual correction for ambiguous windows; clear windows keep the direct prediction."
+        "label": "Use uncertainty to choose a path",
+        "description": "At inference, extra deliberation runs only when uncertainty exceeds the learned threshold and valid history exists. Other windows keep the local prediction. Boundary supervision is an auxiliary training objective."
+      },
+      {
+        "label": "Apply a targeted residual correction",
+        "description": "For routed windows, System 2 retrieves historical context and adds a residual to the local logits. It gives likely candidate classes extra capacity while retaining a dense correction over all classes."
       }
     ],
     "figure": {
@@ -82,23 +111,52 @@ window.paperStories = [
       "regions": [
         {
           "x": 0,
-          "y": 0.02,
-          "width": 0.31,
-          "height": 0.98
-        },
-        {
-          "x": 0.31,
-          "y": 0.02,
-          "width": 0.38,
-          "height": 0.98
-        },
-        {
-          "x": 0.7,
-          "y": 0,
-          "width": 0.3,
+          "y": 0.12,
+          "width": 0.318,
           "height": 0.84
-        }
+        },
+        {
+          "x": 0.32,
+          "y": 0.11,
+          "width": 0.377,
+          "height": 0.827
+        },
+        [
+          {
+            "x": 0.735,
+            "y": 0.005,
+            "width": 0.086,
+            "height": 0.318
+          },
+          {
+            "x": 0.895,
+            "y": 0.076,
+            "width": 0.068,
+            "height": 0.156
+          }
+        ],
+        [
+          {
+            "x": 0.713,
+            "y": 0.385,
+            "width": 0.194,
+            "height": 0.363
+          },
+          {
+            "x": 0.918,
+            "y": 0.445,
+            "width": 0.074,
+            "height": 0.29
+          }
+        ]
       ]
+    },
+    "problem": "How can an activity classifier interpret a short window that contains only a partial motion or mixed evidence near an activity change?",
+    "takeaway": "Across eight HAR datasets, PSDNet achieves the best mean accuracy and weighted F1 among the compared methods. Boundary and look-alike analyses examine ambiguous windows; selective-routing experiments measure the accuracy–computation trade-off.",
+    "contentReview": {
+      "status": "verified",
+      "basis": "full-manuscript",
+      "reviewedAt": "2026-10-03"
     }
   },
   {
@@ -110,19 +168,22 @@ window.paperStories = [
       "https://doi.org/10.48550/arxiv.2006.14435"
     ],
     "shortName": "DanHAR",
-    "summary": "DanHAR combines channel attention and temporal attention in a CNN to interpret multimodal wearable signals for activity recognition.",
+    "summary": "DanHAR combines channel attention and temporal attention in CNN and residual backbones to reweight features from wearable sensor windows.",
     "steps": [
       {
-        "label": "Wearable inputs",
-        "description": "Sensor windows enter the residual CNN."
+        "label": "Extract window features",
+        "description": "Segment the sensor streams into fixed-length windows and encode each window with convolutional or residual blocks.",
+        "phase": "inference"
       },
       {
-        "label": "Channel then temporal attention",
-        "description": "The inset shows successive channel and temporal attention weighting."
+        "label": "Weight feature channels",
+        "description": "Average and max pooling summarize each feature channel. Shared fully connected layers produce sigmoid weights that rescale these channels.",
+        "phase": "inference"
       },
       {
-        "label": "Activity classifier",
-        "description": "The attended representation feeds the activity classifier."
+        "label": "Weight temporal positions",
+        "description": "Pool the channel-attended features across channels, concatenate the pooled maps, and use a convolution and sigmoid to produce the temporal attention map before classification.",
+        "phase": "inference"
       }
     ],
     "evidenceUrl": "https://arxiv.org/abs/2006.14435",
@@ -137,25 +198,32 @@ window.paperStories = [
       "sourceFigureNumber": "1",
       "regions": [
         {
-          "x": 0.0,
-          "y": 0.17,
-          "width": 0.25,
-          "height": 0.28
+          "x": 0.235,
+          "y": 0.02,
+          "width": 0.602,
+          "height": 0.424
         },
         {
-          "x": 0.14,
-          "y": 0.5,
-          "width": 0.64,
-          "height": 0.48
+          "x": 0.324,
+          "y": 0.678,
+          "width": 0.202,
+          "height": 0.268
         },
         {
-          "x": 0.78,
-          "y": 0.14,
-          "width": 0.22,
-          "height": 0.32
+          "x": 0.544,
+          "y": 0.596,
+          "width": 0.222,
+          "height": 0.323
         }
       ],
       "sourceUrl": "https://arxiv.org/pdf/2006.14435"
+    },
+    "problem": "Temporal attention alone does not model which convolutional feature channels should receive more weight.",
+    "takeaway": "In the author-version experiments, dual attention improved the tested CNN and residual baselines on four public HAR datasets and a weakly labeled dataset.",
+    "contentReview": {
+      "status": "verified",
+      "basis": "full-manuscript",
+      "reviewedAt": "2026-10-03"
     }
   },
   {
@@ -166,19 +234,27 @@ window.paperStories = [
       "https://doi.org/10.1109/JSEN.2020.2978772"
     ],
     "shortName": "Local-Loss CNN",
-    "summary": "This work studies layer-wise CNN training with local losses for sensor-based human activity recognition.",
+    "summary": "This CNN training method combines local label-prediction and similarity-matching losses, detaching gradients between layers to address backward locking.",
     "steps": [
       {
-        "label": "Preprocess sensor signals",
-        "description": "Raw accelerometer, gyroscope and magnetometer data enter the CNN."
+        "label": "Predict labels locally",
+        "description": "Attach a linear classifier to a hidden layer and compare its activity prediction with the label using cross-entropy.",
+        "phase": "training"
       },
       {
-        "label": "Local learning at each layer",
-        "description": "Similarity-matching and cross-entropy losses provide local learning signals. The original arrows distinguish forward, activation and local gradient flows."
+        "label": "Match label similarities",
+        "description": "Compare pairwise hidden-feature similarities within a batch with the similarities of the corresponding one-hot activity labels.",
+        "phase": "training"
       },
       {
-        "label": "Activity classification",
-        "description": "The final representation feeds the activity classifier."
+        "label": "Update layers locally",
+        "description": "Combine the two losses and detach the computation graph between hidden layers so each layer can be updated without a network-wide backward pass.",
+        "phase": "training"
+      },
+      {
+        "label": "Run forward inference",
+        "description": "The final classifier is trained with cross-entropy. At deployment, the trained network recognizes activity through an ordinary CNN forward path.",
+        "phase": "inference"
       }
     ],
     "evidenceUrl": "https://doi.org/10.1109/JSEN.2020.2978772",
@@ -193,26 +269,48 @@ window.paperStories = [
       "sourceFigureNumber": "1",
       "regions": [
         {
-          "x": 0.0,
-          "y": 0.0,
-          "width": 0.29,
-          "height": 0.4
+          "x": 0.478,
+          "y": 0.6,
+          "width": 0.179,
+          "height": 0.376
         },
         {
-          "x": 0.23,
-          "y": 0.39,
-          "width": 0.47,
-          "height": 0.61
+          "x": 0.27,
+          "y": 0.608,
+          "width": 0.177,
+          "height": 0.36
         },
+        [
+          {
+            "x": 0.266,
+            "y": 0.455,
+            "width": 0.4,
+            "height": 0.51
+          },
+          {
+            "x": 0.679,
+            "y": 0.503,
+            "width": 0.22,
+            "height": 0.228
+          }
+        ],
         {
-          "x": 0.78,
-          "y": 0.0,
-          "width": 0.22,
-          "height": 0.42
+          "x": 0.344,
+          "y": 0.12,
+          "width": 0.635,
+          "height": 0.33
         }
       ],
       "sourceUrl": "https://doi.org/10.1109/JSEN.2020.2978772"
-    }
+    },
+    "problem": "Global backpropagation retains hidden activations for the full backward pass, limiting memory reuse during HAR model training.",
+    "takeaway": "The combined local loss improved test accuracy over the tested global-loss CNNs on five public HAR datasets; inference still uses the trained CNN's forward path.",
+    "contentReview": {
+      "status": "verified",
+      "basis": "full-manuscript",
+      "reviewedAt": "2026-10-03"
+    },
+    "walkthroughNote": "The local-loss arrows describe training. Inference follows the forward CNN path."
   },
   {
     "id": "lego-cnn",
@@ -223,19 +321,27 @@ window.paperStories = [
       "https://arxiv.org/abs/2005.03948"
     ],
     "shortName": "Lego CNN",
-    "summary": "Lower-dimensional Lego filters are assembled into CNN filters, while local losses train the model for wearable activity recognition.",
+    "summary": "Lego CNN shares filters with fewer input channels, reuses their intermediate responses, and adds layer-wise local training for wearable activity recognition.",
     "steps": [
       {
-        "label": "Wearable signal input",
-        "description": "Signals from body-worn sensors enter the HAR pipeline."
+        "label": "Share smaller filters",
+        "description": "Construct convolutional filters from a shared Lego bank with fewer input channels. Learn the discrete filter selections using a straight-through estimator.",
+        "phase": "model-design-and-training"
       },
       {
-        "label": "Split, transform and merge",
-        "description": "The inset shows small Lego filters transforming segmented feature maps and merging their outputs."
+        "label": "Reuse fragment responses",
+        "description": "Split feature channels into fragments and convolve each fragment with the shared Lego bank to compute reusable intermediate feature maps.",
+        "phase": "convolution"
       },
       {
-        "label": "Activity classification",
-        "description": "Layer-wise convolution blocks feed the fully connected layer and softmax classifier."
+        "label": "Select and merge",
+        "description": "Use the learned masks to select an intermediate response for each fragment, then sum the selected responses into each output feature map.",
+        "phase": "convolution"
+      },
+      {
+        "label": "Train with local objectives",
+        "description": "The layer-wise variant combines local prediction and similarity-matching losses and detaches gradients between hidden layers; the first convolution and final classifier remain uncompressed.",
+        "phase": "training"
       }
     ],
     "evidenceUrl": "https://arxiv.org/abs/2005.03948",
@@ -249,27 +355,49 @@ window.paperStories = [
       "alt": "Original Lego CNN framework: wearable signals enter layer-wise convolution blocks. The inset shows split, transform and merge operations, with small Lego filters used to construct output feature maps.",
       "sourceFigureNumber": "1",
       "regions": [
+        [
+          {
+            "x": 0.396,
+            "y": 0.48,
+            "width": 0.124,
+            "height": 0.117
+          },
+          {
+            "x": 0.868,
+            "y": 0.477,
+            "width": 0.118,
+            "height": 0.5
+          }
+        ],
         {
-          "x": 0.0,
-          "y": 0.01,
-          "width": 0.37,
-          "height": 0.46
+          "x": 0.064,
+          "y": 0.59,
+          "width": 0.51,
+          "height": 0.353
         },
         {
-          "x": 0.0,
-          "y": 0.46,
-          "width": 1.0,
-          "height": 0.54
+          "x": 0.565,
+          "y": 0.59,
+          "width": 0.242,
+          "height": 0.369
         },
         {
-          "x": 0.68,
-          "y": 0.01,
-          "width": 0.32,
-          "height": 0.4
+          "x": 0.5,
+          "y": 0.167,
+          "width": 0.19,
+          "height": 0.225
         }
       ],
       "sourceUrl": "https://doi.org/10.1109/JSEN.2020.3015521"
-    }
+    },
+    "problem": "Wearable HAR CNNs can be costly to deploy; the paper asks whether shared filters can reduce storage and computation.",
+    "takeaway": "The evaluated compression settings reduced model size and FLOPs with a recognition-performance tradeoff; a WISDM model also ran faster on the tested Honor 20i.",
+    "contentReview": {
+      "status": "verified",
+      "basis": "full-manuscript",
+      "reviewedAt": "2026-10-03"
+    },
+    "walkthroughNote": "The inset shows shared-filter convolution. Layer-wise training is described in the paper and applied to the marked LWConv blocks."
   },
   {
     "id": "triple-attention",
@@ -279,19 +407,27 @@ window.paperStories = [
       "https://doi.org/10.1109/TETCI.2021.3136642"
     ],
     "shortName": "Triple Attention",
-    "summary": "A triple cross-domain attention design is investigated for activity recognition from wearable sensor measurements.",
+    "summary": "Triplet attention forms parallel maps for temporal-channel, channel-sensor and temporal-sensor interactions, then learns how to combine their reweighted features.",
     "steps": [
       {
-        "label": "Collect and preprocess",
-        "description": "Wearable sensor time series are segmented before model training."
+        "label": "View three dimension pairs",
+        "description": "Send the C x T x S feature tensor through three parallel branches. Permute dimensions where needed to expose temporal-channel, channel-sensor and temporal-sensor interactions.",
+        "phase": "attention"
       },
       {
-        "label": "Three interaction branches",
-        "description": "T & S, T & C and C & S denote temporal-sensor, temporal-channel and channel-sensor interactions."
+        "label": "Build pairwise attention maps",
+        "description": "Concatenate max and average pooling along the remaining dimension, then apply a convolution, batch normalization and sigmoid to obtain an attention map for each pair.",
+        "phase": "attention"
       },
       {
-        "label": "Recognize activity",
-        "description": "Residual features feed the fully connected softmax classifier."
+        "label": "Reweight each view",
+        "description": "Multiply each branch tensor by its attention map and restore the permuted dimensions so all branch outputs have a common shape.",
+        "phase": "attention"
+      },
+      {
+        "label": "Learn the branch combination",
+        "description": "Combine the three reweighted outputs using coefficients learned during training, then pass the refined features to the activity-recognition backbone.",
+        "phase": "attention"
       }
     ],
     "evidenceUrl": "https://doi.org/10.1109/TETCI.2021.3136642",
@@ -306,7 +442,7 @@ window.paperStories = [
       "sourceFigureNumber": "1",
       "regions": [
         {
-          "x": 0.0,
+          "x": 0,
           "y": 0.15,
           "width": 0.3,
           "height": 0.8
@@ -325,7 +461,88 @@ window.paperStories = [
         }
       ],
       "sourceUrl": "https://yinntag.github.io/publications/P3.pdf"
-    }
+    },
+    "problem": "Separate channel and spatial attention can miss interactions between feature channels, temporal positions and sensor dimensions.",
+    "takeaway": "The paper reports F1 gains on four public datasets and a weakly labeled dataset, with additional average gains in PAMAP2 leave-one-subject-out tests.",
+    "contentReview": {
+      "status": "verified",
+      "basis": "full-manuscript",
+      "reviewedAt": "2026-10-03"
+    },
+    "walkthroughFigure": {
+      "src": "assets/paper-figures/triple-attention-detail.webp",
+      "width": 1389,
+      "height": 650,
+      "label": "Original attention module · Figure 2",
+      "alt": "Original triplet-attention module: one unchanged and two permuted feature tensors pass through parallel Z_Pooling, convolution and sigmoid branches; their attention maps reweight the tensors, which are restored to a common dimension order and combined.",
+      "sourceFigureNumber": 2,
+      "sourceUrl": "https://yinntag.github.io/publications/P3.pdf",
+      "regions": [
+        [
+          {
+            "x": 0.006,
+            "y": 0.039,
+            "width": 0.325,
+            "height": 0.926
+          }
+        ],
+        [
+          {
+            "x": 0.315,
+            "y": 0.025,
+            "width": 0.298,
+            "height": 0.305
+          },
+          {
+            "x": 0.315,
+            "y": 0.35,
+            "width": 0.298,
+            "height": 0.3
+          },
+          {
+            "x": 0.315,
+            "y": 0.667,
+            "width": 0.298,
+            "height": 0.3
+          }
+        ],
+        [
+          {
+            "x": 0.606,
+            "y": 0.047,
+            "width": 0.198,
+            "height": 0.302
+          },
+          {
+            "x": 0.606,
+            "y": 0.35,
+            "width": 0.198,
+            "height": 0.305
+          },
+          {
+            "x": 0.606,
+            "y": 0.66,
+            "width": 0.198,
+            "height": 0.305
+          },
+          {
+            "x": 0.79,
+            "y": 0.12,
+            "width": 0.08,
+            "height": 0.72
+          }
+        ],
+        [
+          {
+            "x": 0.855,
+            "y": 0.348,
+            "width": 0.14,
+            "height": 0.32
+          }
+        ]
+      ]
+    },
+    "walkthroughNote": "The three dimension-pair branches operate in parallel. The pooling and gating are shown in Figure 2; the learned fusion coefficients are specified in the method equations."
   },
   {
     "id": "channel-selectivity",
@@ -335,19 +552,22 @@ window.paperStories = [
       "https://doi.org/10.1109/JBHI.2021.3092396"
     ],
     "shortName": "Channel Selectivity",
-    "summary": "This work explores CNN training with channel selectivity for human activity recognition from sensor data.",
+    "summary": "Channel-selective CNN training estimates the effect of removing feature channels, reallocates low-impact channels to important ones, and learns shifts to diversify copied features.",
     "steps": [
       {
-        "label": "Sensor preprocessing",
-        "description": "Accelerometer, gyroscope and magnetometer streams provide input windows."
+        "label": "Estimate removal damage",
+        "description": "Use the Expected Channel Damage Matrix to estimate how removing each input feature channel changes the output; a normalized damage threshold controls deallocation.",
+        "phase": "training"
       },
       {
-        "label": "Select and recycle channels",
-        "description": "Channel-selective convolution uses deallocation, reallocation and spatial shifting, as shown by the replacement arrows."
+        "label": "Reallocate channel capacity",
+        "description": "Block low-contribution channels and remap their released positions to selected Top-K important channels, resetting the corresponding convolution weights.",
+        "phase": "training"
       },
       {
-        "label": "Activity classifier",
-        "description": "The resulting features feed the fully connected classifier."
+        "label": "Diversify copied features",
+        "description": "Learn spatial shifts for the copied channels so repeated copies provide different information rather than identical convolution inputs.",
+        "phase": "training"
       }
     ],
     "evidenceUrl": "https://doi.org/10.1109/JBHI.2021.3092396",
@@ -362,7 +582,7 @@ window.paperStories = [
       "sourceFigureNumber": "1",
       "regions": [
         {
-          "x": 0.0,
+          "x": 0,
           "y": 0.12,
           "width": 0.38,
           "height": 0.53
@@ -381,7 +601,68 @@ window.paperStories = [
         }
       ],
       "sourceUrl": "https://wenbohuang1002.github.io/papers/JBHI-2021-1.pdf"
-    }
+    },
+    "problem": "Fixed channel connections can spend capacity on features that have little effect on the convolutional output.",
+    "takeaway": "Across five public HAR datasets, the paper reports accuracy gains over its CNN and ResNet baselines; smartphone inference latency remained close to the plain CNN.",
+    "contentReview": {
+      "status": "verified",
+      "basis": "full-manuscript",
+      "reviewedAt": "2026-10-03"
+    },
+    "walkthroughFigure": {
+      "src": "assets/paper-figures/channel-selectivity-detail.webp",
+      "width": 1270,
+      "height": 1190,
+      "label": "Original Figures 2 and 3 · Channel-selective training",
+      "alt": "Original channel-selectivity diagrams: Figure 2 shows channel deallocation and reallocation with a channel-importance color scale; Figure 3 shows spatial shifting of channel copies.",
+      "sourceFigureNumber": "2 and 3",
+      "sourceUrl": "https://wenbohuang1002.github.io/papers/JBHI-2021-1.pdf",
+      "regions": [
+        [
+          {
+            "x": 0.055118,
+            "y": 0.008403,
+            "width": 0.771654,
+            "height": 0.243697
+          },
+          {
+            "x": 0.866142,
+            "y": 0.021008,
+            "width": 0.074803,
+            "height": 0.42437
+          }
+        ],
+        [
+          {
+            "x": 0.055118,
+            "y": 0.197479,
+            "width": 0.771654,
+            "height": 0.302521
+          },
+          {
+            "x": 0.866142,
+            "y": 0.021008,
+            "width": 0.074803,
+            "height": 0.42437
+          }
+        ],
+        [
+          {
+            "x": 0.043307,
+            "y": 0.659664,
+            "width": 0.200787,
+            "height": 0.226891
+          },
+          {
+            "x": 0.279528,
+            "y": 0.659664,
+            "width": 0.700787,
+            "height": 0.235294
+          }
+        ]
+      ]
+    },
+    "walkthroughNote": "Figures 2 and 3 show channel rewiring and spatial shifts during training."
   },
   {
     "id": "rephar",
@@ -391,19 +672,22 @@ window.paperStories = [
       "https://doi.org/10.1109/TIM.2023.3240198"
     ],
     "shortName": "RepHAR",
-    "summary": "RepHAR investigates decoupled networks for sensor-based activity recognition, with the accuracy–speed tradeoff as its central design question.",
+    "summary": "RepHAR trains a multi-branch convolutional model and converts its convolution and batch-normalization parameters into a plain CNN for wearable activity recognition.",
     "steps": [
       {
-        "label": "Wearable signals",
-        "description": "Preprocessed inertial-sensor signals enter the network."
+        "label": "Train with multiple branches",
+        "description": "Train the convolutional model with parallel branches and batch normalization, using the multi-branch architecture for feature learning.",
+        "phase": "training"
       },
       {
-        "label": "Multi-branch training",
-        "description": "The green path uses the training-time multi-branch CNN blocks."
+        "label": "Convert trained parameters",
+        "description": "After training, fold batch-normalization parameters into the convolution, pad smaller branch kernels to a common size, and sum the kernels and biases as described in the paper.",
+        "phase": "conversion-after-training"
       },
       {
-        "label": "Reparameterize for inference",
-        "description": "Structural reparameterization converts those blocks into the plain CNN illustrated by the red inference path."
+        "label": "Deploy the plain network",
+        "description": "Load the converted CNN for activity inference. The deployed model follows a plain convolutional path rather than evaluating the training-time branches.",
+        "phase": "inference"
       }
     ],
     "evidenceUrl": "https://doi.org/10.1109/TIM.2023.3240198",
@@ -418,7 +702,7 @@ window.paperStories = [
       "sourceFigureNumber": "1",
       "regions": [
         {
-          "x": 0.0,
+          "x": 0,
           "y": 0.2,
           "width": 0.27,
           "height": 0.55
@@ -437,7 +721,62 @@ window.paperStories = [
         }
       ],
       "sourceUrl": "https://doi.org/10.1109/TIM.2023.3240198"
-    }
+    },
+    "problem": "Multi-branch HAR networks can improve recognition while increasing inference overhead; FLOPs alone do not predict device latency.",
+    "takeaway": "On four public HAR datasets, CNN_Rep improved the paper's plain CNN baseline; a Raspberry Pi 3B+ test reported lower latency than the multi-branch model.",
+    "contentReview": {
+      "status": "verified",
+      "basis": "full-manuscript",
+      "reviewedAt": "2026-10-03"
+    },
+    "walkthroughFigure": {
+      "src": "assets/paper-figures/rephar-detail.webp",
+      "width": 1235,
+      "height": 1465,
+      "label": "Original structural re-parameterization · Fig. 2",
+      "alt": "Original RepHAR Figure 2: two convolution-plus-batch-normalization training branches, CNN and BN parameter conversion with zero-padding, and the resulting single-convolution inference block.",
+      "sourceFigureNumber": "2",
+      "sourceUrl": "https://doi.org/10.1109/TIM.2023.3240198",
+      "regions": [
+        [
+          {
+            "x": 0.04453,
+            "y": 0.00683,
+            "width": 0.33198,
+            "height": 0.32423
+          }
+        ],
+        [
+          {
+            "x": 0.4251,
+            "y": 0.00683,
+            "width": 0.56275,
+            "height": 0.87372
+          },
+          {
+            "x": 0.04453,
+            "y": 0.35836,
+            "width": 0.33198,
+            "height": 0.28669
+          }
+        ],
+        [
+          {
+            "x": 0.08907,
+            "y": 0.66553,
+            "width": 0.25506,
+            "height": 0.21843
+          },
+          {
+            "x": 0.5749,
+            "y": 0.72014,
+            "width": 0.25911,
+            "height": 0.16382
+          }
+        ]
+      ]
+    },
+    "walkthroughNote": "Figure 2 details one convolutional block. Its parameter conversion is performed after training and used to build the plain inference network."
   },
   {
     "id": "multistep-cldnn",
@@ -447,19 +786,19 @@ window.paperStories = [
       "https://doi.org/10.1063/1.5100558"
     ],
     "shortName": "Multi-Step CLDNN",
-    "summary": "A multi-step CLDNN learns from observed time series to identify nonlinear dynamical systems.",
+    "summary": "Multi-step CLDNN learns a nonlinear dynamical vector field from observed states using convolutional features, LSTM memory and a numerical multistep residual loss.",
     "steps": [
       {
-        "label": "CNN + LSTM representation",
-        "description": "Observed time-series data pass through convolution, pooling, LSTM and a fully connected layer."
+        "label": "Learn the dynamical vector field",
+        "description": "Convolution extracts features, an LSTM models temporal dependence, and the fully connected layer approximates f(x(t)), the rate of change of the system state."
       },
       {
-        "label": "Multistep training objective",
-        "description": "A multistep residual and loss define the backpropagation loop."
+        "label": "Fit a numerical multistep residual",
+        "description": "Minimize the mean squared residual of a linear multistep time-stepping rule. Training uses observed states without separately approximating their temporal gradients."
       },
       {
-        "label": "Predicted dynamics",
-        "description": "The trained model produces predicted dynamical data."
+        "label": "Integrate the learned dynamics",
+        "description": "Use SciPy's odeint to turn the learned vector field into state trajectories. The paper tests oscillator, Lorenz, Hopf and reduced fluid-flow benchmarks."
       }
     ],
     "evidenceUrl": "https://doi.org/10.1063/1.5100558",
@@ -493,7 +832,15 @@ window.paperStories = [
         }
       ],
       "sourceUrl": "https://doi.org/10.1063/1.5100558"
-    }
+    },
+    "problem": "The baseline multistep DNN does not explicitly model temporal dependencies in observations of nonlinear dynamical systems.",
+    "takeaway": "On four reported dynamical-system benchmarks, adding convolutional and LSTM modelling to the multistep residual improves trajectory reconstruction over the compared DNN; accurate Lorenz tracking remains limited in time.",
+    "contentReview": {
+      "status": "verified",
+      "basis": "full-manuscript",
+      "reviewedAt": "2026-10-03"
+    },
+    "walkthroughNote": "The multistep residual trains the vector field; numerical integration generates the state trajectory."
   },
   {
     "id": "dual-decoupling-attention",
@@ -503,19 +850,23 @@ window.paperStories = [
       "https://doi.org/10.1109/JBHI.2024.3488528"
     ],
     "shortName": "Dual-Decoupling CNN",
-    "summary": "This CNN combines dual decoupling with layer-wise temporal–spatial attention for sensor-based activity recognition.",
+    "summary": "CNN-TSFDU-LW combines parallel temporal and sensor-channel attention with layer-local training driven by a Huber similarity loss and cross-entropy.",
     "steps": [
       {
-        "label": "Layer-wise HAR pipeline",
-        "description": "CNN and TSFDU blocks pass sensor representations to an activity classifier."
+        "label": "CNN activity pipeline",
+        "description": "Sensor windows pass through convolutional TSFDU blocks and a final fully connected activity classifier."
       },
       {
-        "label": "Temporal-spatial decoupling",
-        "description": "The TSFDU diagram separates temporal convolutions and sensor-channel attention before feature combination."
+        "label": "Temporal attention branch",
+        "description": "Depthwise, dilated depthwise and 1x1 convolutions build temporal attention from the same feature map used by the channel branch."
       },
       {
-        "label": "Local-loss training",
-        "description": "Each block uses similarity matching and cross-entropy losses for local supervision."
+        "label": "Parallel channel attention",
+        "description": "Average pooling and a fully connected layer produce channel weights; the temporal and channel maps jointly reweight the feature map."
+      },
+      {
+        "label": "Huber-based local learning",
+        "description": "Each hidden layer combines Huber matching of feature and label similarities with local cross-entropy; the final classifier uses its own cross-entropy."
       }
     ],
     "evidenceUrl": "https://doi.org/10.1109/JBHI.2024.3488528",
@@ -536,10 +887,16 @@ window.paperStories = [
           "height": 0.37
         },
         {
-          "x": 0.02,
-          "y": 0.39,
-          "width": 0.57,
-          "height": 0.6
+          "x": 0.2,
+          "y": 0.405,
+          "width": 0.38,
+          "height": 0.31
+        },
+        {
+          "x": 0.19,
+          "y": 0.7,
+          "width": 0.385,
+          "height": 0.29
         },
         {
           "x": 0.59,
@@ -549,7 +906,15 @@ window.paperStories = [
         }
       ],
       "sourceUrl": "https://doi.org/10.1109/JBHI.2024.3488528"
-    }
+    },
+    "problem": "Sensor-based HAR needs temporal and sensor-channel modeling while controlling the memory cost of global training.",
+    "takeaway": "The paper reports stronger recognition than reproduced baselines on four HAR datasets and demonstrates Raspberry Pi inference, while noting extra memory-access costs during training.",
+    "contentReview": {
+      "status": "verified",
+      "basis": "full-manuscript",
+      "reviewedAt": "2026-10-03"
+    },
+    "walkthroughNote": "Temporal and channel attention operate in parallel; local losses supervise training."
   },
   {
     "id": "blockwise-resnet",
@@ -559,19 +924,23 @@ window.paperStories = [
       "https://doi.org/10.1109/JSEN.2021.3085360"
     ],
     "shortName": "Block-Wise ResNet",
-    "summary": "Residual networks are trained block by block on multi-channel time series for human activity recognition.",
+    "summary": "Predsim ResNet retains residual connections but trains each block with supervised similarity matching and cross-entropy, stopping gradients between blocks.",
     "steps": [
       {
-        "label": "Sensor windows",
-        "description": "Wearable sensing streams are segmented with sliding windows."
+        "label": "Multichannel sensor windows",
+        "description": "Sliding windows segment body-worn or smartphone sensor streams into multichannel inputs for activity recognition."
       },
       {
-        "label": "Residual units + local losses",
-        "description": "Residual blocks receive local supervision from similarity matching and cross-entropy losses."
+        "label": "Residual feature blocks",
+        "description": "Convolutional residual units retain skip connections while learning sensor-window features."
       },
       {
-        "label": "Activity classifier",
-        "description": "A fully connected head produces the activity output."
+        "label": "Predsim local supervision",
+        "description": "A weighted combination of label-similarity matching and local cross-entropy updates each residual block; detaching the graph stops gradients between blocks."
+      },
+      {
+        "label": "Separate activity classifier",
+        "description": "The final fully connected head predicts the activity and uses cross-entropy without sending its gradient back into earlier blocks."
       }
     ],
     "evidenceUrl": "https://doi.org/10.1109/JSEN.2021.3085360",
@@ -593,9 +962,15 @@ window.paperStories = [
         },
         {
           "x": 0.23,
-          "y": 0.02,
-          "width": 0.64,
-          "height": 0.96
+          "y": 0.015,
+          "width": 0.635,
+          "height": 0.37
+        },
+        {
+          "x": 0.23,
+          "y": 0.39,
+          "width": 0.635,
+          "height": 0.43
         },
         {
           "x": 0.88,
@@ -605,7 +980,15 @@ window.paperStories = [
         }
       ],
       "sourceUrl": "https://doi.org/10.1109/JSEN.2021.3085360"
-    }
+    },
+    "problem": "Deep residual networks require stored activations for global backpropagation, increasing training-memory demands.",
+    "takeaway": "In four HAR benchmark evaluations, combined local losses improved recognition over reproduced baselines; Raspberry Pi inference remained close to the plain ResNet.",
+    "contentReview": {
+      "status": "verified",
+      "basis": "full-manuscript",
+      "reviewedAt": "2026-10-03"
+    },
+    "walkthroughNote": "Residual skips are preserved. The auxiliary losses supply block-local training gradients."
   },
   {
     "id": "large-receptive-field",
@@ -615,19 +998,19 @@ window.paperStories = [
       "https://doi.org/10.1109/JSEN.2024.3364187"
     ],
     "shortName": "Large-Field Attention",
-    "summary": "Large receptive field attention is developed by decomposing large-kernel convolution for sensor-based activity recognition.",
+    "summary": "LRF attention cascades depthwise, dilated depthwise and pointwise convolutions to reweight sensor features inside a hierarchical network with convolutional token embedding and residual feed-forward blocks.",
     "steps": [
       {
-        "label": "Sensor input",
-        "description": "A multichannel sensor sequence enters the network."
+        "label": "Sensor windows to tokens",
+        "description": "Filtered, normalized sensor windows retain their time-by-modality layout as a convolutional stem produces tokens."
       },
       {
-        "label": "LRF network blocks",
-        "description": "Convolutional token embedding, LRF attention and feed-forward layers process the representation."
+        "label": "Convolutional LRF attention",
+        "description": "Depthwise, dilated depthwise and 1x1 convolutions generate an attention map that is multiplied element-wise with the input features."
       },
       {
-        "label": "Activity classification",
-        "description": "The activity classifier maps the final representation to activity categories."
+        "label": "Residual blocks and classifier",
+        "description": "Three hierarchical blocks combine normalized LRF attention and feed-forward updates with residual connections before activity classification."
       }
     ],
     "evidenceUrl": "https://doi.org/10.1109/JSEN.2024.3364187",
@@ -642,25 +1025,32 @@ window.paperStories = [
       "sourceFigureNumber": "3",
       "regions": [
         {
-          "x": 0,
-          "y": 0.1,
-          "width": 0.12,
-          "height": 0.9
-        },
-        {
-          "x": 0.12,
-          "y": 0.02,
-          "width": 0.75,
-          "height": 0.97
-        },
-        {
-          "x": 0.87,
-          "y": 0.07,
-          "width": 0.13,
+          "x": 0.005,
+          "y": 0.05,
+          "width": 0.196,
           "height": 0.91
+        },
+        {
+          "x": 0.229,
+          "y": 0.2,
+          "width": 0.049,
+          "height": 0.57
+        },
+        {
+          "x": 0.335,
+          "y": 0.015,
+          "width": 0.66,
+          "height": 0.97
         }
       ],
       "sourceUrl": "https://doi.org/10.1109/JSEN.2024.3364187"
+    },
+    "problem": "The time and modality axes of sensor data have different meanings; enlarging receptive fields alone does not guarantee better HAR.",
+    "takeaway": "LRF outperformed reproduced baselines on four HAR datasets and KU-HAR; ablations show that kernel choice matters, while mobile hardware acceleration remains future work.",
+    "contentReview": {
+      "status": "verified",
+      "basis": "full-manuscript",
+      "reviewedAt": "2026-10-03"
     }
   },
   {
@@ -671,19 +1061,19 @@ window.paperStories = [
       "https://doi.org/10.1109/JSEN.2025.3534413"
     ],
     "shortName": "CSFO",
-    "summary": "CSFO studies category-specific flattening optimization for activity recognition when sensor-data categories have long-tailed frequencies.",
+    "summary": "CSFO addresses long-tailed HAR with class-dependent parameter perturbations, followed by class-balanced classifier training on original and gradient-perturbed features.",
     "steps": [
       {
-        "label": "Two-stage HAR pipeline",
-        "description": "The overview separates feature-extractor training from classifier refinement."
+        "label": "Two-stage long-tail learning",
+        "description": "First train a CNN feature extractor and classifier; then freeze the extractor and refine only the classifier under class-balanced sampling."
       },
       {
-        "label": "Stage 1: class-specific fit",
-        "description": "Perturb parameters at a class-conditioned scale while training the feature extractor and classifier."
+        "label": "Class-conditioned flattening",
+        "description": "Class frequencies and class-specific gradients set parameter-perturbation radii and directions for learning the feature extractor and classifier."
       },
       {
-        "label": "Stage 2: robust classifier",
-        "description": "Freeze backbone weights and refine the classifier with progressively generated adversarial features."
+        "label": "Frozen-feature classifier refinement",
+        "description": "Freeze the extractor, perturb features along normalized loss gradients, and progressively shift classifier training from empirical loss toward adversarial loss."
       }
     ],
     "evidenceUrl": "https://doi.org/10.1109/JSEN.2025.3534413",
@@ -717,6 +1107,13 @@ window.paperStories = [
         }
       ],
       "sourceUrl": "https://doi.org/10.1109/JSEN.2025.3534413"
+    },
+    "problem": "Frequent activities can dominate training, leaving underrepresented activity categories harder to recognize.",
+    "takeaway": "Across four HAR datasets, CSFO reports higher overall accuracy than reproduced baselines; class-group gains vary, and the paper notes computational overhead and limited gains for rare classes.",
+    "contentReview": {
+      "status": "verified",
+      "basis": "full-manuscript",
+      "reviewedAt": "2026-10-03"
     }
   },
   {
@@ -727,19 +1124,19 @@ window.paperStories = [
       "https://doi.org/10.1063/5.0015600"
     ],
     "shortName": "Attention for Dynamics",
-    "summary": "Attention-based multistep neural networks approximate governing equations from observed data.",
+    "summary": "This attention-based CLDNN weights convolutional features by compatibility with a global representation, then learns a nonlinear dynamical vector field through a numerical multistep residual loss.",
     "steps": [
       {
-        "label": "Convolutional features",
-        "description": "Observed data feed the convolutional feature pipeline."
+        "label": "Encode observed dynamics",
+        "description": "The CLDNN backbone combines convolutional features with LSTM temporal modelling and forms a global representation of the observed state sequence."
       },
       {
-        "label": "Attention modules + merge",
-        "description": "Compare local and global features, then merge the attention-module outputs."
+        "label": "Weight local features by global context",
+        "description": "Compare features from the third, fourth and fifth convolutional layers with the global vector. Softmax-normalize the compatibility scores, form weighted representations and merge them."
       },
       {
-        "label": "Multistep loss + prediction",
-        "description": "The multistep residual loss updates model weights and the learned model predicts dynamical data."
+        "label": "Fit the residual and generate trajectories",
+        "description": "Learn the vector field with a linear multistep residual loss, then use odeint to generate state trajectories. Comparisons cover Lorenz, Rössler and Hopf systems."
       }
     ],
     "evidenceUrl": "https://doi.org/10.1063/5.0015600",
@@ -773,21 +1170,15 @@ window.paperStories = [
         }
       ],
       "sourceUrl": "https://doi.org/10.1063/5.0015600"
-    }
-  },
-  {
-    "id": "csfo-correction",
-    "title": "CSFO: A Category-Specific Flattening Optimization Method for Sensor-Based Long-Tailed Activity Recognition (Correction)",
-    "link": "https://doi.org/10.1109/JSEN.2025.3610164",
-    "aliases": [
-      "https://doi.org/10.1109/JSEN.2025.3610164"
-    ],
-    "shortName": "CSFO Correction",
-    "summary": "This notice accompanies the original CSFO article. Readers should consult the correction together with the original publication.",
-    "steps": [],
-    "evidenceUrl": "https://doi.org/10.1109/JSEN.2025.3610164",
-    "evidenceLevel": "title-only",
-    "presentationLabel": "Publication notice"
+    },
+    "problem": "Nonlinear system identification needs temporal modelling and a way to emphasize useful observations rather than giving every feature equal influence.",
+    "takeaway": "Lorenz, Rössler and Hopf benchmark comparisons report lower trajectory errors than the tested DNN and CLDNN baselines. Accurate tracking of chaotic dynamics remains limited to a finite prediction interval.",
+    "contentReview": {
+      "status": "verified",
+      "basis": "full-manuscript",
+      "reviewedAt": "2026-10-03"
+    },
+    "walkthroughNote": "Feature weighting and the multistep loss train the vector field; numerical integration generates the state trajectory."
   },
   {
     "id": "dswd",
@@ -797,19 +1188,19 @@ window.paperStories = [
       "https://doi.org/10.22967/HCIS.2024.14.052"
     ],
     "shortName": "Stage-Wise Decoupling",
-    "summary": "Dual stage-wise decoupling networks address activity recognition from wearable signals with long-tailed category frequencies.",
+    "summary": "DSWD tackles long-tailed wearable activity recognition with two decouplings: feature learning from classifier rebalancing, and multi-branch training from single-branch inference.",
     "steps": [
       {
-        "label": "Collect + preprocess",
-        "description": "Wearable measurements form the sensor input and long-tailed activity distribution."
+        "label": "Wearable signals and class imbalance",
+        "description": "Collect and window sensor measurements for activity recognition. The long-tail evaluation includes UCI-HAR training sets downsampled to create uneven class frequencies."
       },
       {
-        "label": "Stage-wise training",
-        "description": "Separate representation learning from classifier learning in the multi-branch training network."
+        "label": "Learn features, then rebalance the classifier",
+        "description": "Train the multi-branch backbone with cross-entropy and weight decay. Freeze the backbone, then fine-tune the classifier with class-balanced loss, weight decay and MaxNorm."
       },
       {
-        "label": "Re-parameterized inference",
-        "description": "Convert the trained multi-branch blocks into the single-branch inference path."
+        "label": "Fuse training branches for inference",
+        "description": "Fold convolution and batch-normalization parameters and combine the branches into a single inference path. The fine-tuned classifier produces the activity label."
       }
     ],
     "evidenceUrl": "https://doi.org/10.22967/HCIS.2024.14.052",
@@ -843,6 +1234,13 @@ window.paperStories = [
         }
       ],
       "sourceUrl": "https://doi.org/10.22967/HCIS.2024.14.052"
+    },
+    "problem": "Class imbalance biases wearable activity recognition toward frequent activities, while multi-branch feature extractors add deployment cost.",
+    "takeaway": "On the four evaluated HAR datasets, DSWD improves overall accuracy over the tested CNN variants while using a simpler inference structure; embedded evidence is limited to the reported Raspberry Pi latency benchmark.",
+    "contentReview": {
+      "status": "verified",
+      "basis": "full-manuscript",
+      "reviewedAt": "2026-10-03"
     }
   }
 ];

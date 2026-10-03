@@ -18,17 +18,17 @@ Owner-provided Scholar snapshots are recorded in `profile.citationSnapshot` with
 
 Run manually with `node scripts/refresh-data.mjs`. Update news in `siteData.news`; the sync preserves it. An optional CV link is shown when `profile.cv` contains a local PDF path.
 
-`siteData.excludedPublications` records owner-confirmed authorship exclusions by full title and DOI. These exclusions override Scholar indexing, old verified records and browser metadata enrichment, so work by a different researcher with the same name cannot return during a refresh. Remove corresponding news and visual stories when excluding a paper.
+`siteData.excludedPublications` records owner-requested exclusions by full title and DOI. These cover namesake authorship errors and the CSFO correction notice, which the owner chose to omit. They override Scholar indexing, old verified records and browser metadata enrichment. The original CSFO article remains listed. Remove corresponding news and visual stories when excluding a record.
 
 ## Accepted papers and visual introductions
 
-News leads with accepted, forthcoming papers. Accepted entries offer only the graphical abstract and animation; paper, conference-page, Scholar-search and story-source links are withheld. `status: "accepted"` is a curated status, preserved by Scholar sync and browser metadata enrichment. To mark a paper published, first verify the proceedings record, then update its status, venue, bibliographic details and public link, including the story publicationStatus. Citation snapshot dates remain separate from content update dates.
+News leads with accepted, forthcoming papers. Accepted entries offer original figures and concise method walkthroughs; paper, conference-page, Scholar-search and story-source links are withheld. `status: "accepted"` is a curated status, preserved by Scholar sync and browser metadata enrichment. To mark a paper published, first verify the proceedings record, then update its status, venue, bibliographic details and public link, including the story publicationStatus. Citation snapshot dates remain separate from content update dates.
 
 Every current archive record maps through `storyId` to `assets/paper-stories.js`. News, selected papers and archive rows show original framework figures extracted from the corresponding paper PDFs, preserving their labels and connections. The figure caption identifies its original figure number and author version where applicable. Clicking a figure opens a zoomable view; the image is never cropped to fit a card. Downloads contain only the figure image. Accepted manuscripts have no source or full-text link.
 
-A three-step walkthrough highlights verified regions of the original image. It provides pause, manual step selection and keyboard dismissal; reduced-motion preferences disable automatic playback. An animation is offered only when three valid regions and matching explanations exist. Records without a verified figure, including the CSFO correction notice, show no replacement illustration or animation. Preprint/article twins share a story. Tall archive sections reveal as soon as they enter the viewport.
+Each method walkthrough explains paper-specific mechanisms in two to six modules. `contentReview` must record a full-manuscript review before any explanation is shown; extracting a figure alone never enables it. The review covers the research question, complete method, evaluation and scope. Highlights map the reviewed explanations to exact regions of the original image, with multiple regions for parallel branches. Three papers additionally use original detail figures through `walkthroughFigure`, while their archive thumbnails keep the framework overview. Module buttons, zoom, pause and keyboard dismissal remain available. Playback starts only on request and respects reduced-motion preferences. Training and inference are distinguished where applicable. Preprint/article twins share a story. Tall archive sections reveal as soon as they enter the viewport.
 
-For future entries, verify a source figure before adding `figure` metadata and the WebP asset to `assets/paper-figures/`. Record dimensions, the original figure number, an accurate alt description and the public source for published work. Add normalized highlight regions only after inspecting them against the original figure. Refreshing metadata never invents a visual explanation. Keep private source PDFs outside the deployable website.
+For future entries, verify a source figure before adding `figure` metadata and the WebP asset to `assets/paper-figures/`. Record dimensions, the original figure number, an accurate alt description and the public source for published work. Add normalized highlight regions only after checking the original figure against a full-paper reading. Keep page/section evidence in the private work audit, and set `contentReview` only after the public descriptions are checked. Add a genuine source detail figure when the overview omits operations essential to the explanation. Refreshing metadata never invents a visual explanation. Keep private source PDFs outside the deployable website.
 
 ## Visitor atlas
 
@@ -42,7 +42,7 @@ The base map is derived from [Natural Earth 1:50m land](https://www.naturalearth
 
 ```sh
 python3 -m http.server 8765 --bind 127.0.0.1
-node --test scripts/site-content.test.mjs scripts/publication-exclusions.test.mjs scripts/paper-figures.test.mjs
+node --test scripts/*.test.mjs
 ```
 
 The Worker tests use Node 24's built-in SQLite and do not contact production. For a clearly labeled, sample-data atlas demo, run `node scripts/preview-atlas.mjs` and open port 8766. Demo data is never injected into the normal site.

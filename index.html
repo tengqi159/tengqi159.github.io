@@ -491,10 +491,11 @@
     </footer>
     <dialog class="paper-dialog" id="paper-dialog" aria-labelledby="pe-title">
       <header class="pe-header"><div><p id="pe-subtitle"></p><h2 id="pe-title"></h2></div><button type="button" id="pe-close" aria-label="Close paper introduction">Close</button></header>
-      <div class="pe-mode-bar" aria-label="Presentation mode"><button type="button" data-pe-mode="abstract" aria-pressed="true">Paper framework</button><button type="button" data-pe-mode="animation" aria-pressed="false">Animated introduction</button><button type="button" id="pe-play" aria-pressed="false">Play</button><button type="button" id="pe-restart">Restart</button><span id="pe-progress"></span><span id="pe-motion-note" role="status" hidden></span></div>
+      <div class="pe-mode-bar" aria-label="Presentation mode"><button type="button" data-pe-mode="abstract" aria-pressed="true">Paper framework</button><button type="button" data-pe-mode="animation" aria-pressed="false">Method walkthrough</button><button type="button" id="pe-play" aria-pressed="false">Play</button><button type="button" id="pe-restart">Restart</button><span id="pe-progress"></span><span id="pe-motion-note" role="status" hidden></span></div>
+      <details class="pe-context" id="pe-context" hidden></details>
       <div class="pe-zoom-bar" aria-label="Figure zoom"><button type="button" id="pe-zoom-out" aria-label="Zoom out">−</button><span id="pe-zoom-level">100%</span><button type="button" id="pe-zoom-in" aria-label="Zoom in">+</button><button type="button" id="pe-zoom-fit">Fit figure</button><span class="pe-zoom-hint">Zoom to read labels; scroll to inspect the full figure.</span></div>
+      <div class="pe-steps" id="pe-steps" aria-label="Explore the method modules"></div>
       <figure class="pe-figure-wrap"><div id="pe-figure" class="pe-image-viewport" tabindex="0" role="region" aria-label="Original paper figure; scroll when zoomed"></div><figcaption id="pe-caption" aria-live="off"></figcaption></figure>
-      <div class="pe-steps" id="pe-steps" aria-label="Explore the three steps"></div>
       <footer class="pe-footer"><button type="button" id="pe-download">Download figure</button><a id="pe-source" target="_blank" rel="noreferrer" hidden>Paper source</a><p id="pe-note"></p></footer>
     </dialog>
     <p class="copy-feedback" id="copy-feedback" role="status" aria-live="polite"></p>

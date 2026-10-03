@@ -32,6 +32,18 @@ const secondTitle = 'Innovative Chair and System Designs to Enhance Resistance T
 const secondDoi = '10.3390/healthcare12191926';
 const exclusions = [{ title: excludedTitle, doi: excludedDoi }, { title: secondTitle, doi: secondDoi }];
 
+test('the removed CSFO correction stays excluded while the original article remains',()=>{
+  const c={window:{}};vm.createContext(c);
+  for(const file of ['site-data.js','paper-stories.js']) vm.runInContext(readFileSync(new URL('../assets/'+file,import.meta.url),'utf8'),c);
+  const {siteData,paperStories}=c.window;
+  assert.ok(!siteData.publications.some(p=>p.storyId==='csfo-correction'));
+  assert.ok(!paperStories.some(p=>p.id==='csfo-correction'));
+  assert.ok(siteData.publications.some(p=>p.storyId==='csfo'));
+  const excluded=loadScript().isExcludedPublication;
+  assert.equal(excluded({doi:'10.1109/JSEN.2025.3610164'},siteData.excludedPublications),true);
+  assert.equal(excluded({doi:'10.1109/JSEN.2025.3534413'},siteData.excludedPublications),false);
+});
+
 test('exclusion matches the complete normalized title without truncating it', () => {
   const { isExcludedPublication: excluded } = loadScript();
   assert.equal(excluded({ title: excludedTitle.toUpperCase().replaceAll('-', ' ') }, exclusions), true);

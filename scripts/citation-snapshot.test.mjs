@@ -29,7 +29,7 @@ test('publication versions receive only the citation count provided for their DO
 });
 
 test('unlisted or blank counts cannot masquerade as current confirmed zeros',()=>{
-  for(const id of ['csfo-correction','dswd']){
+  for(const id of ['dswd']){
     const p=data.publications.find(p=>p.storyId===id);assert.equal(p.citations,null);assert.equal(context.citationLabel(p),'Citations unavailable');
   }
   const old=data.publications.find(p=>p.link==='https://doi.org/10.48550/arxiv.2006.14435');
