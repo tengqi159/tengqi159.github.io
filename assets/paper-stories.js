@@ -4,52 +4,102 @@ window.paperStories = [
     "title": "MIRAGE: Hierarchical MI-Surrogate Regulation for Graph Contrastive Learning",
     "publicationStatus": "accepted",
     "presentationLabel": "Accepted · NeurIPS 2026 · Proceedings forthcoming",
-    "evidenceLevel": "method",
+    "evidenceLevel": "primary-framework",
     "shortName": "MIRAGE",
     "summary": "MIRAGE calibrates cross-view agreement through bounded node-wise alignment budgets and dual-view MI-surrogate stabilization.",
     "steps": [
       {
-        "label": "Two graph views",
-        "visual": "views",
-        "description": "Learn node representations from two views of an attributed graph."
+        "label": "Graph branches",
+        "description": "The attributed graph and a KNN graph provide attribute and structural representations."
       },
       {
-        "label": "Node alignment budgets",
-        "visual": "budgets",
-        "description": "Use bounded anchor-wise targets to regulate cross-view agreement for individual nodes."
+        "label": "Hierarchical MI regulation",
+        "description": "Anchor-wise MI targets and view-level stabilization regulate alignment; a reliability-gated structural supplement supports weak anchors."
       },
       {
-        "label": "Dual-view stabilization",
-        "visual": "stability",
-        "description": "Stabilize MI-surrogate estimates across the two views while limiting excessive dispersion."
+        "label": "Fused prediction",
+        "description": "Fuse attribute and structural representations before the downstream classification head."
       }
-    ]
+    ],
+    "figure": {
+      "src": "assets/paper-figures/mirage.webp",
+      "width": 2345,
+      "height": 990,
+      "label": "Figure 1 · Original framework",
+      "alt": "Original framework figure from the MIRAGE manuscript",
+      "sourceFigureNumber": "1",
+      "regions": [
+        {
+          "x": 0,
+          "y": 0,
+          "width": 0.41,
+          "height": 0.96
+        },
+        {
+          "x": 0.41,
+          "y": 0,
+          "width": 0.3,
+          "height": 1
+        },
+        {
+          "x": 0.7,
+          "y": 0.07,
+          "width": 0.3,
+          "height": 0.82
+        }
+      ]
+    }
   },
   {
     "id": "psdnet",
     "title": "When a Window Is Not an Action: Selective Phase-Script Deliberation for Sliding-Window Human Activity Recognition",
     "publicationStatus": "accepted",
     "presentationLabel": "Accepted · NeurIPS 2026 · Proceedings forthcoming",
-    "evidenceLevel": "method",
+    "evidenceLevel": "primary-framework",
     "shortName": "PSDNet",
     "summary": "PSDNet combines local phase evidence with recent history and selectively checks class-specific phase scripts when a sliding window remains ambiguous.",
     "steps": [
       {
-        "label": "Partial action window",
-        "visual": "windows",
-        "description": "A fixed sensor window may capture only part of an action or evidence from an activity transition."
+        "label": "Window and recent history",
+        "description": "Encode the current sensor window into phase primitives and summarize the available short-term history."
       },
       {
-        "label": "Phases + recent history",
-        "visual": "phases",
-        "description": "Encode local phase primitives and recent history to form an initial prediction and uncertainty."
+        "label": "Phase-script local recognition",
+        "description": "Evaluate compatibility with learned class-specific phase scripts and form an evidential local prediction."
       },
       {
-        "label": "Selective deliberation",
-        "visual": "route",
-        "description": "Clear windows take the direct path. Uncertain windows compare a small set of candidate class phase scripts."
+        "label": "Uncertainty-triggered deliberation",
+        "description": "Use uncertainty to activate targeted residual correction for ambiguous windows; clear windows keep the direct prediction."
       }
-    ]
+    ],
+    "figure": {
+      "src": "assets/paper-figures/psdnet.webp",
+      "width": 2763,
+      "height": 911,
+      "label": "Figure 1 · Original framework",
+      "alt": "Original framework figure from the PSDNet manuscript",
+      "sourceFigureNumber": "1",
+      "regions": [
+        {
+          "x": 0,
+          "y": 0.02,
+          "width": 0.31,
+          "height": 0.98
+        },
+        {
+          "x": 0.31,
+          "y": 0.02,
+          "width": 0.38,
+          "height": 0.98
+        },
+        {
+          "x": 0.7,
+          "y": 0,
+          "width": 0.3,
+          "height": 0.84
+        }
+      ]
+    }
   },
   {
     "id": "danhar",
@@ -63,24 +113,50 @@ window.paperStories = [
     "summary": "DanHAR combines channel attention and temporal attention in a CNN to interpret multimodal wearable signals for activity recognition.",
     "steps": [
       {
-        "label": "Sensor modalities",
-        "description": "Accelerometer and gyroscope sequences capture movement.",
-        "visual": "signals"
+        "label": "Wearable inputs",
+        "description": "Sensor windows enter the residual CNN."
       },
       {
-        "label": "Channel + time",
-        "description": "Two attention paths weight sensor channels and timesteps.",
-        "visual": "attention"
+        "label": "Channel then temporal attention",
+        "description": "The inset shows successive channel and temporal attention weighting."
       },
       {
-        "label": "Activity label",
-        "description": "The attended representation supports activity classification.",
-        "visual": "classify"
+        "label": "Activity classifier",
+        "description": "The attended representation feeds the activity classifier."
       }
     ],
     "evidenceUrl": "https://arxiv.org/abs/2006.14435",
-    "evidenceLevel": "primary-abstract",
-    "presentationLabel": "Method overview"
+    "evidenceLevel": "primary-framework",
+    "presentationLabel": "Original paper framework",
+    "figure": {
+      "src": "assets/paper-figures/danhar.webp",
+      "width": 1084,
+      "height": 733,
+      "label": "Original framework · Figure 1 · arXiv author version",
+      "alt": "DanHAR original framework: wearable signals pass through residual CNN blocks, with a channel-attention module followed by temporal attention, before activity classification.",
+      "sourceFigureNumber": "1",
+      "regions": [
+        {
+          "x": 0.0,
+          "y": 0.17,
+          "width": 0.25,
+          "height": 0.28
+        },
+        {
+          "x": 0.14,
+          "y": 0.5,
+          "width": 0.64,
+          "height": 0.48
+        },
+        {
+          "x": 0.78,
+          "y": 0.14,
+          "width": 0.22,
+          "height": 0.32
+        }
+      ],
+      "sourceUrl": "https://arxiv.org/pdf/2006.14435"
+    }
   },
   {
     "id": "local-loss-cnn",
@@ -93,24 +169,50 @@ window.paperStories = [
     "summary": "This work studies layer-wise CNN training with local losses for sensor-based human activity recognition.",
     "steps": [
       {
-        "label": "Sensor sequence",
-        "description": "Time-series measurements describe human movement.",
-        "visual": "signals"
+        "label": "Preprocess sensor signals",
+        "description": "Raw accelerometer, gyroscope and magnetometer data enter the CNN."
       },
       {
-        "label": "Local supervision",
-        "description": "Train CNN layers using layer-specific losses.",
-        "visual": "local"
+        "label": "Local learning at each layer",
+        "description": "Similarity-matching and cross-entropy losses provide local learning signals. The original arrows distinguish forward, activation and local gradient flows."
       },
       {
-        "label": "Activity class",
-        "description": "Use the learned representation for activity recognition.",
-        "visual": "classify"
+        "label": "Activity classification",
+        "description": "The final representation feeds the activity classifier."
       }
     ],
     "evidenceUrl": "https://doi.org/10.1109/JSEN.2020.2978772",
-    "evidenceLevel": "title-only",
-    "presentationLabel": "Concept overview"
+    "evidenceLevel": "primary-framework",
+    "presentationLabel": "Original paper framework",
+    "figure": {
+      "src": "assets/paper-figures/local-loss-cnn.webp",
+      "width": 1021,
+      "height": 413,
+      "label": "Original framework · Figure 1",
+      "alt": "Original layer-wise CNN framework: sensor preprocessing, successive CNN modules, and a local loss block combining similarity-matching loss with cross-entropy loss. Colored arrows distinguish activation and local gradient flow.",
+      "sourceFigureNumber": "1",
+      "regions": [
+        {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 0.29,
+          "height": 0.4
+        },
+        {
+          "x": 0.23,
+          "y": 0.39,
+          "width": 0.47,
+          "height": 0.61
+        },
+        {
+          "x": 0.78,
+          "y": 0.0,
+          "width": 0.22,
+          "height": 0.42
+        }
+      ],
+      "sourceUrl": "https://doi.org/10.1109/JSEN.2020.2978772"
+    }
   },
   {
     "id": "lego-cnn",
@@ -124,24 +226,50 @@ window.paperStories = [
     "summary": "Lower-dimensional Lego filters are assembled into CNN filters, while local losses train the model for wearable activity recognition.",
     "steps": [
       {
-        "label": "Wearable signals",
-        "description": "Movement is recorded by wearable sensor channels.",
-        "visual": "signals"
+        "label": "Wearable signal input",
+        "description": "Signals from body-worn sensors enter the HAR pipeline."
       },
       {
-        "label": "Lego filters",
-        "description": "Assemble smaller filters and train with local losses.",
-        "visual": "kernel"
+        "label": "Split, transform and merge",
+        "description": "The inset shows small Lego filters transforming segmented feature maps and merging their outputs."
       },
       {
-        "label": "Embedded HAR",
-        "description": "Evaluate activity recognition, including on an Android phone.",
-        "visual": "classify"
+        "label": "Activity classification",
+        "description": "Layer-wise convolution blocks feed the fully connected layer and softmax classifier."
       }
     ],
     "evidenceUrl": "https://arxiv.org/abs/2005.03948",
-    "evidenceLevel": "primary-abstract",
-    "presentationLabel": "Method overview"
+    "evidenceLevel": "primary-framework",
+    "presentationLabel": "Original paper framework",
+    "figure": {
+      "src": "assets/paper-figures/lego-cnn.webp",
+      "width": 1058,
+      "height": 492,
+      "label": "Original framework · Figure 1",
+      "alt": "Original Lego CNN framework: wearable signals enter layer-wise convolution blocks. The inset shows split, transform and merge operations, with small Lego filters used to construct output feature maps.",
+      "sourceFigureNumber": "1",
+      "regions": [
+        {
+          "x": 0.0,
+          "y": 0.01,
+          "width": 0.37,
+          "height": 0.46
+        },
+        {
+          "x": 0.0,
+          "y": 0.46,
+          "width": 1.0,
+          "height": 0.54
+        },
+        {
+          "x": 0.68,
+          "y": 0.01,
+          "width": 0.32,
+          "height": 0.4
+        }
+      ],
+      "sourceUrl": "https://doi.org/10.1109/JSEN.2020.3015521"
+    }
   },
   {
     "id": "triple-attention",
@@ -154,24 +282,50 @@ window.paperStories = [
     "summary": "A triple cross-domain attention design is investigated for activity recognition from wearable sensor measurements.",
     "steps": [
       {
-        "label": "Wearable data",
-        "description": "Sensor sequences provide activity information.",
-        "visual": "signals"
+        "label": "Collect and preprocess",
+        "description": "Wearable sensor time series are segmented before model training."
       },
       {
-        "label": "Triple attention",
-        "description": "Represent signals through cross-domain attention.",
-        "visual": "attention"
+        "label": "Three interaction branches",
+        "description": "T & S, T & C and C & S denote temporal-sensor, temporal-channel and channel-sensor interactions."
       },
       {
-        "label": "Activity decision",
-        "description": "Classify human activity from the resulting features.",
-        "visual": "classify"
+        "label": "Recognize activity",
+        "description": "Residual features feed the fully connected softmax classifier."
       }
     ],
     "evidenceUrl": "https://doi.org/10.1109/TETCI.2021.3136642",
-    "evidenceLevel": "title-only",
-    "presentationLabel": "Concept overview"
+    "evidenceLevel": "primary-framework",
+    "presentationLabel": "Original paper framework",
+    "figure": {
+      "src": "assets/paper-figures/triple-attention.webp",
+      "width": 2137,
+      "height": 441,
+      "label": "Original framework · Figure 1 · author-hosted version",
+      "alt": "Original triplet attention HAR framework: sensor signals pass through residual blocks with temporal-sensor, temporal-channel and channel-sensor interaction branches, then a fully connected softmax activity classifier.",
+      "sourceFigureNumber": "1",
+      "regions": [
+        {
+          "x": 0.0,
+          "y": 0.15,
+          "width": 0.3,
+          "height": 0.8
+        },
+        {
+          "x": 0.31,
+          "y": 0.22,
+          "width": 0.49,
+          "height": 0.68
+        },
+        {
+          "x": 0.8,
+          "y": 0.13,
+          "width": 0.2,
+          "height": 0.87
+        }
+      ],
+      "sourceUrl": "https://yinntag.github.io/publications/P3.pdf"
+    }
   },
   {
     "id": "channel-selectivity",
@@ -184,24 +338,50 @@ window.paperStories = [
     "summary": "This work explores CNN training with channel selectivity for human activity recognition from sensor data.",
     "steps": [
       {
-        "label": "Sensor channels",
-        "description": "Multiple channels record movement over time.",
-        "visual": "signals"
+        "label": "Sensor preprocessing",
+        "description": "Accelerometer, gyroscope and magnetometer streams provide input windows."
       },
       {
-        "label": "Channel selectivity",
-        "description": "Incorporate channel selectivity into CNN training.",
-        "visual": "attention"
+        "label": "Select and recycle channels",
+        "description": "Channel-selective convolution uses deallocation, reallocation and spatial shifting, as shown by the replacement arrows."
       },
       {
-        "label": "Activity prediction",
-        "description": "Use the trained model to recognize human activity.",
-        "visual": "classify"
+        "label": "Activity classifier",
+        "description": "The resulting features feed the fully connected classifier."
       }
     ],
     "evidenceUrl": "https://doi.org/10.1109/JBHI.2021.3092396",
-    "evidenceLevel": "title-only",
-    "presentationLabel": "Concept overview"
+    "evidenceLevel": "primary-framework",
+    "presentationLabel": "Original paper framework",
+    "figure": {
+      "src": "assets/paper-figures/channel-selectivity.webp",
+      "width": 1933,
+      "height": 667,
+      "label": "Original framework · Figure 1 · author-hosted version",
+      "alt": "Original channel-selective CNN framework: wearable signals are preprocessed, and conventional convolution is replaced by channel deallocation, reallocation and spatial shift operations before activity classification.",
+      "sourceFigureNumber": "1",
+      "regions": [
+        {
+          "x": 0.0,
+          "y": 0.12,
+          "width": 0.38,
+          "height": 0.53
+        },
+        {
+          "x": 0.38,
+          "y": 0.12,
+          "width": 0.39,
+          "height": 0.88
+        },
+        {
+          "x": 0.79,
+          "y": 0.11,
+          "width": 0.21,
+          "height": 0.62
+        }
+      ],
+      "sourceUrl": "https://wenbohuang1002.github.io/papers/JBHI-2021-1.pdf"
+    }
   },
   {
     "id": "rephar",
@@ -214,24 +394,50 @@ window.paperStories = [
     "summary": "RepHAR investigates decoupled networks for sensor-based activity recognition, with the accuracy–speed tradeoff as its central design question.",
     "steps": [
       {
-        "label": "Sensor windows",
-        "description": "Time-series segments describe human movement.",
-        "visual": "windows"
+        "label": "Wearable signals",
+        "description": "Preprocessed inertial-sensor signals enter the network."
       },
       {
-        "label": "Decoupled networks",
-        "description": "Study network designs for activity recognition.",
-        "visual": "decouple"
+        "label": "Multi-branch training",
+        "description": "The green path uses the training-time multi-branch CNN blocks."
       },
       {
-        "label": "Accuracy + speed",
-        "description": "Evaluate recognition alongside inference speed.",
-        "visual": "tradeoff"
+        "label": "Reparameterize for inference",
+        "description": "Structural reparameterization converts those blocks into the plain CNN illustrated by the red inference path."
       }
     ],
     "evidenceUrl": "https://doi.org/10.1109/TIM.2023.3240198",
-    "evidenceLevel": "title-only",
-    "presentationLabel": "Concept overview"
+    "evidenceLevel": "primary-framework",
+    "presentationLabel": "Original paper framework",
+    "figure": {
+      "src": "assets/paper-figures/rephar.webp",
+      "width": 2021,
+      "height": 763,
+      "label": "Original framework · Figure 1",
+      "alt": "Original RepHAR framework: multi-branch CNN blocks are trained with green paths, then structurally reparameterized into a plain inference-time CNN shown by the red path, ending in an activity classifier.",
+      "sourceFigureNumber": "1",
+      "regions": [
+        {
+          "x": 0.0,
+          "y": 0.2,
+          "width": 0.27,
+          "height": 0.55
+        },
+        {
+          "x": 0.27,
+          "y": 0.05,
+          "width": 0.61,
+          "height": 0.56
+        },
+        {
+          "x": 0.28,
+          "y": 0.66,
+          "width": 0.57,
+          "height": 0.33
+        }
+      ],
+      "sourceUrl": "https://doi.org/10.1109/TIM.2023.3240198"
+    }
   },
   {
     "id": "multistep-cldnn",
@@ -244,24 +450,50 @@ window.paperStories = [
     "summary": "A multi-step CLDNN learns from observed time series to identify nonlinear dynamical systems.",
     "steps": [
       {
-        "label": "Observed dynamics",
-        "description": "Time-series data record a system's evolution.",
-        "visual": "dynamics"
+        "label": "CNN + LSTM representation",
+        "description": "Observed time-series data pass through convolution, pooling, LSTM and a fully connected layer."
       },
       {
-        "label": "Multi-step CLDNN",
-        "description": "Fit a multi-step neural model to observations.",
-        "visual": "layers"
+        "label": "Multistep training objective",
+        "description": "A multistep residual and loss define the backpropagation loop."
       },
       {
-        "label": "System identification",
-        "description": "Represent the underlying nonlinear dynamics.",
-        "visual": "dynamics"
+        "label": "Predicted dynamics",
+        "description": "The trained model produces predicted dynamical data."
       }
     ],
     "evidenceUrl": "https://doi.org/10.1063/1.5100558",
-    "evidenceLevel": "title-only",
-    "presentationLabel": "Concept overview"
+    "evidenceLevel": "primary-framework",
+    "presentationLabel": "Original paper framework",
+    "figure": {
+      "src": "assets/paper-figures/multistep-cldnn.webp",
+      "width": 975,
+      "height": 1355,
+      "label": "Original framework · Fig. 1",
+      "alt": "Original multi-step CLDNN framework with observed data, CNN and LSTM processing, a fully connected layer, the multistep loss and backpropagation loop, and predicted data.",
+      "sourceFigureNumber": "1",
+      "regions": [
+        {
+          "x": 0.02,
+          "y": 0.005,
+          "width": 0.965,
+          "height": 0.63
+        },
+        {
+          "x": 0.02,
+          "y": 0.63,
+          "width": 0.965,
+          "height": 0.27
+        },
+        {
+          "x": 0.3,
+          "y": 0.93,
+          "width": 0.32,
+          "height": 0.065
+        }
+      ],
+      "sourceUrl": "https://doi.org/10.1063/1.5100558"
+    }
   },
   {
     "id": "dual-decoupling-attention",
@@ -274,24 +506,50 @@ window.paperStories = [
     "summary": "This CNN combines dual decoupling with layer-wise temporal–spatial attention for sensor-based activity recognition.",
     "steps": [
       {
-        "label": "Sensor time series",
-        "description": "Sensor channels capture movement across time.",
-        "visual": "signals"
+        "label": "Layer-wise HAR pipeline",
+        "description": "CNN and TSFDU blocks pass sensor representations to an activity classifier."
       },
       {
-        "label": "Layer-wise attention",
-        "description": "Combine dual decoupling with temporal–spatial attention.",
-        "visual": "attention"
+        "label": "Temporal-spatial decoupling",
+        "description": "The TSFDU diagram separates temporal convolutions and sensor-channel attention before feature combination."
       },
       {
-        "label": "Activity recognition",
-        "description": "Classify activity from the learned representation.",
-        "visual": "classify"
+        "label": "Local-loss training",
+        "description": "Each block uses similarity matching and cross-entropy losses for local supervision."
       }
     ],
     "evidenceUrl": "https://doi.org/10.1109/JBHI.2024.3488528",
-    "evidenceLevel": "title-only",
-    "presentationLabel": "Concept overview"
+    "evidenceLevel": "primary-framework",
+    "presentationLabel": "Original paper framework",
+    "figure": {
+      "src": "assets/paper-figures/dual-decoupling-attention.webp",
+      "width": 1940,
+      "height": 880,
+      "label": "Original framework · Fig. 1",
+      "alt": "Original CNN-TSFDU-LW framework, showing the sensor-to-classifier pipeline, temporal-spatial feature decoupling unit, and layer-wise local-loss training.",
+      "sourceFigureNumber": "1",
+      "regions": [
+        {
+          "x": 0.02,
+          "y": 0.01,
+          "width": 0.96,
+          "height": 0.37
+        },
+        {
+          "x": 0.02,
+          "y": 0.39,
+          "width": 0.57,
+          "height": 0.6
+        },
+        {
+          "x": 0.59,
+          "y": 0.39,
+          "width": 0.4,
+          "height": 0.6
+        }
+      ],
+      "sourceUrl": "https://doi.org/10.1109/JBHI.2024.3488528"
+    }
   },
   {
     "id": "blockwise-resnet",
@@ -304,24 +562,50 @@ window.paperStories = [
     "summary": "Residual networks are trained block by block on multi-channel time series for human activity recognition.",
     "steps": [
       {
-        "label": "Multi-channel series",
-        "description": "Parallel sensor channels capture human movement.",
-        "visual": "signals"
+        "label": "Sensor windows",
+        "description": "Wearable sensing streams are segmented with sliding windows."
       },
       {
-        "label": "Block-wise training",
-        "description": "Organize learning around residual network blocks.",
-        "visual": "layers"
+        "label": "Residual units + local losses",
+        "description": "Residual blocks receive local supervision from similarity matching and cross-entropy losses."
       },
       {
         "label": "Activity classifier",
-        "description": "Map learned time-series features to activity labels.",
-        "visual": "classify"
+        "description": "A fully connected head produces the activity output."
       }
     ],
     "evidenceUrl": "https://doi.org/10.1109/JSEN.2021.3085360",
-    "evidenceLevel": "title-only",
-    "presentationLabel": "Concept overview"
+    "evidenceLevel": "primary-framework",
+    "presentationLabel": "Original paper framework",
+    "figure": {
+      "src": "assets/paper-figures/blockwise-resnet.webp",
+      "width": 2052,
+      "height": 644,
+      "label": "Original framework · Fig. 1",
+      "alt": "Original predsim ResNet framework showing wearable sensing and sliding windows, residual units with local loss blocks, and a fully connected activity classifier.",
+      "sourceFigureNumber": "1",
+      "regions": [
+        {
+          "x": 0.005,
+          "y": 0.02,
+          "width": 0.22,
+          "height": 0.96
+        },
+        {
+          "x": 0.23,
+          "y": 0.02,
+          "width": 0.64,
+          "height": 0.96
+        },
+        {
+          "x": 0.88,
+          "y": 0.02,
+          "width": 0.115,
+          "height": 0.96
+        }
+      ],
+      "sourceUrl": "https://doi.org/10.1109/JSEN.2021.3085360"
+    }
   },
   {
     "id": "large-receptive-field",
@@ -334,24 +618,50 @@ window.paperStories = [
     "summary": "Large receptive field attention is developed by decomposing large-kernel convolution for sensor-based activity recognition.",
     "steps": [
       {
-        "label": "Sensor sequence",
-        "description": "Movement measurements provide temporal context.",
-        "visual": "signals"
+        "label": "Sensor input",
+        "description": "A multichannel sensor sequence enters the network."
       },
       {
-        "label": "Decomposed kernels",
-        "description": "Build large receptive field attention from convolution.",
-        "visual": "kernel"
+        "label": "LRF network blocks",
+        "description": "Convolutional token embedding, LRF attention and feed-forward layers process the representation."
       },
       {
-        "label": "Activity label",
-        "description": "Recognize activity using the resulting representation.",
-        "visual": "classify"
+        "label": "Activity classification",
+        "description": "The activity classifier maps the final representation to activity categories."
       }
     ],
     "evidenceUrl": "https://doi.org/10.1109/JSEN.2024.3364187",
-    "evidenceLevel": "title-only",
-    "presentationLabel": "Concept overview"
+    "evidenceLevel": "primary-framework",
+    "presentationLabel": "Original paper framework",
+    "figure": {
+      "src": "assets/paper-figures/large-receptive-field.webp",
+      "width": 2060,
+      "height": 444,
+      "label": "Original framework · Fig. 3",
+      "alt": "Original large receptive field HAR model: sensor input, repeated blocks containing convolutional token embedding, LRF attention and feed-forward processing, and activity classification.",
+      "sourceFigureNumber": "3",
+      "regions": [
+        {
+          "x": 0,
+          "y": 0.1,
+          "width": 0.12,
+          "height": 0.9
+        },
+        {
+          "x": 0.12,
+          "y": 0.02,
+          "width": 0.75,
+          "height": 0.97
+        },
+        {
+          "x": 0.87,
+          "y": 0.07,
+          "width": 0.13,
+          "height": 0.91
+        }
+      ],
+      "sourceUrl": "https://doi.org/10.1109/JSEN.2024.3364187"
+    }
   },
   {
     "id": "csfo",
@@ -364,24 +674,50 @@ window.paperStories = [
     "summary": "CSFO studies category-specific flattening optimization for activity recognition when sensor-data categories have long-tailed frequencies.",
     "steps": [
       {
-        "label": "Long-tailed data",
-        "description": "Activity categories have unequal sample frequencies.",
-        "visual": "tail"
+        "label": "Two-stage HAR pipeline",
+        "description": "The overview separates feature-extractor training from classifier refinement."
       },
       {
-        "label": "Category-specific fit",
-        "description": "Apply category-specific flattening optimization.",
-        "visual": "optimization"
+        "label": "Stage 1: class-specific fit",
+        "description": "Perturb parameters at a class-conditioned scale while training the feature extractor and classifier."
       },
       {
-        "label": "Activity recognition",
-        "description": "Evaluate predictions across activity categories.",
-        "visual": "classify"
+        "label": "Stage 2: robust classifier",
+        "description": "Freeze backbone weights and refine the classifier with progressively generated adversarial features."
       }
     ],
     "evidenceUrl": "https://doi.org/10.1109/JSEN.2025.3534413",
-    "evidenceLevel": "title-only",
-    "presentationLabel": "Concept overview"
+    "evidenceLevel": "primary-framework",
+    "presentationLabel": "Original paper framework",
+    "figure": {
+      "src": "assets/paper-figures/csfo.webp",
+      "width": 1996,
+      "height": 1724,
+      "label": "Original framework · Fig. 1",
+      "alt": "Original CSFO overview with the overall two-stage HAR pipeline, class-conditioned parameter perturbations in Stage 1, and progressively generated adversarial features for classifier training in Stage 2.",
+      "sourceFigureNumber": "1",
+      "regions": [
+        {
+          "x": 0.01,
+          "y": 0.25,
+          "width": 0.99,
+          "height": 0.46
+        },
+        {
+          "x": 0.08,
+          "y": 0.005,
+          "width": 0.87,
+          "height": 0.24
+        },
+        {
+          "x": 0.08,
+          "y": 0.72,
+          "width": 0.87,
+          "height": 0.28
+        }
+      ],
+      "sourceUrl": "https://doi.org/10.1109/JSEN.2025.3534413"
+    }
   },
   {
     "id": "attention-multistep-dynamics",
@@ -394,24 +730,50 @@ window.paperStories = [
     "summary": "Attention-based multistep neural networks approximate governing equations from observed data.",
     "steps": [
       {
-        "label": "Observed series",
-        "description": "Measurements record a dynamical system over time.",
-        "visual": "dynamics"
+        "label": "Convolutional features",
+        "description": "Observed data feed the convolutional feature pipeline."
       },
       {
-        "label": "Attention + multistep",
-        "description": "Learn with an attention-based multistep network.",
-        "visual": "attention"
+        "label": "Attention modules + merge",
+        "description": "Compare local and global features, then merge the attention-module outputs."
       },
       {
-        "label": "Dynamics model",
-        "description": "Approximate the system's governing equations.",
-        "visual": "dynamics"
+        "label": "Multistep loss + prediction",
+        "description": "The multistep residual loss updates model weights and the learned model predicts dynamical data."
       }
     ],
     "evidenceUrl": "https://doi.org/10.1063/5.0015600",
-    "evidenceLevel": "title-only",
-    "presentationLabel": "Concept overview"
+    "evidenceLevel": "primary-framework",
+    "presentationLabel": "Original paper framework",
+    "figure": {
+      "src": "assets/paper-figures/attention-multistep-dynamics.webp",
+      "width": 1220,
+      "height": 835,
+      "label": "Original framework · Fig. 1",
+      "alt": "Original attention-based multistep model with observed data, convolutional feature extraction, three attention modules and a merge operation, and the multistep loss and prediction loop.",
+      "sourceFigureNumber": "1",
+      "regions": [
+        {
+          "x": 0.005,
+          "y": 0.005,
+          "width": 0.99,
+          "height": 0.37
+        },
+        {
+          "x": 0.43,
+          "y": 0.3,
+          "width": 0.54,
+          "height": 0.35
+        },
+        {
+          "x": 0.005,
+          "y": 0.65,
+          "width": 0.99,
+          "height": 0.345
+        }
+      ],
+      "sourceUrl": "https://doi.org/10.1063/5.0015600"
+    }
   },
   {
     "id": "csfo-correction",
@@ -422,23 +784,7 @@ window.paperStories = [
     ],
     "shortName": "CSFO Correction",
     "summary": "This notice accompanies the original CSFO article. Readers should consult the correction together with the original publication.",
-    "steps": [
-      {
-        "label": "Original CSFO",
-        "description": "Start with the category-specific optimization article.",
-        "visual": "notice"
-      },
-      {
-        "label": "Correction notice",
-        "description": "Consult the published correction for amended details.",
-        "visual": "notice"
-      },
-      {
-        "label": "Read together",
-        "description": "Interpret the paper alongside its correction notice.",
-        "visual": "notice"
-      }
-    ],
+    "steps": [],
     "evidenceUrl": "https://doi.org/10.1109/JSEN.2025.3610164",
     "evidenceLevel": "title-only",
     "presentationLabel": "Publication notice"
@@ -454,23 +800,49 @@ window.paperStories = [
     "summary": "Dual stage-wise decoupling networks address activity recognition from wearable signals with long-tailed category frequencies.",
     "steps": [
       {
-        "label": "Long-tailed signals",
-        "description": "Wearable data contain unequal category frequencies.",
-        "visual": "tail"
+        "label": "Collect + preprocess",
+        "description": "Wearable measurements form the sensor input and long-tailed activity distribution."
       },
       {
-        "label": "Stage-wise decoupling",
-        "description": "Organize network learning through decoupled stages.",
-        "visual": "decouple"
+        "label": "Stage-wise training",
+        "description": "Separate representation learning from classifier learning in the multi-branch training network."
       },
       {
-        "label": "Activity categories",
-        "description": "Recognize activities across the category distribution.",
-        "visual": "classify"
+        "label": "Re-parameterized inference",
+        "description": "Convert the trained multi-branch blocks into the single-branch inference path."
       }
     ],
     "evidenceUrl": "https://doi.org/10.22967/HCIS.2024.14.052",
-    "evidenceLevel": "title-only",
-    "presentationLabel": "Concept overview"
+    "evidenceLevel": "primary-framework",
+    "presentationLabel": "Original paper framework",
+    "figure": {
+      "src": "assets/paper-figures/dswd.webp",
+      "width": 1484,
+      "height": 644,
+      "label": "Original framework · Fig. 3",
+      "alt": "Original DSWD framework showing data collection and preprocessing, stage-wise representation and classifier learning, and conversion to the inference architecture.",
+      "sourceFigureNumber": "3",
+      "regions": [
+        {
+          "x": 0.005,
+          "y": 0.02,
+          "width": 0.335,
+          "height": 0.97
+        },
+        {
+          "x": 0.355,
+          "y": 0.02,
+          "width": 0.64,
+          "height": 0.595
+        },
+        {
+          "x": 0.355,
+          "y": 0.61,
+          "width": 0.64,
+          "height": 0.385
+        }
+      ],
+      "sourceUrl": "https://doi.org/10.22967/HCIS.2024.14.052"
+    }
   }
 ];

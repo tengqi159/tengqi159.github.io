@@ -51,13 +51,16 @@ test('withheld paper links still match each accepted work to its own visual stor
     assert.equal(story.publicationStatus,'accepted');assert.equal(story.link,undefined);assert.equal(story.evidenceUrl,undefined);
   }
 });
-test('every curated archive record has a three-step visual introduction',()=>{
+test('every archive record maps to a story and verified figures have three matching steps',()=>{
   const dataContext={window:{}};vm.createContext(dataContext);
   vm.runInContext(readFileSync(new URL('../assets/site-data.js',import.meta.url),'utf8'),dataContext);
   vm.runInContext(readFileSync(new URL('../assets/paper-stories.js',import.meta.url),'utf8'),dataContext);
   const stories=new Map(dataContext.window.paperStories.map(s=>[s.id,s]));
   for(const pub of dataContext.window.siteData.publications){
-    assert.ok(stories.has(pub.storyId),pub.title);assert.equal(stories.get(pub.storyId).steps.length,3);
+    assert.ok(stories.has(pub.storyId),pub.title);
+    const story=stories.get(pub.storyId);
+    if(story.figure) assert.equal(story.steps.length,3);
+    else assert.equal(story.steps.length,0);
   }
 });
 test('owner authorship exclusions override restored snapshots and external indexing',()=>{

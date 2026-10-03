@@ -22,9 +22,11 @@ Run manually with `node scripts/refresh-data.mjs`. Update news in `siteData.news
 
 News leads with accepted, forthcoming papers. Accepted entries offer only the graphical abstract and animation; paper, conference-page, Scholar-search and story-source links are withheld. `status: "accepted"` is a curated status, preserved by Scholar sync and browser metadata enrichment. To mark a paper published, first verify the proceedings record, then update its status, venue, bibliographic details and public link, including the story publicationStatus. Citation snapshot dates remain separate from content update dates.
 
-Every current archive record maps through `storyId` to `assets/paper-stories.js`. Selected papers and archive rows show clickable three-step graphical previews and a short summary. On narrow screens, previews show a small illustration beside readable step text. The graphical abstract and three-step animation use original conceptual SVG diagrams, with pause, manual step selection, keyboard dismissal and standalone SVG downloads. Reduced-motion preferences disable automatic playback. On narrow screens, animation shows one legible scene at a time. Source links accompany published stories; title-based concepts are explicitly labeled. Preprint/article twins share a story, and a correction is shown as a publication notice. Tall archive sections reveal as soon as they enter the viewport.
+Every current archive record maps through `storyId` to `assets/paper-stories.js`. News, selected papers and archive rows show original framework figures extracted from the corresponding paper PDFs, preserving their labels and connections. The figure caption identifies its original figure number and author version where applicable. Clicking a figure opens a zoomable view; the image is never cropped to fit a card. Downloads contain only the figure image. Accepted manuscripts have no source or full-text link.
 
-For future entries, add a three-step story with an evidence URL alongside the publication. Refreshing metadata never invents a new visual explanation. New unpublished manuscript PDFs should only be linked after a public release is available.
+A three-step walkthrough highlights verified regions of the original image. It provides pause, manual step selection and keyboard dismissal; reduced-motion preferences disable automatic playback. An animation is offered only when three valid regions and matching explanations exist. Records without a verified figure, including the CSFO correction notice, show no replacement illustration or animation. Preprint/article twins share a story. Tall archive sections reveal as soon as they enter the viewport.
+
+For future entries, verify a source figure before adding `figure` metadata and the WebP asset to `assets/paper-figures/`. Record dimensions, the original figure number, an accurate alt description and the public source for published work. Add normalized highlight regions only after inspecting them against the original figure. Refreshing metadata never invents a visual explanation. Keep private source PDFs outside the deployable website.
 
 ## Visitor atlas
 
@@ -38,7 +40,7 @@ The base map is derived from [Natural Earth 1:50m land](https://www.naturalearth
 
 ```sh
 python3 -m http.server 8765 --bind 127.0.0.1
-node --test scripts/site-content.test.mjs workers/atlas-worker.test.mjs
+node --test scripts/site-content.test.mjs scripts/publication-exclusions.test.mjs scripts/paper-figures.test.mjs
 ```
 
 The Worker tests use Node 24's built-in SQLite and do not contact production. For a clearly labeled, sample-data atlas demo, run `node scripts/preview-atlas.mjs` and open port 8766. Demo data is never injected into the normal site.

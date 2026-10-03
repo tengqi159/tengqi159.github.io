@@ -68,18 +68,18 @@
       href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Manrope:wght@400..800&family=IBM+Plex+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="assets/styles.css?v=research-20261003-authorship" />
-    <link rel="stylesheet" href="assets/fx.css?v=research-20261003-authorship" />
-    <link rel="stylesheet" href="assets/signal-studies.css?v=research-20261003-authorship" />
-    <link rel="stylesheet" href="assets/atlas.css?v=research-20261003-authorship" />
-    <link rel="stylesheet" href="assets/research-stories.css?v=research-20261003-authorship" />
-    <script defer src="assets/site-data.js?v=research-20261003-authorship"></script>
-    <script defer src="assets/atlas-crowd.js?v=research-20261003-authorship"></script>
-    <script defer src="assets/paper-stories.js?v=research-20261003-authorship"></script>
-    <script defer src="assets/paper-explainer.js?v=research-20261003-authorship"></script>
-    <script defer src="assets/site.js?v=research-20261003-authorship"></script>
-    <script defer src="assets/fx.js?v=research-20261003-authorship"></script>
-    <script defer src="assets/signal-studies.js?v=research-20261003-authorship"></script>
+    <link rel="stylesheet" href="assets/styles.css?v=research-20261003-framework" />
+    <link rel="stylesheet" href="assets/fx.css?v=research-20261003-framework" />
+    <link rel="stylesheet" href="assets/signal-studies.css?v=research-20261003-framework" />
+    <link rel="stylesheet" href="assets/atlas.css?v=research-20261003-framework" />
+    <link rel="stylesheet" href="assets/research-stories.css?v=research-20261003-framework" />
+    <script defer src="assets/site-data.js?v=research-20261003-framework"></script>
+    <script defer src="assets/atlas-crowd.js?v=research-20261003-framework"></script>
+    <script defer src="assets/paper-stories.js?v=research-20261003-framework"></script>
+    <script defer src="assets/paper-explainer.js?v=research-20261003-framework"></script>
+    <script defer src="assets/site.js?v=research-20261003-framework"></script>
+    <script defer src="assets/fx.js?v=research-20261003-framework"></script>
+    <script defer src="assets/signal-studies.js?v=research-20261003-framework"></script>
   </head>
   <body>
     <a class="skip-link" href="#top">Skip to content</a>
@@ -335,7 +335,7 @@
           <p class="section-kicker"><span>04</span>Publications</p>
           <h2>Selected publications.</h2>
           <p class="section-lede">
-            Explore the ideas through graphical abstracts and short animated introductions, or browse the complete publication record below.
+            Explore original paper frameworks and guided animated introductions, or browse the complete publication record below.
           </p>
         </header>
 
@@ -399,7 +399,7 @@
             <div class="visitor-map" id="visitor-map-canvas" role="group" aria-label="Visitor locations on a world map">
               <div class="atlas-plot">
                 <div class="atlas-grid" aria-hidden="true"></div>
-                <img class="world-map-image" src="assets/atlas-world.svg?v=research-20261003-authorship" alt="World map" loading="lazy" decoding="async" />
+                <img class="world-map-image" src="assets/atlas-world.svg?v=research-20261003-framework" alt="World map" loading="lazy" decoding="async" />
                 <canvas class="crowd-canvas" id="crowd-canvas" aria-hidden="true"></canvas>
                 <svg class="arc-layer" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
                   <path id="arc-base" class="arc-base" pathLength="100" vector-effect="non-scaling-stroke" hidden />
@@ -491,10 +491,11 @@
     </footer>
     <dialog class="paper-dialog" id="paper-dialog" aria-labelledby="pe-title">
       <header class="pe-header"><div><p id="pe-subtitle"></p><h2 id="pe-title"></h2></div><button type="button" id="pe-close" aria-label="Close paper introduction">Close</button></header>
-      <div class="pe-mode-bar" aria-label="Presentation mode"><button type="button" data-pe-mode="abstract" aria-pressed="true">Graphical abstract</button><button type="button" data-pe-mode="animation" aria-pressed="false">Animated introduction</button><button type="button" id="pe-play" aria-pressed="false">Play</button><button type="button" id="pe-restart">Restart</button><span id="pe-progress"></span></div>
-      <figure class="pe-figure-wrap"><div id="pe-figure"></div><figcaption id="pe-caption" aria-live="off"></figcaption></figure>
+      <div class="pe-mode-bar" aria-label="Presentation mode"><button type="button" data-pe-mode="abstract" aria-pressed="true">Paper framework</button><button type="button" data-pe-mode="animation" aria-pressed="false">Animated introduction</button><button type="button" id="pe-play" aria-pressed="false">Play</button><button type="button" id="pe-restart">Restart</button><span id="pe-progress"></span><span id="pe-motion-note" role="status" hidden></span></div>
+      <div class="pe-zoom-bar" aria-label="Figure zoom"><button type="button" id="pe-zoom-out" aria-label="Zoom out">−</button><span id="pe-zoom-level">100%</span><button type="button" id="pe-zoom-in" aria-label="Zoom in">+</button><button type="button" id="pe-zoom-fit">Fit figure</button><span class="pe-zoom-hint">Zoom to read labels; scroll to inspect the full figure.</span></div>
+      <figure class="pe-figure-wrap"><div id="pe-figure" class="pe-image-viewport" tabindex="0" role="region" aria-label="Original paper figure; scroll when zoomed"></div><figcaption id="pe-caption" aria-live="off"></figcaption></figure>
       <div class="pe-steps" id="pe-steps" aria-label="Explore the three steps"></div>
-      <footer class="pe-footer"><button type="button" id="pe-download">Download SVG</button><a id="pe-source" target="_blank" rel="noreferrer" hidden>Paper source</a><p id="pe-note"></p></footer>
+      <footer class="pe-footer"><button type="button" id="pe-download">Download figure</button><a id="pe-source" target="_blank" rel="noreferrer" hidden>Paper source</a><p id="pe-note"></p></footer>
     </dialog>
     <p class="copy-feedback" id="copy-feedback" role="status" aria-live="polite"></p>
     <dialog class="copy-dialog" id="copy-dialog" aria-labelledby="copy-dialog-title">

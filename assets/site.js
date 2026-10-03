@@ -306,33 +306,14 @@ function createPaperLinks(publication, extraClass) {
 function publicationPreview(publication) {
   const explainer = window.paperExplainer;
   const story = explainer?.find(publication);
-  if (!story) return "";
-
-  // Reuse the full diagram's three panels, with readable HTML step labels.
-  const source = document.createElement("div");
-  source.innerHTML = explainer.diagram(story, -1, true, false);
-  const panels = [...source.querySelectorAll(".pe-stage")].map((panel, index) => {
-    const graphic = panel.cloneNode(true);
-    graphic.removeAttribute("transform");
-    graphic.querySelectorAll(".pe-label, .pe-number, .pe-small").forEach(label => label.remove());
-    const background = graphic.querySelector(".pe-panel");
-    if (background) background.setAttribute("height", "130");
-    const drawing = [...graphic.children].find(child => child.tagName.toLowerCase() === "g");
-    if (drawing) drawing.setAttribute("transform", "translate(13 14)");
-    const step = story.steps[index];
-    return `<span class="publication-preview-step">
-      <svg class="publication-preview-graphic" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 204 130" aria-hidden="true" focusable="false">${graphic.outerHTML}</svg>
-      <span class="publication-preview-step-copy"><span class="publication-preview-step-label"><span class="publication-preview-step-number">0${index + 1}</span>${escapeAttr(step.label)}</span><span class="publication-preview-step-description">${escapeAttr(step.description)}</span></span>
-    </span>`;
-  }).join("");
-  const label = story.evidenceLevel?.startsWith("title") ? "Concept overview" :
-    story.presentationLabel === "Publication notice" ? "Publication notice" : "Graphical abstract";
+  if (!explainer?.hasFigure(story)) return "";
   return `<figure class="publication-preview-wrap">
-    <button class="publication-preview" type="button" data-story="${escapeAttr(story.id)}" data-mode="abstract" aria-label="View graphical abstract for ${escapeAttr(story.shortName)}">
-      <span class="publication-preview-topline"><span>${label}</span><span class="publication-preview-open">Explore${ARROW_ICON}</span></span>
-      <span class="publication-preview-steps">${panels}</span>
+    <button class="publication-preview" type="button" data-story="${escapeAttr(story.id)}" data-mode="abstract" aria-label="View paper framework for ${escapeAttr(story.shortName)}">
+      <span class="publication-preview-topline"><span>Original paper figure</span><span class="publication-preview-open">Enlarge${ARROW_ICON}</span></span>
+      ${explainer.figureMarkup(story, {thumbnail:true})}
     </button>
-    <figcaption class="publication-preview-summary">${escapeAttr(story.summary)}</figcaption>
+    <figcaption class="publication-figure-caption">${escapeAttr(story.figure.label || "Paper framework")}</figcaption>
+    <p class="publication-preview-summary">${escapeAttr(story.summary)}</p>
   </figure>`;
 }
 
