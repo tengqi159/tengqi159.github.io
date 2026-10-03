@@ -30,6 +30,32 @@ const normalize = (s) =>
     .replace(/[^a-z0-9]+/g, "")
     .slice(0, 64);
 
+// Exclusions use the complete title: the legacy matching key above truncates
+// long titles and must not turn a different paper with the same prefix into a
+// rejected work. DOI resolver links and bare DOI values share one exact key.
+function isExcludedPublication(publication, exclusions = []) {
+  const fullTitle = value => String(value || "")
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, "");
+  const doiKey = value => {
+    const key = String(value || "").trim().toLowerCase()
+      .replace(/^doi:\s*/, "")
+      .replace(/^https?:\/\/(?:dx\.)?doi\.org\//, "")
+      .replace(/[?#].*$/, "")
+      .replace(/\/+$/, "");
+    return /^10\.\d{4,9}\/\S+$/.test(key) ? key : "";
+  };
+  const title = fullTitle(publication?.title);
+  const dois = [publication?.doi, publication?.link].map(doiKey).filter(Boolean);
+  return (Array.isArray(exclusions) ? exclusions : []).some(exclusion => {
+    const excludedTitle = fullTitle(exclusion?.title);
+    const excludedDoi = doiKey(exclusion?.doi || exclusion?.link);
+    return (title && excludedTitle && title === excludedTitle) ||
+      (excludedDoi && dois.includes(excludedDoi));
+  });
+}
+
 async function fetchText(url) {
   const res = await fetch(url, {
     signal: AbortSignal.timeout(15000),
@@ -180,6 +206,7 @@ async function main() {
   const seenCombos = new Set(); // title|link combos already present
 
   for (const paper of scholarPapers) {
+    if (isExcludedPublication(paper, data.excludedPublications)) continue;
     const key = normalize(paper.title);
     if (seen.has(key)) continue;
     seen.add(key);
@@ -187,6 +214,7 @@ async function main() {
     const existing = data.publications.find(
       (p) => normalize(p.title) === key
     );
+    if (isExcludedPublication(existing, data.excludedPublications)) continue;
     // Acceptance status is curated; indexing alone does not prove publication.
     if (existing?.status === "accepted" || existing?.metadataVerified) {
       nextPublications.push({...existing, citations: existing.status === "accepted" ? existing.citations : Number(paper.cites) || 0});
@@ -240,6 +268,7 @@ async function main() {
       type: existing?.type || typeLabel(openAlex?.type),
       verified: true
     };
+    if (isExcludedPublication(rebuilt, data.excludedPublications)) continue;
     nextPublications.push(rebuilt);
     seenCombos.add(`${normalize(rebuilt.title)}|${normalize(rebuilt.link)}`);
   }
@@ -248,7 +277,7 @@ async function main() {
   // preprint/journal twin records, user-confirmed works Scholar has not
   // indexed yet) — as long as the title|link pair is not already present.
   for (const pub of data.publications) {
-    if (pub.verified !== true) continue;
+    if (pub.verified !== true || isExcludedPublication(pub, data.excludedPublications)) continue;
     const combo = `${normalize(pub.title)}|${normalize(pub.link)}`;
     if (seenCombos.has(combo)) continue;
     seenCombos.add(combo);

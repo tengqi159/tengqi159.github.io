@@ -64,10 +64,34 @@ const normalizeTitle = (value) =>
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "");
 
+function isExcludedPublication(publication, exclusions = window.siteData.excludedPublications || []) {
+  const fullTitle = value => String(value || "")
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, "");
+  const doiKey = value => {
+    const key = String(value || "").trim().toLowerCase()
+      .replace(/^doi:\s*/, "")
+      .replace(/^https?:\/\/(?:dx\.)?doi\.org\//, "")
+      .replace(/[?#].*$/, "")
+      .replace(/\/+$/, "");
+    return /^10\.\d{4,9}\/\S+$/.test(key) ? key : "";
+  };
+  const title = fullTitle(publication?.title);
+  const dois = [publication?.doi, publication?.link].map(doiKey).filter(Boolean);
+  return (Array.isArray(exclusions) ? exclusions : []).some(exclusion => {
+    const excludedTitle = fullTitle(exclusion?.title);
+    const excludedDoi = doiKey(exclusion?.doi || exclusion?.link);
+    return (title && excludedTitle && title === excludedTitle) ||
+      (excludedDoi && dois.includes(excludedDoi));
+  });
+}
+
+
 /* ---------- shared state ---------- */
 
 const state = {
-  publications: window.siteData.publications
+  publications: window.siteData.publications.filter(publication => !isExcludedPublication(publication))
 };
 
 let archiveApi = null;
@@ -642,7 +666,7 @@ function mapOpenAlexWork(work) {
   };
 }
 
-// Enrichment never removes a curated paper or substitutes citation counts.
+// Owner exclusions override indexing; enrichment preserves other saved papers and citation counts.
 function mergePublicationMetadata(snapshot, works) {
   const doiKey = value => String(value || "").replace(/^https?:\/\/(?:dx\.)?doi\.org\//i, "").toLowerCase();
   const byDoi = new Map(works.filter(w=>w.doi).map(w=>[doiKey(w.doi),w]));
@@ -651,7 +675,7 @@ function mergePublicationMetadata(snapshot, works) {
     const matches=works.filter(w=>normalizeTitle(w.title)===key);
     return matches.length===1 && snapshot.filter(p=>normalizeTitle(p.title)===key).length===1 ? matches[0] : null;
   };
-  return snapshot.map(publication=>{
+  return snapshot.filter(publication=>!isExcludedPublication(publication)).map(publication=>{
     if (publication.status === "accepted" || publication.metadataVerified) return {...publication};
     const hasDoi=/doi\.org\//i.test(publication.link || "");
     const match=hasDoi ? byDoi.get(doiKey(publication.link)) : uniqueTitle(publication.title);

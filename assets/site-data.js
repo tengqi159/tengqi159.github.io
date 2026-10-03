@@ -104,14 +104,6 @@ window.siteData = {
       "linkLabel": "DOI"
     },
     {
-      "date": "2025",
-      "type": "paper",
-      "text": "Single-camera frailty-focused movement monitoring with joint-angle exercise-quality assessment published in",
-      "venue": "Sensors",
-      "link": "https://doi.org/10.3390/s25133907",
-      "linkLabel": "DOI"
-    },
-    {
       "date": "2024",
       "type": "paper",
       "text": "Dual-decoupling CNN with layer-wise temporal-spatial attention published online in",
@@ -356,34 +348,6 @@ window.siteData = {
       "storyId": "csfo-correction"
     },
     {
-      "title": "Frailty-Focused Movement Monitoring: A Single-Camera System Using Joint Angles for Assessing Chair-Based Exercise Quality",
-      "authors": "Qi Teng, Miyuki Iwamoto, Dongeun Choi, Noriyuki Kida, Noriaki Kuwahara",
-      "venue": "Sensors",
-      "details": "2025",
-      "year": 2025,
-      "citations": 1,
-      "link": "https://doi.org/10.3390/s25133907",
-      "linkLabel": "DOI",
-      "selected": false,
-      "type": "Journal article",
-      "verified": true,
-      "storyId": "frailty-movement-monitoring"
-    },
-    {
-      "title": "Innovative Chair and System Designs to Enhance Resistance Training Outcomes for the Elderly",
-      "authors": "Qi Teng, Miyuki Iwamoto, Dongeun Choi, Panote Siriaraya, Noriaki Kuwahara",
-      "venue": "Healthcare",
-      "details": "2024",
-      "year": 2024,
-      "citations": 1,
-      "link": "https://doi.org/10.3390/healthcare12191926",
-      "linkLabel": "DOI",
-      "selected": false,
-      "type": "Journal article",
-      "verified": true,
-      "storyId": "chair-system-design"
-    },
-    {
       "title": "DanHAR: Dual Attention Network For Multimodal Human Activity Recognition Using Wearable Sensors",
       "authors": "Wenbin Gao, Lei Zhang, Qi Teng, Jun He, Hao Wu",
       "venue": "arXiv (Cornell University)",
@@ -411,6 +375,18 @@ window.siteData = {
       "verified": true,
       "metadataVerified": true,
       "storyId": "dswd"
+    }
+  ],
+  "excludedPublications": [
+    {
+      "title": "Frailty-Focused Movement Monitoring: A Single-Camera System Using Joint Angles for Assessing Chair-Based Exercise Quality",
+      "doi": "10.3390/s25133907",
+      "reason": "Different researcher with the same name; excluded by the homepage owner."
+    },
+    {
+      "title": "Innovative Chair and System Designs to Enhance Resistance Training Outcomes for the Elderly",
+      "doi": "10.3390/healthcare12191926",
+      "reason": "Different researcher with the same name; excluded by the homepage owner."
     }
   ]
 };

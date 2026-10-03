@@ -444,66 +444,6 @@ window.paperStories = [
     "presentationLabel": "Publication notice"
   },
   {
-    "id": "frailty-movement-monitoring",
-    "title": "Frailty-Focused Movement Monitoring: A Single-Camera System Using Joint Angles for Assessing Chair-Based Exercise Quality",
-    "link": "https://doi.org/10.3390/s25133907",
-    "aliases": [
-      "https://doi.org/10.3390/s25133907"
-    ],
-    "shortName": "Camera-Based Exercise Quality",
-    "summary": "A single camera estimates joint angles during chair-based exercise, and an SVM classifies movement correctness. Muscle recordings are used for physiological comparison in the study.",
-    "steps": [
-      {
-        "label": "Single-camera video",
-        "description": "Record older adults performing chair-based exercises.",
-        "visual": "video"
-      },
-      {
-        "label": "Joint-angle features",
-        "description": "MediaPipe pose estimates provide inputs to an SVM.",
-        "visual": "angles"
-      },
-      {
-        "label": "Movement correctness",
-        "description": "Classify correct and incorrect exercise execution.",
-        "visual": "correctness"
-      }
-    ],
-    "evidenceUrl": "https://www.mdpi.com/1424-8220/25/13/3907",
-    "evidenceLevel": "primary-abstract",
-    "presentationLabel": "Method overview"
-  },
-  {
-    "id": "chair-system-design",
-    "title": "Innovative Chair and System Designs to Enhance Resistance Training Outcomes for the Elderly",
-    "link": "https://doi.org/10.3390/healthcare12191926",
-    "aliases": [
-      "https://doi.org/10.3390/healthcare12191926"
-    ],
-    "shortName": "Chair + Movement System",
-    "summary": "The study combines modified chair designs with movement monitoring to investigate resistance-training stability and exercise correctness in older adults.",
-    "steps": [
-      {
-        "label": "Chair-based training",
-        "description": "Record movement with modified and standard chairs.",
-        "visual": "video"
-      },
-      {
-        "label": "Stability + pose",
-        "description": "Analyze acceleration and video-derived joint angles.",
-        "visual": "angles"
-      },
-      {
-        "label": "Exercise assessment",
-        "description": "Evaluate body stability and movement correctness.",
-        "visual": "correctness"
-      }
-    ],
-    "evidenceUrl": "https://doi.org/10.3390/healthcare12191926",
-    "evidenceLevel": "primary-methods",
-    "presentationLabel": "Study overview"
-  },
-  {
     "id": "dswd",
     "title": "Dual Stage-Wise Decoupling Networks for Long-Tailed Activity Recognition Using Wearable Sensors",
     "link": "https://doi.org/10.22967/HCIS.2024.14.052",

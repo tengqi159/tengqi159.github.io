@@ -60,3 +60,26 @@ test('every curated archive record has a three-step visual introduction',()=>{
     assert.ok(stories.has(pub.storyId),pub.title);assert.equal(stories.get(pub.storyId).steps.length,3);
   }
 });
+test('owner authorship exclusions override restored snapshots and external indexing',()=>{
+  const title='Frailty-Focused Movement Monitoring: A Single-Camera System Using Joint Angles for Assessing Chair-Based Exercise Quality';
+  context.window.siteData.excludedPublications=[{title,doi:'10.3390/s25133907'}];
+  const wrong={title,link:'https://doi.org/10.3390/s25133907',verified:true};
+  const renamed={title:'Renamed by an external index',link:'https://doi.org/10.3390/S25133907?source=index',verified:true};
+  const kept={title:'DanHAR',link:'https://doi.org/10.1016/j.asoc.2021.107728',citations:244};
+  const result=merge([wrong,renamed,kept],[{title,doi:wrong.link,venue:'Sensors'}]);
+  assert.equal(result.length,1);assert.equal(result[0].title,kept.title);assert.equal(result[0].citations,244);
+  delete context.window.siteData.excludedPublications;
+});
+test('incorrectly attributed work is absent from the archive, news and graphical stories',()=>{
+  const dataContext={window:{}};vm.createContext(dataContext);
+  for(const file of ['site-data.js','paper-stories.js'])
+    vm.runInContext(readFileSync(new URL('../assets/'+file,import.meta.url),'utf8'),dataContext);
+  const {siteData,paperStories}=dataContext.window;
+  assert.ok(siteData.excludedPublications.some(p=>p.doi==='10.3390/s25133907'));
+  assert.ok(siteData.excludedPublications.some(p=>p.doi==='10.3390/healthcare12191926'));
+  assert.ok(!siteData.publications.some(p=>p.storyId==='frailty-movement-monitoring'));
+  assert.ok(!siteData.publications.some(p=>p.storyId==='chair-system-design'));
+  assert.ok(!siteData.news.some(p=>p.link==='https://doi.org/10.3390/s25133907'));
+  assert.ok(!paperStories.some(p=>p.id==='frailty-movement-monitoring'));
+  assert.ok(!paperStories.some(p=>p.id==='chair-system-design'));
+});

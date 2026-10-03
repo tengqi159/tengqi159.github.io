@@ -16,6 +16,8 @@ The scheduled workflow attempts a daily Scholar refresh and optional OpenAlex me
 
 Run manually with `node scripts/refresh-data.mjs`. Update news in `siteData.news`; the sync preserves it. An optional CV link is shown when `profile.cv` contains a local PDF path.
 
+`siteData.excludedPublications` records owner-confirmed authorship exclusions by full title and DOI. These exclusions override Scholar indexing, old verified records and browser metadata enrichment, so work by a different researcher with the same name cannot return during a refresh. Remove corresponding news and visual stories when excluding a paper.
+
 ## Accepted papers and visual introductions
 
 News leads with accepted, forthcoming papers. Accepted entries offer only the graphical abstract and animation; paper, conference-page, Scholar-search and story-source links are withheld. `status: "accepted"` is a curated status, preserved by Scholar sync and browser metadata enrichment. To mark a paper published, first verify the proceedings record, then update its status, venue, bibliographic details and public link, including the story publicationStatus. Citation snapshot dates remain separate from content update dates.
