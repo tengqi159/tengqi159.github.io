@@ -6,7 +6,7 @@ A static academic homepage for https://tengqi159.github.io/ — research, public
 
 The warm paper / teal / gold design supports light and dark themes. A flowing signal illustration introduces the research, four selectable studies explain its directions, and publication cards include citation links and BibTeX copying. All studies are illustrations, not experimental results. Ambient motion can be paused and respects reduced-motion preferences.
 
-The publication archive supports title, author and venue search, year filters, citation sorting and an explicit reset. `/` focuses search; Escape clears it. Clipboard failures open a selectable text dialog.
+News, selected publications and the archive use compact rows: a complete original-figure thumbnail on the left, with metadata, title, authors, venue, reviewed method summary and actions grouped on the right. Narrow screens stack the two parts. The thumbnail opens the original figure viewer for reading labels, while the list remains easy to scan. The first selected paper follows the same scale as the rest. The publication archive supports title, author and venue search, year filters, citation sorting and an explicit reset. `/` focuses search; Escape clears it. Clipboard failures open a selectable text dialog.
 
 ## Publication data
 

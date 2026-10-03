@@ -319,8 +319,15 @@ function publicationPreview(publication) {
       ${explainer.figureMarkup(story, {thumbnail:true})}
     </button>
     <figcaption class="publication-figure-caption">${escapeAttr(story.figure.label || "Paper framework")}</figcaption>
-    ${window.paperExplainer.hasReviewedContent(story) ? `<p class="publication-preview-summary">${escapeAttr(story.summary)}</p>` : ""}
   </figure>`;
+}
+
+function publicationSummary(publication) {
+  const explainer = window.paperExplainer;
+  const story = explainer?.find(publication);
+  return explainer?.hasReviewedContent(story)
+    ? `<p class="publication-summary">${escapeAttr(story.summary)}</p>`
+    : "";
 }
 
 function citationLabel(publication) {
@@ -350,18 +357,21 @@ function renderSelectedPublications() {
   container.replaceChildren(
     ...selected.map((publication) => {
       const card = document.createElement("article");
-      card.className = "selected-card";
+      card.className = "selected-card paper-row";
       card.innerHTML = `
-        <div class="paper-topline">
-          <span class="paper-badge">${publication.year}</span>
-          <span class="paper-badge ${publication.status === "accepted" ? "accepted-badge" : "citation"}">${citationLabel(publication)}</span>
-          <span class="paper-badge">${publication.type}</span>
-        </div>
-        <h3>${publication.title}</h3>
-        <p class="paper-authors">${publication.authors}</p>
-        <p class="paper-venue">${venueLine(publication)}</p>
         ${publicationPreview(publication)}
-        <div class="paper-links">${createPaperLinks(publication, "")}</div>
+        <div class="publication-copy">
+          <div class="paper-topline">
+            <span class="paper-badge">${publication.year}</span>
+            <span class="paper-badge ${publication.status === "accepted" ? "accepted-badge" : "citation"}">${citationLabel(publication)}</span>
+            <span class="paper-badge">${publication.type}</span>
+          </div>
+          <h3>${publication.title}</h3>
+          <p class="paper-authors">${publication.authors}</p>
+          <p class="paper-venue">${venueLine(publication)}</p>
+          ${publicationSummary(publication)}
+          <div class="paper-links">${createPaperLinks(publication, "")}</div>
+        </div>
       `;
 
       const share =
@@ -375,7 +385,7 @@ function renderSelectedPublications() {
       bar.style.setProperty("--w", `${share > 0 ? Math.max(6, Math.round(share * 100)) : 0}%`);
       meter.appendChild(bar);
       foot.appendChild(meter);
-      if (publication.status !== "accepted") card.appendChild(foot);
+      if (publication.status !== "accepted") card.querySelector(".publication-copy").appendChild(foot);
 
       return card;
     })
@@ -463,18 +473,20 @@ function setupArchive() {
         const item = document.createElement("article");
         item.className = "publication-item";
         item.innerHTML = `
-          <span class="publication-year">${publication.year}</span>
-          <div class="publication-main">
+          <div class="publication-main paper-row">
+            ${publicationPreview(publication)}
             <div class="publication-copy">
+              <div class="paper-topline publication-topline">
+                <span class="publication-year">${publication.year}</span>
+                <span class="cited-chip">${citationLabel(publication)}</span>
+                <span class="paper-badge">${publication.type}</span>
+              </div>
               <h3>${publication.title}</h3>
               <p class="publication-authors">${publication.authors}</p>
               <p class="publication-meta">${venueLineHtml(publication)}</p>
+              ${publicationSummary(publication)}
+              <div class="publication-links">${createPaperLinks(publication, "")}</div>
             </div>
-            ${publicationPreview(publication)}
-          </div>
-          <div class="publication-side">
-            <span class="cited-chip">${citationLabel(publication)}</span>
-            <div class="publication-links">${createPaperLinks(publication, "")}</div>
           </div>
         `;
         return item;
