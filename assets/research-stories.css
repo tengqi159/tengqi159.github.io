@@ -1,7 +1,8 @@
 /* Paper-led extension of the existing paper / teal / gold visual language. */
 .hero { min-height: auto; padding-bottom: 2.5rem; }
-.hero-latest { display: flex; align-items: center; flex-wrap: wrap; gap: .8rem; margin: 1.6rem 0 0; padding: .85rem 0; border-top: 1px solid var(--line); color: var(--teal-strong); font-size: .9rem; }
-.hero-latest span { color: var(--ink-2); }
+.hero-latest { display: flex; align-items: center; flex-wrap: wrap; gap: .35rem .8rem; min-width: 0; max-width: 100%; margin: 1.6rem 0 0; padding: .85rem 0; border-top: 1px solid var(--line); color: var(--teal-strong); font-size: .9rem; line-height: 1.6; }
+.hero-latest strong { flex: 0 0 auto; }
+.hero-latest span { min-width: 0; overflow-wrap: anywhere; color: var(--ink-2); }
 .hero-summary { font-size: 1rem; }
 .news-papers { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 1.25rem; }
 .news-paper { display: flex; flex-direction: column; min-width: 0; border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper-elev); padding: 1.6rem; }

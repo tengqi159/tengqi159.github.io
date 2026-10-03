@@ -173,7 +173,17 @@ window.siteData = {
       "type": "Journal article",
       "verified": true,
       "storyId": "danhar",
-      "citationsUpdatedAt": "2026-10-03"
+      "citationsUpdatedAt": "2026-10-03",
+      "preprints": [
+        {
+          "title": "DanHAR: Dual Attention Network For Multimodal Human Activity Recognition Using Wearable Sensors",
+          "link": "https://arxiv.org/abs/2006.14435",
+          "doi": "10.48550/arxiv.2006.14435",
+          "year": 2020,
+          "citations": 11,
+          "citationsUpdatedAt": "2026-08-09"
+        }
+      ]
     },
     {
       "title": "The layer-wise training convolutional neural networks using local loss for sensor-based human activity recognition",
@@ -203,7 +213,20 @@ window.siteData = {
       "type": "Journal article",
       "verified": true,
       "storyId": "lego-cnn",
-      "citationsUpdatedAt": "2026-10-03"
+      "citationsUpdatedAt": "2026-10-03",
+      "preprints": [
+        {
+          "title": "Layer-wise training convolutional neural networks with smaller filters for human activity recognition using wearable sensors",
+          "link": "https://arxiv.org/abs/2005.03948",
+          "doi": "10.48550/arxiv.2005.03948",
+          "year": 2020,
+          "citations": 16,
+          "citationsUpdatedAt": "2026-10-03",
+          "scholarTitleAliases": [
+            "Efficient convolutional neural networks with smaller filters for human activity recognition using wearable sensors"
+          ]
+        }
+      ]
     },
     {
       "title": "Triple cross-domain attention on human activity recognition using wearable sensors",
@@ -312,25 +335,6 @@ window.siteData = {
       "citationsUpdatedAt": "2026-10-03"
     },
     {
-      "title": "Layer-wise training convolutional neural networks with smaller filters for human activity recognition using wearable sensors",
-      "authors": "Y Tang, Q Teng, L Zhang, F Min, J He",
-      "venue": "arXiv preprint arXiv:2005.03948, 2020",
-      "details": "arXiv preprint arXiv:2005.03948, 2020 · 2020",
-      "year": 2020,
-      "citations": 16,
-      "link": "https://arxiv.org/abs/2005.03948",
-      "linkLabel": "arXiv",
-      "selected": false,
-      "type": "Preprint",
-      "verified": true,
-      "metadataVerified": true,
-      "storyId": "lego-cnn",
-      "citationsUpdatedAt": "2026-10-03",
-      "scholarTitleAliases": [
-        "Efficient convolutional neural networks with smaller filters for human activity recognition using wearable sensors"
-      ]
-    },
-    {
       "title": "CSFO: A category-specific flattening optimization method for sensor-based long-tailed activity recognition",
       "authors": "X Wang, Q Teng",
       "venue": "IEEE Sensors Journal 25 (7), 12318-12334, 2025",
@@ -359,21 +363,6 @@ window.siteData = {
       "verified": true,
       "storyId": "attention-multistep-dynamics",
       "citationsUpdatedAt": "2026-10-03"
-    },
-    {
-      "title": "DanHAR: Dual Attention Network For Multimodal Human Activity Recognition Using Wearable Sensors",
-      "authors": "Wenbin Gao, Lei Zhang, Qi Teng, Jun He, Hao Wu",
-      "venue": "arXiv (Cornell University)",
-      "details": "2020",
-      "year": 2020,
-      "citations": 11,
-      "link": "https://doi.org/10.48550/arxiv.2006.14435",
-      "linkLabel": "DOI",
-      "selected": false,
-      "type": "Preprint",
-      "verified": true,
-      "storyId": "danhar",
-      "citationsUpdatedAt": "2026-08-09"
     },
     {
       "title": "Dual Stage-Wise Decoupling Networks for Long-Tailed Activity Recognition Using Wearable Sensors",

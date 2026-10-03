@@ -12,6 +12,8 @@
  *    Citation counts always come from the saved or fetched Scholar snapshot.
  *  - Entries marked "verified: true" in site-data.js are user-confirmed and
  *    survive even if Scholar stops listing them (e.g. journal corrections).
+ *  - Explicitly matched preprints stay nested in their journal record. Their
+ *    Scholar counts are refreshed separately and never added to journal counts.
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import vm from "node:vm";
@@ -57,6 +59,31 @@ function scholarCitationFields(value, date) {
   const text = String(value ?? "").trim().replace(/,/g, "");
   const citations = /^\d+$/.test(text) ? Number(text) : null;
   return { citations, citationsUpdatedAt: citations === null ? undefined : date };
+}
+
+function hasPreprintMarker(publication) {
+  return /\b(?:arxiv|preprint)\b/i.test([
+    publication?.venue, publication?.type, publication?.doi, publication?.link
+  ].filter(Boolean).join(" "));
+}
+
+// Only curated nested titles/aliases establish a version relationship. A
+// shared title needs a preprint marker; a distinct known alias is sufficient.
+function knownPreprintMatch(paper, publications = []) {
+  const key = normalize(paper?.title);
+  if (!key) return null;
+  const matches = [];
+  for (const publication of publications) {
+    for (const preprint of (Array.isArray(publication.preprints) ? publication.preprints : [])) {
+      const names = [preprint.title, ...(Array.isArray(preprint.scholarTitleAliases) ? preprint.scholarTitleAliases : [])];
+      if (!names.some(title => normalize(title) === key)) continue;
+      if (hasPreprintMarker(paper) || key !== normalize(publication.title)) {
+        matches.push({ publication, preprint });
+      }
+    }
+  }
+  // Ambiguous titles are not evidence for automatically merging publications.
+  return matches.length === 1 ? matches[0] : null;
 }
 
 async function fetchText(url) {
@@ -200,24 +227,40 @@ async function main() {
   }
   const snapshotDate = new Date().toISOString().slice(0, 10);
 
-  const scholarNorm = new Set(scholarPapers.map((p) => normalize(p.title)));
-  const byScholarTitle = new Map(
-    scholarPapers.map((p) => [normalize(p.title), p])
-  );
-
-  // 2) Keep list = Scholar papers + previously verified entries.
-  const nextPublications = [];
-  const seen = new Set(); // normalized titles already rebuilt from Scholar
-  const seenCombos = new Set(); // title|link combos already present
-
+  // Refresh known preprints first so the parent retains their new metadata
+  // whether its journal row appears before, after, or not at all in Scholar.
+  const savedPublications = data.publications.filter(pub => !knownPreprintMatch(pub, data.publications));
+  const preprintParents = new Set();
+  const publicationRows = [];
   for (const paper of scholarPapers) {
     if (isExcludedPublication(paper, data.excludedPublications)) continue;
-    const key = normalize(paper.title);
-    if (seen.has(key)) continue;
-    seen.add(key);
+    const match = knownPreprintMatch(paper, savedPublications);
+    if (!match) {
+      publicationRows.push(paper);
+      continue;
+    }
+    if (isExcludedPublication(match.publication, data.excludedPublications) ||
+        isExcludedPublication(match.preprint, data.excludedPublications)) continue;
+    Object.assign(match.preprint, scholarCitationFields(paper.cites, snapshotDate));
+    preprintParents.add(match.publication);
+  }
 
-    const aliases = data.publications.filter(p => (p.scholarTitleAliases || []).some(title => normalize(title) === key));
-    const existing = aliases.length === 1 ? aliases[0] : data.publications.find(p => normalize(p.title) === key);
+  // 2) Keep list = Scholar papers + previously verified entries, with known
+  // preprint versions represented only inside their canonical journal record.
+  const nextPublications = [];
+  const seen = new Set(); // normalized title + version already rebuilt
+  const seenCombos = new Set(); // title|link combos already present
+
+  for (const paper of publicationRows) {
+    const key = normalize(paper.title);
+    const preprintRow = hasPreprintMarker(paper);
+    const versionKey = `${key}|${preprintRow ? "preprint" : "publication"}`;
+    if (seen.has(versionKey)) continue;
+    seen.add(versionKey);
+
+    const candidates = savedPublications.filter(p => hasPreprintMarker(p) === preprintRow);
+    const aliases = candidates.filter(p => (p.scholarTitleAliases || []).some(title => normalize(title) === key));
+    const existing = aliases.length === 1 ? aliases[0] : candidates.find(p => normalize(p.title) === key);
     if (isExcludedPublication(existing, data.excludedPublications)) continue;
     // Acceptance status is curated; indexing alone does not prove publication.
     if (existing?.status === "accepted" || existing?.metadataVerified) {
@@ -226,7 +269,9 @@ async function main() {
       continue;
     }
     const openAlex = openAlexWorks.find(
-      (w) => normalize(w.title) === key
+      (w) => normalize(w.title) === key && hasPreprintMarker({
+        type: w.type, doi: w.doi, venue: w.primary_location?.source?.display_name
+      }) === preprintRow
     );
     const doi = existing?.link?.includes("doi.org")
       ? existing.link
@@ -269,7 +314,7 @@ async function main() {
         `https://scholar.google.com/scholar?q=${encodeURIComponent(paper.title)}`,
       linkLabel: existing?.linkLabel || (doi ? "DOI" : "Scholar"),
       selected: existing?.selected === true,
-      type: existing?.type || typeLabel(openAlex?.type),
+      type: existing?.type || (preprintRow ? "Preprint" : typeLabel(openAlex?.type)),
       verified: true
     };
     if (isExcludedPublication(rebuilt, data.excludedPublications)) continue;
@@ -277,11 +322,11 @@ async function main() {
     seenCombos.add(`${normalize(rebuilt.title)}|${normalize(rebuilt.link)}`);
   }
 
-  // Verified entries no longer listed by Scholar stay (e.g. corrections,
-  // preprint/journal twin records, user-confirmed works Scholar has not
-  // indexed yet) — as long as the title|link pair is not already present.
-  for (const pub of data.publications) {
-    if (pub.verified !== true || isExcludedPublication(pub, data.excludedPublications)) continue;
+  // Verified entries no longer listed by Scholar stay (e.g. corrections or
+  // user-confirmed works not indexed yet). A preprint-only refresh also keeps
+  // its journal parent and the saved journal citation snapshot untouched.
+  for (const pub of savedPublications) {
+    if ((pub.verified !== true && !preprintParents.has(pub)) || isExcludedPublication(pub, data.excludedPublications)) continue;
     const combo = `${normalize(pub.title)}|${normalize(pub.link)}`;
     if (seenCombos.has(combo)) continue;
     seenCombos.add(combo);

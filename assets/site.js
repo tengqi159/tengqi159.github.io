@@ -294,6 +294,12 @@ function createPaperLinks(publication, extraClass) {
       `<a class="paper-link ${extraClass}" href="${publication.link}" target="_blank" rel="noreferrer">${publication.linkLabel}${ARROW_ICON}</a>`
     );
   }
+  for (const version of publication.preprints || []) {
+    if (!/^https:\/\/arxiv\.org\/abs\/\d{4}\.\d{4,5}(?:v\d+)?$/.test(version.link || "")) continue;
+    links.push(
+      `<a class="paper-link ${extraClass}" href="${escapeAttr(version.link)}" target="_blank" rel="noreferrer" aria-label="arXiv preprint for ${escapeAttr(publication.title)}">arXiv${ARROW_ICON}</a>`
+    );
+  }
   links.push(
     `<a class="paper-link ${extraClass}" href="${scholarSearch.toString()}" target="_blank" rel="noreferrer">Scholar${ARROW_ICON}</a>`
   );
@@ -397,6 +403,14 @@ function createFilterChip(label, active, onClick) {
   return button;
 }
 
+function publicationSearchText(publication) {
+  const versions = (publication.preprints || []).flatMap(version => [
+    "arXiv", version.title, version.link, version.doi, ...(version.scholarTitleAliases || [])
+  ]);
+  return [publication.title, publication.authors, publication.venue, ...versions]
+    .filter(Boolean).join(" ").toLowerCase();
+}
+
 function setupArchive() {
   const listContainer = document.getElementById("publication-list");
   const filtersContainer = document.getElementById("year-filters");
@@ -439,9 +453,7 @@ function setupArchive() {
         activeYear === "All" || String(publication.year) === activeYear;
       if (!matchesYear) return false;
       if (!query) return true;
-      const haystack =
-        `${publication.title} ${publication.authors} ${publication.venue}`.toLowerCase();
-      return haystack.includes(query);
+      return publicationSearchText(publication).includes(query);
     });
 
     const sorted = sortPublications(filtered, activeSort);
