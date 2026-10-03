@@ -187,6 +187,12 @@ async function main() {
     const existing = data.publications.find(
       (p) => normalize(p.title) === key
     );
+    // Acceptance status is curated; indexing alone does not prove publication.
+    if (existing?.status === "accepted" || existing?.metadataVerified) {
+      nextPublications.push({...existing, citations: existing.status === "accepted" ? existing.citations : Number(paper.cites) || 0});
+      seenCombos.add(`${normalize(existing.title)}|${normalize(existing.link)}`);
+      continue;
+    }
     const openAlex = openAlexWorks.find(
       (w) => normalize(w.title) === key
     );

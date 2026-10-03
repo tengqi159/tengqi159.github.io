@@ -67,15 +67,36 @@ window.siteData = {
         "value": "Associate Researcher",
         "note": "School of Management, Zhengzhou University"
       }
-    ]
+    ],
+    "contentUpdatedAt": "2026-10-03"
   },
   "news": [
     {
-      "date": "2025",
+      "date": "2026",
+      "type": "paper",
+      "status": "accepted",
+      "storyId": "mirage",
+      "text": "MIRAGE: Hierarchical MI-Surrogate Regulation for Graph Contrastive Learning accepted at",
+      "venue": "NeurIPS 2026 (Poster)",
+      "link": "https://neurips.cc/virtual/2026/poster/151455",
+      "linkLabel": "Conference page"
+    },
+    {
+      "date": "2026",
+      "type": "paper",
+      "status": "accepted",
+      "storyId": "psdnet",
+      "text": "When a Window Is Not an Action: Selective Phase-Script Deliberation for Sliding-Window Human Activity Recognition accepted at",
+      "venue": "NeurIPS 2026 (Poster)",
+      "link": "https://neurips.cc/virtual/2026/poster/154058",
+      "linkLabel": "Conference page"
+    },
+    {
+      "date": "2024",
       "type": "paper",
       "text": "Dual stage-wise decoupling networks for long-tailed activity recognition published in",
-      "venue": "Pattern Recognition",
-      "link": "https://doi.org/10.1016/j.patcog.2024.111234",
+      "venue": "Human-centric Computing and Information Sciences",
+      "link": "https://doi.org/10.22967/HCIS.2024.14.052",
       "linkLabel": "DOI"
     },
     {
@@ -97,7 +118,7 @@ window.siteData = {
     {
       "date": "2024",
       "type": "paper",
-      "text": "Dual-decoupling CNN with layer-wise temporal-spatial attention published in",
+      "text": "Dual-decoupling CNN with layer-wise temporal-spatial attention published online in",
       "venue": "IEEE Journal of Biomedical and Health Informatics",
       "link": "https://doi.org/10.1109/JBHI.2024.3488528",
       "linkLabel": "DOI"
@@ -113,6 +134,38 @@ window.siteData = {
   ],
   "publications": [
     {
+      "storyId": "mirage",
+      "title": "MIRAGE: Hierarchical MI-Surrogate Regulation for Graph Contrastive Learning",
+      "authors": "Q. Teng, X. Wang",
+      "venue": "NeurIPS 2026",
+      "details": "Accepted · Poster · Proceedings forthcoming",
+      "year": 2026,
+      "citations": 0,
+      "link": "https://neurips.cc/virtual/2026/poster/151455",
+      "linkLabel": "Conference",
+      "selected": false,
+      "type": "Accepted paper",
+      "status": "accepted",
+      "verified": true,
+      "statusSource": "https://neurips.cc/Downloads/2026"
+    },
+    {
+      "storyId": "psdnet",
+      "title": "When a Window Is Not an Action: Selective Phase-Script Deliberation for Sliding-Window Human Activity Recognition",
+      "authors": "Q. Teng, X. Wang",
+      "venue": "NeurIPS 2026",
+      "details": "Accepted · Poster · Proceedings forthcoming",
+      "year": 2026,
+      "citations": 0,
+      "link": "https://neurips.cc/virtual/2026/poster/154058",
+      "linkLabel": "Conference",
+      "selected": false,
+      "type": "Accepted paper",
+      "status": "accepted",
+      "verified": true,
+      "statusSource": "https://neurips.cc/Downloads/2026"
+    },
+    {
       "title": "DanHAR: Dual attention network for multimodal human activity recognition using wearable sensors",
       "authors": "W Gao, L Zhang, Q Teng, J He, H Wu",
       "venue": "Applied Soft Computing 111, 107728, 2021",
@@ -123,7 +176,8 @@ window.siteData = {
       "linkLabel": "DOI",
       "selected": true,
       "type": "Journal article",
-      "verified": true
+      "verified": true,
+      "storyId": "danhar"
     },
     {
       "title": "The layer-wise training convolutional neural networks using local loss for sensor-based human activity recognition",
@@ -136,7 +190,8 @@ window.siteData = {
       "linkLabel": "DOI",
       "selected": true,
       "type": "Journal article",
-      "verified": true
+      "verified": true,
+      "storyId": "local-loss-cnn"
     },
     {
       "title": "Layer-wise training convolutional neural networks with smaller filters for human activity recognition using wearable sensors",
@@ -149,7 +204,8 @@ window.siteData = {
       "linkLabel": "DOI",
       "selected": false,
       "type": "Journal article",
-      "verified": true
+      "verified": true,
+      "storyId": "lego-cnn"
     },
     {
       "title": "Triple cross-domain attention on human activity recognition using wearable sensors",
@@ -162,7 +218,8 @@ window.siteData = {
       "linkLabel": "DOI",
       "selected": true,
       "type": "Journal article",
-      "verified": true
+      "verified": true,
+      "storyId": "triple-attention"
     },
     {
       "title": "The convolutional neural networks training with channel-selectivity for human activity recognition based on sensors",
@@ -175,7 +232,8 @@ window.siteData = {
       "linkLabel": "DOI",
       "selected": false,
       "type": "Journal article",
-      "verified": true
+      "verified": true,
+      "storyId": "channel-selectivity"
     },
     {
       "title": "RepHAR: Decoupling networks with accuracy-speed tradeoff for sensor-based human activity recognition",
@@ -188,7 +246,8 @@ window.siteData = {
       "linkLabel": "DOI",
       "selected": true,
       "type": "Journal article",
-      "verified": true
+      "verified": true,
+      "storyId": "rephar"
     },
     {
       "title": "Data driven nonlinear dynamical systems identification using multi-step CLDNN",
@@ -201,20 +260,23 @@ window.siteData = {
       "linkLabel": "DOI",
       "selected": false,
       "type": "Journal article",
-      "verified": true
+      "verified": true,
+      "storyId": "multistep-cldnn"
     },
     {
       "title": "Innovative dual-decoupling CNN with layer-wise temporal-spatial attention for sensor-based human activity recognition",
       "authors": "Q Teng, W Li, G Hu, Y Shu, Y Liu",
-      "venue": "IEEE Journal of Biomedical and Health Informatics 29 (2), 1035-1048, 2024",
-      "details": "IEEE Journal of Biomedical and Health Informatics 29 (2), 1035-1048, 2024 · Vol. 29, 1035-1048 · 2024",
-      "year": 2024,
+      "venue": "IEEE Journal of Biomedical and Health Informatics 29 (2), 1035–1048, 2025",
+      "details": "IEEE Journal of Biomedical and Health Informatics 29 (2), 1035–1048, 2025",
+      "year": 2025,
       "citations": 26,
       "link": "https://doi.org/10.1109/JBHI.2024.3488528",
       "linkLabel": "DOI",
       "selected": true,
       "type": "Journal article",
-      "verified": true
+      "verified": true,
+      "metadataVerified": true,
+      "storyId": "dual-decoupling-attention"
     },
     {
       "title": "Block-wise training residual networks on multi-channel time series for human activity recognition",
@@ -227,7 +289,8 @@ window.siteData = {
       "linkLabel": "DOI",
       "selected": false,
       "type": "Journal article",
-      "verified": true
+      "verified": true,
+      "storyId": "blockwise-resnet"
     },
     {
       "title": "Large receptive field attention: An innovation in decomposing large-kernel convolution for sensor-based activity recognition",
@@ -240,10 +303,11 @@ window.siteData = {
       "linkLabel": "DOI",
       "selected": true,
       "type": "Journal article",
-      "verified": true
+      "verified": true,
+      "storyId": "large-receptive-field"
     },
     {
-      "title": "Efficient convolutional neural networks with smaller filters for human activity recognition using wearable sensors",
+      "title": "Layer-wise training convolutional neural networks with smaller filters for human activity recognition using wearable sensors",
       "authors": "Y Tang, Q Teng, L Zhang, F Min, J He",
       "venue": "arXiv preprint arXiv:2005.03948, 2020",
       "details": "arXiv preprint arXiv:2005.03948, 2020 · 2020",
@@ -253,7 +317,9 @@ window.siteData = {
       "linkLabel": "arXiv",
       "selected": false,
       "type": "Preprint",
-      "verified": true
+      "verified": true,
+      "metadataVerified": true,
+      "storyId": "lego-cnn"
     },
     {
       "title": "CSFO: A category-specific flattening optimization method for sensor-based long-tailed activity recognition",
@@ -266,7 +332,8 @@ window.siteData = {
       "linkLabel": "DOI",
       "selected": true,
       "type": "Journal article",
-      "verified": true
+      "verified": true,
+      "storyId": "csfo"
     },
     {
       "title": "Data driven governing equations approximations using attention based multistep neural networks",
@@ -279,7 +346,8 @@ window.siteData = {
       "linkLabel": "DOI",
       "selected": false,
       "type": "Journal article",
-      "verified": true
+      "verified": true,
+      "storyId": "attention-multistep-dynamics"
     },
     {
       "title": "CSFO: A Category-Specific Flattening Optimization Method for Sensor-Based Long-Tailed Activity Recognition (Correction)",
@@ -292,7 +360,8 @@ window.siteData = {
       "linkLabel": "DOI",
       "selected": false,
       "type": "Correction",
-      "verified": true
+      "verified": true,
+      "storyId": "csfo-correction"
     },
     {
       "title": "Frailty-Focused Movement Monitoring: A Single-Camera System Using Joint Angles for Assessing Chair-Based Exercise Quality",
@@ -305,7 +374,8 @@ window.siteData = {
       "linkLabel": "DOI",
       "selected": false,
       "type": "Journal article",
-      "verified": true
+      "verified": true,
+      "storyId": "frailty-movement-monitoring"
     },
     {
       "title": "Innovative Chair and System Designs to Enhance Resistance Training Outcomes for the Elderly",
@@ -318,7 +388,8 @@ window.siteData = {
       "linkLabel": "DOI",
       "selected": false,
       "type": "Journal article",
-      "verified": true
+      "verified": true,
+      "storyId": "chair-system-design"
     },
     {
       "title": "DanHAR: Dual Attention Network For Multimodal Human Activity Recognition Using Wearable Sensors",
@@ -331,20 +402,23 @@ window.siteData = {
       "linkLabel": "DOI",
       "selected": false,
       "type": "Preprint",
-      "verified": true
+      "verified": true,
+      "storyId": "danhar"
     },
     {
       "title": "Dual Stage-Wise Decoupling Networks for Long-Tailed Activity Recognition Using Wearable Sensors",
       "authors": "Q Teng, L Yu, G Hu",
-      "venue": "Pattern Recognition",
-      "details": "Pattern Recognition · 2025",
-      "year": 2025,
+      "venue": "Human-centric Computing and Information Sciences",
+      "details": "Human-centric Computing and Information Sciences, Vol. 14 · 2024",
+      "year": 2024,
       "citations": 0,
-      "link": "https://doi.org/10.1016/j.patcog.2024.111234",
+      "link": "https://doi.org/10.22967/HCIS.2024.14.052",
       "linkLabel": "DOI",
       "selected": false,
       "type": "Journal article",
-      "verified": true
+      "verified": true,
+      "metadataVerified": true,
+      "storyId": "dswd"
     }
   ]
 };

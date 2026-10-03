@@ -187,6 +187,10 @@ const BIBTEX_STOPWORDS = new Set([
 ]);
 
 function bibtexFor(publication) {
+  if (publication.status === "accepted") {
+    const slug = publication.storyId || "paper";
+    return `@unpublished{teng${publication.year}${slug}, title={${publication.title}}, author={${String(publication.authors).split(",").map(s=>s.trim()).join(" and ")}}, note={Accepted at NeurIPS ${publication.year} (Poster); proceedings forthcoming}, url={${publication.link}}}`;
+  }
   const authors = String(publication.authors || "")
     .split(",")
     .map((name) => name.trim())
@@ -260,6 +264,7 @@ function createPaperLinks(publication, extraClass) {
   scholarSearch.searchParams.set("q", publication.title);
 
   const links = [];
+  if (window.paperExplainer) links.push(window.paperExplainer.buttons(publication, extraClass));
   if (publication.link) {
     links.push(
       `<a class="paper-link ${extraClass}" href="${publication.link}" target="_blank" rel="noreferrer">${publication.linkLabel}${ARROW_ICON}</a>`
@@ -405,7 +410,7 @@ function setupArchive() {
             <p class="publication-meta">${venueLineHtml(publication)}</p>
           </div>
           <div class="publication-side">
-            <span class="cited-chip">Cited by ${publication.citations}</span>
+            <span class="cited-chip">${publication.status === "accepted" ? "Accepted · Forthcoming" : `Cited by ${publication.citations}`}</span>
             <div class="publication-links">${createPaperLinks(publication, "")}</div>
           </div>
         `;
@@ -493,7 +498,7 @@ function renderNews() {
   const list = document.getElementById("news-timeline");
   if (!list) return;
 
-  const items = [...(window.siteData.news || [])].sort((a, b) =>
+  const items = [...(window.siteData.news || [])].filter(item=>item.status!=="accepted").sort((a, b) =>
     String(b.date).localeCompare(String(a.date))
   );
 
@@ -610,6 +615,7 @@ function mergePublicationMetadata(snapshot, works) {
     return matches.length===1 && snapshot.filter(p=>normalizeTitle(p.title)===key).length===1 ? matches[0] : null;
   };
   return snapshot.map(publication=>{
+    if (publication.status === "accepted" || publication.metadataVerified) return {...publication};
     const hasDoi=/doi\.org\//i.test(publication.link || "");
     const match=hasDoi ? byDoi.get(doiKey(publication.link)) : uniqueTitle(publication.title);
     if (!match) return {...publication};

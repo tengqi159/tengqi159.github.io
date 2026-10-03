@@ -26,3 +26,19 @@ test('bibliographic lines do not repeat Scholar volume/pages/year',()=>{
   assert.equal(context.venueLine(pub),pub.venue);
   assert.equal(context.venueLine({venue:'Journal',details:'Vol. 4, 1–9'}),'Journal · Vol. 4, 1–9');
 });
+test('metadata indexing does not imply publication of an accepted paper',()=>{
+  const pub={title:'Accepted conference work',status:'accepted',venue:'NeurIPS 2026',details:'Proceedings forthcoming',citations:0};
+  const result=merge([pub],[{title:pub.title,venue:'Unconfirmed source',details:'2026-12-01'}]);
+  assert.equal(result[0].status,'accepted');assert.equal(result[0].details,'Proceedings forthcoming');assert.equal(result[0].venue,'NeurIPS 2026');
+  const bib=context.bibtexFor({...pub,storyId:'example',year:2026,authors:'Q. Teng, X. Wang',link:'https://example.com/paper'});
+  assert.match(bib,/^@unpublished/);assert.match(bib,/proceedings forthcoming/);
+});
+test('every curated archive record has a three-step visual introduction',()=>{
+  const dataContext={window:{}};vm.createContext(dataContext);
+  vm.runInContext(readFileSync(new URL('../assets/site-data.js',import.meta.url),'utf8'),dataContext);
+  vm.runInContext(readFileSync(new URL('../assets/paper-stories.js',import.meta.url),'utf8'),dataContext);
+  const stories=new Map(dataContext.window.paperStories.map(s=>[s.id,s]));
+  for(const pub of dataContext.window.siteData.publications){
+    assert.ok(stories.has(pub.storyId),pub.title);assert.equal(stories.get(pub.storyId).steps.length,3);
+  }
+});

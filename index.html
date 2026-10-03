@@ -68,15 +68,18 @@
       href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Manrope:wght@400..800&family=IBM+Plex+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="assets/styles.css?v=release-20260905" />
-    <link rel="stylesheet" href="assets/fx.css?v=release-20260905" />
-    <link rel="stylesheet" href="assets/signal-studies.css?v=release-20260905" />
-    <link rel="stylesheet" href="assets/atlas.css?v=release-20260905" />
-    <script defer src="assets/site-data.js?v=release-20260905"></script>
-    <script defer src="assets/atlas-crowd.js?v=release-20260905"></script>
-    <script defer src="assets/site.js?v=release-20260905"></script>
-    <script defer src="assets/fx.js?v=release-20260905"></script>
-    <script defer src="assets/signal-studies.js?v=release-20260905"></script>
+    <link rel="stylesheet" href="assets/styles.css?v=research-20261003" />
+    <link rel="stylesheet" href="assets/fx.css?v=research-20261003" />
+    <link rel="stylesheet" href="assets/signal-studies.css?v=research-20261003" />
+    <link rel="stylesheet" href="assets/atlas.css?v=research-20261003" />
+    <link rel="stylesheet" href="assets/research-stories.css?v=research-20261003" />
+    <script defer src="assets/site-data.js?v=research-20261003"></script>
+    <script defer src="assets/atlas-crowd.js?v=research-20261003"></script>
+    <script defer src="assets/paper-stories.js?v=research-20261003"></script>
+    <script defer src="assets/paper-explainer.js?v=research-20261003"></script>
+    <script defer src="assets/site.js?v=research-20261003"></script>
+    <script defer src="assets/fx.js?v=research-20261003"></script>
+    <script defer src="assets/signal-studies.js?v=research-20261003"></script>
   </head>
   <body>
     <a class="skip-link" href="#top">Skip to content</a>
@@ -92,8 +95,8 @@
       </a>
 
       <nav class="site-nav" aria-label="Primary">
-        <a href="#profile" data-nav="profile"><span class="nav-index">01</span>Profile</a>
-        <a href="#news" data-nav="news"><span class="nav-index">02</span>News</a>
+        <a href="#news" data-nav="news"><span class="nav-index">01</span>News</a>
+        <a href="#profile" data-nav="profile"><span class="nav-index">02</span>Profile</a>
         <a href="#research" data-nav="research"><span class="nav-index">03</span>Research</a>
         <a href="#publications" data-nav="publications"><span class="nav-index">04</span>Publications</a>
         <a href="#atlas" data-nav="atlas"><span class="nav-index">05</span>Atlas</a>
@@ -123,7 +126,7 @@
               I build <em>efficient neural models</em> that turn
               <em>wearable signals</em> into an understanding of human activity.
             </p>
-            <p class="hero-summary">My work spans attention-based time-series learning and data-driven dynamical systems.</p>
+            <p class="hero-summary">My work spans time-series intelligence, efficient learning and graph representation learning.</p>
             <div class="hero-ribbons" id="hero-ribbons"></div>
             <div class="hero-cta">
               <a
@@ -150,6 +153,7 @@
               </a>
             </div>
             <div class="hero-contacts" id="contact-strip"></div>
+            <a class="hero-latest" href="#news"><strong>NeurIPS 2026</strong><span>Two papers accepted · Explore the research</span></a>
           </div>
 
           <aside class="hero-aside" data-reveal aria-label="Portrait and facts">
@@ -177,16 +181,30 @@
           </aside>
         </div>
 
-        <a class="scroll-cue" href="#profile" aria-label="Scroll to profile">
+        <a class="scroll-cue" href="#news" aria-label="Scroll to latest news">
           <span>Scroll</span>
           <i aria-hidden="true"></i>
         </a>
       </section>
 
+      <section class="section" id="news" data-reveal>
+        <header class="section-head">
+          <p class="section-kicker"><span>01</span>News</p>
+          <h2>Latest news.</h2>
+          <p class="section-lede">
+            Accepted papers and research updates. The latest papers below are awaiting publication in the proceedings.
+          </p>
+        </header>
+
+        <div class="news-papers" id="news-papers"></div>
+        <noscript><p>Two papers accepted at NeurIPS 2026: <a href="https://neurips.cc/virtual/2026/poster/151455">MIRAGE</a> and <a href="https://neurips.cc/virtual/2026/poster/154058">When a Window Is Not an Action</a>. Proceedings forthcoming. Enable JavaScript for the graphical abstracts.</p></noscript>
+        <details class="news-history"><summary>Earlier updates</summary><ol class="news-timeline" id="news-timeline"></ol></details>
+      </section>
+
       <section class="section" id="profile" data-reveal>
         <header class="section-head">
-          <p class="section-kicker"><span>01</span>Profile</p>
-          <h2>A quiet record of measurable work.</h2>
+          <p class="section-kicker"><span>02</span>Profile</p>
+          <h2>Research profile.</h2>
         </header>
 
         <div class="metrics-strip" id="metrics-grid"></div>
@@ -231,22 +249,10 @@
         </div>
       </section>
 
-      <section class="section" id="news" data-reveal>
-        <header class="section-head">
-          <p class="section-kicker"><span>02</span>News</p>
-          <h2>Signals from the lab notebook.</h2>
-          <p class="section-lede">
-            New papers and research milestones, newest first.
-          </p>
-        </header>
-
-        <ol class="news-timeline" id="news-timeline"></ol>
-      </section>
-
       <section class="section" id="research" data-reveal>
         <header class="section-head">
           <p class="section-kicker"><span>03</span>Research</p>
-          <h2>Four directions, one signal.</h2>
+          <h2>Research directions.</h2>
           <p class="section-lede">
             The common thread across recent work: extracting trustworthy
             structure from noisy, multi-channel sensor time series — and doing
@@ -327,10 +333,9 @@
       <section class="section" id="publications" data-reveal>
         <header class="section-head">
           <p class="section-kicker"><span>04</span>Publications</p>
-          <h2>Selected work.</h2>
+          <h2>Selected publications.</h2>
           <p class="section-lede">
-            Representative papers on activity recognition, efficient training,
-            and attention design — ranked by their citation footprint.
+            Explore the ideas through graphical abstracts and short animated introductions, or browse the complete publication record below.
           </p>
         </header>
 
@@ -394,7 +399,7 @@
             <div class="visitor-map" id="visitor-map-canvas" role="group" aria-label="Visitor locations on a world map">
               <div class="atlas-plot">
                 <div class="atlas-grid" aria-hidden="true"></div>
-                <img class="world-map-image" src="assets/atlas-world.svg?v=release-20260905" alt="World map" loading="lazy" decoding="async" />
+                <img class="world-map-image" src="assets/atlas-world.svg?v=research-20261003" alt="World map" loading="lazy" decoding="async" />
                 <canvas class="crowd-canvas" id="crowd-canvas" aria-hidden="true"></canvas>
                 <svg class="arc-layer" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
                   <path id="arc-base" class="arc-base" pathLength="100" vector-effect="non-scaling-stroke" hidden />
@@ -433,7 +438,7 @@
       <section class="section" id="links" data-reveal>
         <header class="section-head">
           <p class="section-kicker"><span>06</span>Links</p>
-          <h2>Elsewhere on the record.</h2>
+          <h2>Research links.</h2>
         </header>
 
         <div class="link-list">
@@ -480,11 +485,17 @@
     <footer class="site-footer">
       <p>Qi Teng · 滕起 — Academic Homepage</p>
       <p class="colophon">
-        Set in Fraunces, Manrope &amp; IBM Plex Mono · Signal field drawn in
-        real time · Visitor atlas uses approximate city or region locations
+        Content updated 3 October 2026 · Qi Teng · Zhengzhou University
       </p>
       <a class="to-top" href="#top">Back to top ↑</a>
     </footer>
+    <dialog class="paper-dialog" id="paper-dialog" aria-labelledby="pe-title">
+      <header class="pe-header"><div><p id="pe-subtitle"></p><h2 id="pe-title"></h2></div><button type="button" id="pe-close" aria-label="Close paper introduction">Close</button></header>
+      <div class="pe-mode-bar" aria-label="Presentation mode"><button type="button" data-pe-mode="abstract" aria-pressed="true">Graphical abstract</button><button type="button" data-pe-mode="animation" aria-pressed="false">Animated introduction</button><button type="button" id="pe-play" aria-pressed="false">Play</button><button type="button" id="pe-restart">Restart</button><span id="pe-progress"></span></div>
+      <figure class="pe-figure-wrap"><div id="pe-figure"></div><figcaption id="pe-caption" aria-live="off"></figcaption></figure>
+      <div class="pe-steps" id="pe-steps" aria-label="Explore the three steps"></div>
+      <footer class="pe-footer"><button type="button" id="pe-download">Download SVG</button><a id="pe-source" target="_blank" rel="noreferrer">Paper source</a><p id="pe-note"></p></footer>
+    </dialog>
     <p class="copy-feedback" id="copy-feedback" role="status" aria-live="polite"></p>
     <dialog class="copy-dialog" id="copy-dialog" aria-labelledby="copy-dialog-title">
       <form method="dialog">

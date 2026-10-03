@@ -16,6 +16,14 @@ The scheduled workflow attempts a daily Scholar refresh and optional OpenAlex me
 
 Run manually with `node scripts/refresh-data.mjs`. Update news in `siteData.news`; the sync preserves it. An optional CV link is shown when `profile.cv` contains a local PDF path.
 
+## Accepted papers and visual introductions
+
+News leads with accepted, forthcoming papers. `status: "accepted"` is a curated status, preserved by Scholar sync and browser metadata enrichment. To mark a paper published, first verify the proceedings record, then update its status, venue, bibliographic details and public link. Citation snapshot dates remain separate from content update dates.
+
+Every current archive record maps through `storyId` to `assets/paper-stories.js`. The graphical abstract and three-step animation use original conceptual SVG diagrams, with pause, manual step selection, keyboard dismissal and standalone SVG downloads. Reduced-motion preferences disable automatic playback. On narrow screens, animation shows one legible scene at a time. Source links accompany all stories; title-based concepts are explicitly labeled. Preprint/article twins share a story, and a correction is shown as a publication notice.
+
+For future entries, add a three-step story with an evidence URL alongside the publication. Refreshing metadata never invents a new visual explanation. New unpublished manuscript PDFs should only be linked after a public release is available.
+
 ## Visitor atlas
 
 The configured Cloudflare Worker and D1 database aggregate approximate city/region locations. No browser GPS request is made. A random browser token deduplicates visits for 30 minutes per place. Maps use rounded coordinates; VPNs and carrier routing affect the estimate. The app does not write raw IP addresses to D1. Counts estimate browser visits rather than exact people.
