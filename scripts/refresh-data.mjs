@@ -8,8 +8,8 @@
  *    (only Scholar-indexed works ever appear) and the headline metrics
  *    (Citations / h-index / i10-index). Scholar has no official API, so the
  *    public profile page is parsed; if that fails the previous snapshot stays.
- *  - OpenAlex supplements per-paper metadata (DOI, venue, volume/pages) and
- *    live citation counts for the Scholar-verified list.
+ *  - OpenAlex supplements per-paper metadata (DOI, venue, volume/pages).
+ *    Citation counts always come from the saved or fetched Scholar snapshot.
  *  - Entries marked "verified: true" in site-data.js are user-confirmed and
  *    survive even if Scholar stops listing them (e.g. journal corrections).
  */
@@ -27,12 +27,9 @@ const UA =
 const normalize = (s) =>
   String(s || "")
     .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "")
-    .slice(0, 64);
+    .replace(/[^a-z0-9]+/g, "");
 
-// Exclusions use the complete title: the legacy matching key above truncates
-// long titles and must not turn a different paper with the same prefix into a
-// rejected work. DOI resolver links and bare DOI values share one exact key.
+// DOI resolver links and bare DOI values share one exact exclusion key.
 function isExcludedPublication(publication, exclusions = []) {
   const fullTitle = value => String(value || "")
     .normalize("NFKC")
@@ -54,6 +51,12 @@ function isExcludedPublication(publication, exclusions = []) {
     return (title && excludedTitle && title === excludedTitle) ||
       (excludedDoi && dois.includes(excludedDoi));
   });
+}
+
+function scholarCitationFields(value, date) {
+  const text = String(value ?? "").trim().replace(/,/g, "");
+  const citations = /^\d+$/.test(text) ? Number(text) : null;
+  return { citations, citationsUpdatedAt: citations === null ? undefined : date };
 }
 
 async function fetchText(url) {
@@ -143,7 +146,8 @@ async function fetchScholarMetrics(user) {
   return {
     citations: cells[0] || "",
     hIndex: cells[2] || "",
-    i10Index: cells[4] || ""
+    i10Index: cells[4] || "",
+    since2021: { citations: cells[1] || "", hIndex: cells[3] || "", i10Index: cells[5] || "" }
   };
 }
 
@@ -194,6 +198,7 @@ async function main() {
     console.log("scholar/unparseable — keeping the existing snapshot");
     return;
   }
+  const snapshotDate = new Date().toISOString().slice(0, 10);
 
   const scholarNorm = new Set(scholarPapers.map((p) => normalize(p.title)));
   const byScholarTitle = new Map(
@@ -211,13 +216,12 @@ async function main() {
     if (seen.has(key)) continue;
     seen.add(key);
 
-    const existing = data.publications.find(
-      (p) => normalize(p.title) === key
-    );
+    const aliases = data.publications.filter(p => (p.scholarTitleAliases || []).some(title => normalize(title) === key));
+    const existing = aliases.length === 1 ? aliases[0] : data.publications.find(p => normalize(p.title) === key);
     if (isExcludedPublication(existing, data.excludedPublications)) continue;
     // Acceptance status is curated; indexing alone does not prove publication.
     if (existing?.status === "accepted" || existing?.metadataVerified) {
-      nextPublications.push({...existing, citations: existing.status === "accepted" ? existing.citations : Number(paper.cites) || 0});
+      nextPublications.push({...existing, ...(existing.status === "accepted" ? {} : scholarCitationFields(paper.cites, snapshotDate))});
       seenCombos.add(`${normalize(existing.title)}|${normalize(existing.link)}`);
       continue;
     }
@@ -258,7 +262,7 @@ async function main() {
       venue: paper.venue || source.display_name || "",
       details,
       year: Number(paper.year) || openAlex?.publication_year || null,
-      citations: Number(paper.cites) || 0,
+      ...scholarCitationFields(paper.cites, snapshotDate),
       link:
         existing?.link ||
         doi ||
@@ -293,11 +297,15 @@ async function main() {
       "h-index": metrics.hIndex,
       "i10-index": metrics.i10Index
     }[metric.label];
-    if (next) metric.value = next;
+    if (next) { metric.value = next; metric.note = `Google Scholar · snapshot ${snapshotDate}`; }
   }
 
   // 4) Freshness stamp.
-  data.profile.updatedAt = new Date().toISOString().slice(0, 10);
+  data.profile.updatedAt = snapshotDate;
+  data.profile.citationSnapshot = { source: "Google Scholar", capture: "automatic", recordedAt: snapshotDate, profileId: SCHOLAR_USER };
+  if (Object.values(metrics.since2021).every(value => /^\d+$/.test(value.replace(/,/g, "")))) {
+    data.profile.citationSnapshot.since2021 = Object.fromEntries(Object.entries(metrics.since2021).map(([key, value]) => [key, Number(value.replace(/,/g, ""))]));
+  }
 
   // 5) Write only when something changed.
   const next = `window.siteData = ${JSON.stringify(data, null, 2)};\n`;

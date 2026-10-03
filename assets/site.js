@@ -317,6 +317,14 @@ function publicationPreview(publication) {
   </figure>`;
 }
 
+function citationLabel(publication) {
+  if (publication.status === "accepted") return "Accepted · Forthcoming";
+  if (!Number.isFinite(publication.citations)) return "Citations unavailable";
+  const date = publication.citationsUpdatedAt;
+  const older = date && date !== window.siteData.profile?.updatedAt;
+  return `Cited by ${publication.citations}${older ? ` · ${date}` : ""}`;
+}
+
 function renderSelectedPublications() {
   const container = document.getElementById("selected-publications");
   if (!container) return;
@@ -340,7 +348,7 @@ function renderSelectedPublications() {
       card.innerHTML = `
         <div class="paper-topline">
           <span class="paper-badge">${publication.year}</span>
-          ${publication.status === "accepted" ? `<span class="paper-badge accepted-badge">Accepted · Forthcoming</span>` : `<span class="paper-badge citation">Cited by ${publication.citations}</span>`}
+          <span class="paper-badge ${publication.status === "accepted" ? "accepted-badge" : "citation"}">${citationLabel(publication)}</span>
           <span class="paper-badge">${publication.type}</span>
         </div>
         <h3>${publication.title}</h3>
@@ -369,11 +377,12 @@ function renderSelectedPublications() {
 }
 
 function sortPublications(publications, mode) {
+  const count = paper => Number.isFinite(paper.citations) ? paper.citations : -1;
   return [...publications].sort((left, right) => {
     if (mode === "citations") {
-      return right.citations - left.citations || right.year - left.year;
+      return count(right) - count(left) || right.year - left.year;
     }
-    return right.year - left.year || right.citations - left.citations;
+    return right.year - left.year || count(right) - count(left);
   });
 }
 
@@ -452,7 +461,7 @@ function setupArchive() {
             ${publicationPreview(publication)}
           </div>
           <div class="publication-side">
-            <span class="cited-chip">${publication.status === "accepted" ? "Accepted · Forthcoming" : `Cited by ${publication.citations}`}</span>
+            <span class="cited-chip">${citationLabel(publication)}</span>
             <div class="publication-links">${createPaperLinks(publication, "")}</div>
           </div>
         `;
@@ -676,7 +685,8 @@ function updateDataStamp(info = {}) {
   const stamp = document.getElementById("data-stamp");
   if (!stamp) return;
   const snapshot = window.siteData.profile.updatedAt;
-  stamp.textContent = `Citations: Google Scholar${snapshot ? ` · snapshot ${snapshot}` : " · saved snapshot"}${info.live ? " · Publication details updated from OpenAlex" : ""}`;
+  const supplied = window.siteData.profile.citationSnapshot?.capture === "owner-provided";
+  stamp.textContent = `Citations: Google Scholar${snapshot ? ` · snapshot ${snapshot}` : " · saved snapshot"}${supplied ? " · Provided by profile owner" : ""}${info.live ? " · Publication details updated from OpenAlex" : ""}`;
 }
 
 async function setupLivePublications() {

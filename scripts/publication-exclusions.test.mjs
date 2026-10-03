@@ -117,5 +117,54 @@ test('mock refresh cannot resurrect excluded Scholar papers or verified records'
   }
   assert.equal(refreshed.excludedPublications[0].doi, excludedDoi);
   assert.equal(refreshed.profile.metrics[0].value, '100');
+  assert.equal(refreshed.profile.citationSnapshot.capture, 'automatic');
+  assert.equal(good.citationsUpdatedAt, refreshed.profile.updatedAt);
+  assert.equal(refreshed.profile.citationSnapshot.since2021.citations, 80);
+  assert.match(refreshed.profile.metrics[0].note, /Google Scholar · snapshot/);
   assert.equal(requests.filter(url => url.startsWith('https://scholar.google.com/')).length, 2);
+});
+
+test('a missing Scholar count is unavailable, while an explicit zero remains zero', () => {
+  const { scholarCitationFields: fields } = loadScript();
+  assert.equal(fields('', '2026-10-03').citations, null);
+  assert.equal(fields('', '2026-10-03').citationsUpdatedAt, undefined);
+  assert.equal(fields('0', '2026-10-03').citations, 0);
+  assert.equal(fields('0', '2026-10-03').citationsUpdatedAt, '2026-10-03');
+  assert.equal(fields('1,025', '2026-10-03').citations, 1025);
+});
+
+test('unreachable Scholar leaves an owner-provided snapshot and provenance untouched', async () => {
+  const data={profile:{updatedAt:'2026-10-03',citationSnapshot:{capture:'owner-provided'},metrics:[{label:'Citations',value:'1025'}]},publications:[]};
+  let wrote=false;
+  const context=loadScript({
+    readFileSync(){return `window.siteData = ${JSON.stringify(data)};`;},
+    writeFileSync(){wrote=true;},
+    async fetch(){throw new Error('Scholar is unavailable');}
+  });
+  await context.main();
+  assert.equal(wrote,false);
+});
+
+test('a known preprint title alias updates that record rather than its journal twin', async () => {
+  const title='Layer-wise CNN with smaller filters', alias='Efficient CNN with smaller filters';
+  const data={profile:{metrics:[]},publications:[
+    {title,link:'https://doi.org/10.1234/journal',type:'Journal article',citations:166,verified:true,metadataVerified:true},
+    {title,scholarTitleAliases:[alias],link:'https://arxiv.org/abs/2005.03948',type:'Preprint',citations:16,verified:true,metadataVerified:true}
+  ]};
+  const html=['1025','1009','11','11','11','11'].map(value=>`<td class="gsc_rsb_std">${value}</td>`).join('')+scholarRow(alias,'17');
+  let saved;
+  const context=loadScript({
+    readFileSync(){return `window.siteData = ${JSON.stringify(data)};`;},
+    writeFileSync(file,code){saved=code;},
+    async fetch(url){
+      if(String(url).startsWith('https://scholar.google.com/'))return {ok:true,text:async()=>html};
+      throw new Error('Optional OpenAlex enrichment is unavailable');
+    }
+  });
+  await context.main();
+  const refreshed=context.parseSiteData(saved);
+  assert.equal(refreshed.publications.length,2);
+  assert.equal(refreshed.publications.find(p=>p.type==='Preprint').citations,17);
+  assert.equal(refreshed.publications.find(p=>p.type==='Preprint').title,title);
+  assert.equal(refreshed.publications.find(p=>p.type==='Journal article').citations,166);
 });

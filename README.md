@@ -14,6 +14,8 @@ The publication archive supports title, author and venue search, year filters, c
 
 The scheduled workflow attempts a daily Scholar refresh and optional OpenAlex metadata enrichment. If Scholar is unavailable, the previous snapshot remains. If OpenAlex is unavailable, it does not prevent a successful Scholar refresh. A zero Scholar citation count remains zero. User-confirmed entries marked `verified: true` survive sync.
 
+Owner-provided Scholar snapshots are recorded in `profile.citationSnapshot` with their date and capture source. Per-paper `citationsUpdatedAt` distinguishes historical counts from the current profile snapshot; an absent or blank count is unavailable, rather than a confirmed zero. A successful automatic refresh updates both the provenance and dates. `scholarTitleAliases` matches known renamed preprints while retaining verified publication titles and links.
+
 Run manually with `node scripts/refresh-data.mjs`. Update news in `siteData.news`; the sync preserves it. An optional CV link is shown when `profile.cv` contains a local PDF path.
 
 `siteData.excludedPublications` records owner-confirmed authorship exclusions by full title and DOI. These exclusions override Scholar indexing, old verified records and browser metadata enrichment, so work by a different researcher with the same name cannot return during a refresh. Remove corresponding news and visual stories when excluding a paper.
