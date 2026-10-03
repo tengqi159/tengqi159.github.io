@@ -1,11 +1,12 @@
-/* Paper figures are extracted from source manuscripts; motion only highlights verified regions. */
+/* Original figures remain available; explanations require a full-manuscript content review. */
 (() => {
   const esc = value => String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   const all = () => window.paperStories || [];
   const normalized = title => String(title || "").toLowerCase().replace(/[^a-z0-9]/g, "");
   const find = pub => all().find(s => s.id === pub.storyId || (pub.link && (s.link === pub.link || (s.aliases || []).includes(pub.link))) || normalized(s.title) === normalized(pub.title));
   const hasFigure = story => !!story?.figure?.src;
-  const hasAnimation = story => hasFigure(story) && story.steps?.length === 3 && story.figure.regions?.length === 3 && story.figure.regions.every(r =>
+  const hasReviewedContent = story => story?.contentReview?.status === "verified" && story.contentReview.basis === "full-manuscript";
+  const hasAnimation = story => hasReviewedContent(story) && hasFigure(story) && story.steps?.length === 3 && story.figure.regions?.length === 3 && story.figure.regions.every(r =>
     [r.x, r.y, r.width, r.height].every(Number.isFinite) && r.x >= 0 && r.y >= 0 && r.width > 0 && r.height > 0 && r.x + r.width <= 1.001 && r.y + r.height <= 1.001);
   const icon = name => `<svg class="paper-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${{
     abstract: '<rect x="3" y="5" width="18" height="14" rx="3"/><path d="m5 16 5-5 4 4 3-3 4 4"/><circle cx="16" cy="9" r="1"/>',
@@ -34,7 +35,7 @@
         <div class="news-paper-top"><span class="news-new-badge">${icon("new")}New</span><span class="accepted-badge">${icon("accepted")}Accepted · NeurIPS ${pub.year}</span><span class="news-paper-format">${icon("poster")}Poster · Forthcoming</span></div>
         <h3>${esc(pub.title)}</h3><p class="paper-authors">${esc(pub.authors)}</p>
         ${hasFigure(story) ? `<figure class="news-paper-figure"><button class="publication-preview" type="button" data-story="${esc(story.id)}" data-mode="abstract" aria-label="View paper framework for ${esc(story.shortName)}"><span class="publication-preview-topline"><span>Original paper figure</span><span class="publication-preview-open">Enlarge ↗</span></span>${figureMarkup(story, {thumbnail:true})}</button><figcaption class="publication-figure-caption">${esc(story.figure.label || "Paper framework")}</figcaption></figure>` : ""}
-        ${story ? `<p class="news-paper-summary">${esc(story.summary)}</p>` : ""}
+        ${hasReviewedContent(story) ? `<p class="news-paper-summary">${esc(story.summary)}</p>` : ""}
         <div class="paper-links">${buttons(pub)}</div>
       </article>`;
     }).join("");
@@ -56,7 +57,7 @@
     motionNote.hidden = !animationMode || !reduced?.matches;
     const motionMessage = reduced?.matches ? "Reduced motion is enabled. Select a step to explore." : "";
     if (motionNote.textContent !== motionMessage) motionNote.textContent = motionMessage;
-    dialog.querySelector("#pe-caption").textContent = mode === "abstract" ? `${current.figure.label || "Paper framework"}. ${current.summary}` : `${current.steps[phase].label}. ${current.steps[phase].description}`;
+    dialog.querySelector("#pe-caption").textContent = mode === "abstract" ? `${current.figure.label || "Paper framework"}${hasReviewedContent(current) ? `. ${current.summary}` : ""}` : `${current.steps[phase].label}. ${current.steps[phase].description}`;
     dialog.querySelector("#pe-play").textContent = playing ? "Pause" : "Play";
     dialog.querySelector("#pe-play").setAttribute("aria-pressed", String(playing));
     dialog.querySelectorAll("[data-pe-mode]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.peMode === mode)));
@@ -95,7 +96,7 @@
     const extension = current.figure.src.split("?")[0].split(".").pop();
     const link = document.createElement("a"); link.href = current.figure.src; link.download = `${current.id}-paper-framework.${extension}`; document.body.appendChild(link); link.click(); link.remove();
   }
-  window.paperExplainer = {find, buttons, figureMarkup, hasFigure, hasAnimation, renderNewsCards};
+  window.paperExplainer = {find, buttons, figureMarkup, hasFigure, hasReviewedContent, hasAnimation, renderNewsCards};
   document.addEventListener("DOMContentLoaded", () => {
     dialog = document.getElementById("paper-dialog"); if (!dialog) return;
     renderNewsCards();

@@ -25,7 +25,6 @@ test('verified framework assets exist with matching lossless WebP dimensions',()
     assert.equal(((bits>>>14)&0x3fff)+1,figure.height,id);
     assert.ok(figure.sourceFigureNumber);
     assert.ok(figure.alt.length>20);
-    assert.equal(viewer.hasAnimation(stories.find(s=>s.id===id)),true,id);
   }
 });
 
@@ -49,9 +48,25 @@ test('missing figures cannot produce a substitute graphic or animation entry',()
 
 test('animation requires three valid regions within the actual image',()=>{
   const story=JSON.parse(JSON.stringify(stories[0]));
+  story.contentReview={status:'verified',basis:'full-manuscript'};
+  assert.equal(viewer.hasAnimation(story),true);
   story.figure.regions[0].width=2;
   assert.equal(viewer.hasAnimation(story),false);
   story.figure.regions=story.figure.regions.slice(0,2);
+  assert.equal(viewer.hasAnimation(story),false);
+});
+
+test('figure extraction alone cannot enable a manuscript explanation',()=>{
+  const story=JSON.parse(JSON.stringify(stories[0]));
+  delete story.contentReview;
+  assert.equal(viewer.hasReviewedContent(story),false);
+  assert.equal(viewer.hasAnimation(story),false);
+  context.window.paperStories.unshift(story);
+  const buttons=viewer.buttons({storyId:story.id});
+  assert.match(buttons,/Paper framework/);
+  assert.doesNotMatch(buttons,/Animated intro/);
+  context.window.paperStories.shift();
+  story.contentReview={status:'verified',basis:'figure-only'};
   assert.equal(viewer.hasAnimation(story),false);
 });
 

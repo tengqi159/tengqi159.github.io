@@ -313,7 +313,7 @@ function publicationPreview(publication) {
       ${explainer.figureMarkup(story, {thumbnail:true})}
     </button>
     <figcaption class="publication-figure-caption">${escapeAttr(story.figure.label || "Paper framework")}</figcaption>
-    <p class="publication-preview-summary">${escapeAttr(story.summary)}</p>
+    ${window.paperExplainer.hasReviewedContent(story) ? `<p class="publication-preview-summary">${escapeAttr(story.summary)}</p>` : ""}
   </figure>`;
 }
 
