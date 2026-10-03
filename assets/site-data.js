@@ -77,9 +77,7 @@ window.siteData = {
       "status": "accepted",
       "storyId": "mirage",
       "text": "MIRAGE: Hierarchical MI-Surrogate Regulation for Graph Contrastive Learning accepted at",
-      "venue": "NeurIPS 2026 (Poster)",
-      "link": "https://neurips.cc/virtual/2026/poster/151455",
-      "linkLabel": "Conference page"
+      "venue": "NeurIPS 2026 (Poster) · Proceedings forthcoming"
     },
     {
       "date": "2026",
@@ -87,9 +85,7 @@ window.siteData = {
       "status": "accepted",
       "storyId": "psdnet",
       "text": "When a Window Is Not an Action: Selective Phase-Script Deliberation for Sliding-Window Human Activity Recognition accepted at",
-      "venue": "NeurIPS 2026 (Poster)",
-      "link": "https://neurips.cc/virtual/2026/poster/154058",
-      "linkLabel": "Conference page"
+      "venue": "NeurIPS 2026 (Poster) · Proceedings forthcoming"
     },
     {
       "date": "2024",
@@ -141,8 +137,6 @@ window.siteData = {
       "details": "Accepted · Poster · Proceedings forthcoming",
       "year": 2026,
       "citations": 0,
-      "link": "https://neurips.cc/virtual/2026/poster/151455",
-      "linkLabel": "Conference",
       "selected": false,
       "type": "Accepted paper",
       "status": "accepted",
@@ -157,8 +151,6 @@ window.siteData = {
       "details": "Accepted · Poster · Proceedings forthcoming",
       "year": 2026,
       "citations": 0,
-      "link": "https://neurips.cc/virtual/2026/poster/154058",
-      "linkLabel": "Conference",
       "selected": false,
       "type": "Accepted paper",
       "status": "accepted",

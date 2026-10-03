@@ -68,18 +68,18 @@
       href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Manrope:wght@400..800&family=IBM+Plex+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="assets/styles.css?v=research-20261003" />
-    <link rel="stylesheet" href="assets/fx.css?v=research-20261003" />
-    <link rel="stylesheet" href="assets/signal-studies.css?v=research-20261003" />
-    <link rel="stylesheet" href="assets/atlas.css?v=research-20261003" />
-    <link rel="stylesheet" href="assets/research-stories.css?v=research-20261003" />
-    <script defer src="assets/site-data.js?v=research-20261003"></script>
-    <script defer src="assets/atlas-crowd.js?v=research-20261003"></script>
-    <script defer src="assets/paper-stories.js?v=research-20261003"></script>
-    <script defer src="assets/paper-explainer.js?v=research-20261003"></script>
-    <script defer src="assets/site.js?v=research-20261003"></script>
-    <script defer src="assets/fx.js?v=research-20261003"></script>
-    <script defer src="assets/signal-studies.js?v=research-20261003"></script>
+    <link rel="stylesheet" href="assets/styles.css?v=research-20261003-visuals" />
+    <link rel="stylesheet" href="assets/fx.css?v=research-20261003-visuals" />
+    <link rel="stylesheet" href="assets/signal-studies.css?v=research-20261003-visuals" />
+    <link rel="stylesheet" href="assets/atlas.css?v=research-20261003-visuals" />
+    <link rel="stylesheet" href="assets/research-stories.css?v=research-20261003-visuals" />
+    <script defer src="assets/site-data.js?v=research-20261003-visuals"></script>
+    <script defer src="assets/atlas-crowd.js?v=research-20261003-visuals"></script>
+    <script defer src="assets/paper-stories.js?v=research-20261003-visuals"></script>
+    <script defer src="assets/paper-explainer.js?v=research-20261003-visuals"></script>
+    <script defer src="assets/site.js?v=research-20261003-visuals"></script>
+    <script defer src="assets/fx.js?v=research-20261003-visuals"></script>
+    <script defer src="assets/signal-studies.js?v=research-20261003-visuals"></script>
   </head>
   <body>
     <a class="skip-link" href="#top">Skip to content</a>
@@ -190,14 +190,14 @@
       <section class="section" id="news" data-reveal>
         <header class="section-head">
           <p class="section-kicker"><span>01</span>News</p>
-          <h2>Latest news.</h2>
+          <h2 class="news-heading"><svg class="news-heading-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v14H4Z"/><path d="M8 9h3v3H8ZM14 9h3M14 12h3M8 15h9"/></svg>Latest news.</h2>
           <p class="section-lede">
             Accepted papers and research updates. The latest papers below are awaiting publication in the proceedings.
           </p>
         </header>
 
         <div class="news-papers" id="news-papers"></div>
-        <noscript><p>Two papers accepted at NeurIPS 2026: <a href="https://neurips.cc/virtual/2026/poster/151455">MIRAGE</a> and <a href="https://neurips.cc/virtual/2026/poster/154058">When a Window Is Not an Action</a>. Proceedings forthcoming. Enable JavaScript for the graphical abstracts.</p></noscript>
+        <noscript><p>Two papers accepted at NeurIPS 2026: MIRAGE and When a Window Is Not an Action. Proceedings forthcoming. Enable JavaScript for the graphical abstracts.</p></noscript>
         <details class="news-history"><summary>Earlier updates</summary><ol class="news-timeline" id="news-timeline"></ol></details>
       </section>
 
@@ -399,7 +399,7 @@
             <div class="visitor-map" id="visitor-map-canvas" role="group" aria-label="Visitor locations on a world map">
               <div class="atlas-plot">
                 <div class="atlas-grid" aria-hidden="true"></div>
-                <img class="world-map-image" src="assets/atlas-world.svg?v=research-20261003" alt="World map" loading="lazy" decoding="async" />
+                <img class="world-map-image" src="assets/atlas-world.svg?v=research-20261003-visuals" alt="World map" loading="lazy" decoding="async" />
                 <canvas class="crowd-canvas" id="crowd-canvas" aria-hidden="true"></canvas>
                 <svg class="arc-layer" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
                   <path id="arc-base" class="arc-base" pathLength="100" vector-effect="non-scaling-stroke" hidden />
@@ -494,7 +494,7 @@
       <div class="pe-mode-bar" aria-label="Presentation mode"><button type="button" data-pe-mode="abstract" aria-pressed="true">Graphical abstract</button><button type="button" data-pe-mode="animation" aria-pressed="false">Animated introduction</button><button type="button" id="pe-play" aria-pressed="false">Play</button><button type="button" id="pe-restart">Restart</button><span id="pe-progress"></span></div>
       <figure class="pe-figure-wrap"><div id="pe-figure"></div><figcaption id="pe-caption" aria-live="off"></figcaption></figure>
       <div class="pe-steps" id="pe-steps" aria-label="Explore the three steps"></div>
-      <footer class="pe-footer"><button type="button" id="pe-download">Download SVG</button><a id="pe-source" target="_blank" rel="noreferrer">Paper source</a><p id="pe-note"></p></footer>
+      <footer class="pe-footer"><button type="button" id="pe-download">Download SVG</button><a id="pe-source" target="_blank" rel="noreferrer" hidden>Paper source</a><p id="pe-note"></p></footer>
     </dialog>
     <p class="copy-feedback" id="copy-feedback" role="status" aria-live="polite"></p>
     <dialog class="copy-dialog" id="copy-dialog" aria-labelledby="copy-dialog-title">

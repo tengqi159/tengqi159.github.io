@@ -32,6 +32,24 @@ test('metadata indexing does not imply publication of an accepted paper',()=>{
   assert.equal(result[0].status,'accepted');assert.equal(result[0].details,'Proceedings forthcoming');assert.equal(result[0].venue,'NeurIPS 2026');
   const bib=context.bibtexFor({...pub,storyId:'example',year:2026,authors:'Q. Teng, X. Wang',link:'https://example.com/paper'});
   assert.match(bib,/^@unpublished/);assert.match(bib,/proceedings forthcoming/);
+  assert.doesNotMatch(bib,/url=|https:\/\//);
+});
+test('accepted papers cannot expose outbound paper links even if metadata supplies a URL',()=>{
+  context.window.paperExplainer={buttons:()=>'<button>Graphical abstract</button><button>Animated intro</button>'};
+  const links=context.createPaperLinks({title:'Accepted paper',status:'accepted',link:'https://example.com/fulltext',linkLabel:'PDF'},'');
+  assert.match(links,/Graphical abstract/);assert.match(links,/Animated intro/);
+  assert.doesNotMatch(links,/<a\b|href=|Scholar|Cite|PDF/);
+  delete context.window.paperExplainer;
+});
+test('withheld paper links still match each accepted work to its own visual story',()=>{
+  const dataContext={window:{},document:{addEventListener(){}}};vm.createContext(dataContext);
+  for(const file of ['site-data.js','paper-stories.js','paper-explainer.js'])
+    vm.runInContext(readFileSync(new URL('../assets/'+file,import.meta.url),'utf8'),dataContext);
+  for(const pub of dataContext.window.siteData.publications.filter(p=>p.status==='accepted')){
+    assert.equal(pub.link,undefined);assert.equal(dataContext.window.paperExplainer.find(pub).id,pub.storyId);
+    const story=dataContext.window.paperExplainer.find(pub);
+    assert.equal(story.publicationStatus,'accepted');assert.equal(story.link,undefined);assert.equal(story.evidenceUrl,undefined);
+  }
 });
 test('every curated archive record has a three-step visual introduction',()=>{
   const dataContext={window:{}};vm.createContext(dataContext);

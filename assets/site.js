@@ -189,7 +189,7 @@ const BIBTEX_STOPWORDS = new Set([
 function bibtexFor(publication) {
   if (publication.status === "accepted") {
     const slug = publication.storyId || "paper";
-    return `@unpublished{teng${publication.year}${slug}, title={${publication.title}}, author={${String(publication.authors).split(",").map(s=>s.trim()).join(" and ")}}, note={Accepted at NeurIPS ${publication.year} (Poster); proceedings forthcoming}, url={${publication.link}}}`;
+    return `@unpublished{teng${publication.year}${slug}, title={${publication.title}}, author={${String(publication.authors).split(",").map(s=>s.trim()).join(" and ")}}, note={Accepted at NeurIPS ${publication.year} (Poster); proceedings forthcoming}}`;
   }
   const authors = String(publication.authors || "")
     .split(",")
@@ -260,11 +260,11 @@ function venueLineHtml(publication) {
 }
 
 function createPaperLinks(publication, extraClass) {
-  const scholarSearch = new URL("https://scholar.google.com/scholar");
-  scholarSearch.searchParams.set("q", publication.title);
-
   const links = [];
   if (window.paperExplainer) links.push(window.paperExplainer.buttons(publication, extraClass));
+  if (publication.status === "accepted") return links.join("");
+  const scholarSearch = new URL("https://scholar.google.com/scholar");
+  scholarSearch.searchParams.set("q", publication.title);
   if (publication.link) {
     links.push(
       `<a class="paper-link ${extraClass}" href="${publication.link}" target="_blank" rel="noreferrer">${publication.linkLabel}${ARROW_ICON}</a>`
@@ -277,6 +277,39 @@ function createPaperLinks(publication, extraClass) {
     `<button type="button" class="paper-link cite-btn ${extraClass}" data-copy="${escapeAttr(bibtexFor(publication))}" aria-label="Copy BibTeX citation">Cite${CITE_ICON}</button>`
   );
   return links.join("");
+}
+
+function publicationPreview(publication) {
+  const explainer = window.paperExplainer;
+  const story = explainer?.find(publication);
+  if (!story) return "";
+
+  // Reuse the full diagram's three panels, with readable HTML step labels.
+  const source = document.createElement("div");
+  source.innerHTML = explainer.diagram(story, -1, true, false);
+  const panels = [...source.querySelectorAll(".pe-stage")].map((panel, index) => {
+    const graphic = panel.cloneNode(true);
+    graphic.removeAttribute("transform");
+    graphic.querySelectorAll(".pe-label, .pe-number, .pe-small").forEach(label => label.remove());
+    const background = graphic.querySelector(".pe-panel");
+    if (background) background.setAttribute("height", "130");
+    const drawing = [...graphic.children].find(child => child.tagName.toLowerCase() === "g");
+    if (drawing) drawing.setAttribute("transform", "translate(13 14)");
+    const step = story.steps[index];
+    return `<span class="publication-preview-step">
+      <svg class="publication-preview-graphic" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 204 130" aria-hidden="true" focusable="false">${graphic.outerHTML}</svg>
+      <span class="publication-preview-step-copy"><span class="publication-preview-step-label"><span class="publication-preview-step-number">0${index + 1}</span>${escapeAttr(step.label)}</span><span class="publication-preview-step-description">${escapeAttr(step.description)}</span></span>
+    </span>`;
+  }).join("");
+  const label = story.evidenceLevel?.startsWith("title") ? "Concept overview" :
+    story.presentationLabel === "Publication notice" ? "Publication notice" : "Graphical abstract";
+  return `<figure class="publication-preview-wrap">
+    <button class="publication-preview" type="button" data-story="${escapeAttr(story.id)}" data-mode="abstract" aria-label="View graphical abstract for ${escapeAttr(story.shortName)}">
+      <span class="publication-preview-topline"><span>${label}</span><span class="publication-preview-open">Explore${ARROW_ICON}</span></span>
+      <span class="publication-preview-steps">${panels}</span>
+    </button>
+    <figcaption class="publication-preview-summary">${escapeAttr(story.summary)}</figcaption>
+  </figure>`;
 }
 
 function renderSelectedPublications() {
@@ -302,12 +335,13 @@ function renderSelectedPublications() {
       card.innerHTML = `
         <div class="paper-topline">
           <span class="paper-badge">${publication.year}</span>
-          <span class="paper-badge citation">Cited by ${publication.citations}</span>
+          ${publication.status === "accepted" ? `<span class="paper-badge accepted-badge">Accepted · Forthcoming</span>` : `<span class="paper-badge citation">Cited by ${publication.citations}</span>`}
           <span class="paper-badge">${publication.type}</span>
         </div>
         <h3>${publication.title}</h3>
         <p class="paper-authors">${publication.authors}</p>
         <p class="paper-venue">${venueLine(publication)}</p>
+        ${publicationPreview(publication)}
         <div class="paper-links">${createPaperLinks(publication, "")}</div>
       `;
 
@@ -322,7 +356,7 @@ function renderSelectedPublications() {
       bar.style.setProperty("--w", `${share > 0 ? Math.max(6, Math.round(share * 100)) : 0}%`);
       meter.appendChild(bar);
       foot.appendChild(meter);
-      card.appendChild(foot);
+      if (publication.status !== "accepted") card.appendChild(foot);
 
       return card;
     })
@@ -405,9 +439,12 @@ function setupArchive() {
         item.innerHTML = `
           <span class="publication-year">${publication.year}</span>
           <div class="publication-main">
-            <h3>${publication.title}</h3>
-            <p class="publication-authors">${publication.authors}</p>
-            <p class="publication-meta">${venueLineHtml(publication)}</p>
+            <div class="publication-copy">
+              <h3>${publication.title}</h3>
+              <p class="publication-authors">${publication.authors}</p>
+              <p class="publication-meta">${venueLineHtml(publication)}</p>
+            </div>
+            ${publicationPreview(publication)}
           </div>
           <div class="publication-side">
             <span class="cited-chip">${publication.status === "accepted" ? "Accepted · Forthcoming" : `Cited by ${publication.citations}`}</span>
@@ -815,7 +852,9 @@ function setupRevealObserver() {
         }
       });
     },
-    { threshold: 0.12 }
+    // A full publication archive may be much taller than the viewport.
+    // Reveal on entry rather than requiring a fraction of the entire section.
+    { threshold: 0 }
   );
 
   targets.forEach((target) => observer.observe(target));

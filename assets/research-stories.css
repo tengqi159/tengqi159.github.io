@@ -17,8 +17,58 @@
 .news-history .news-timeline { margin-top: 1.3rem; }
 .pe-open { color: var(--teal-strong); background: var(--teal-soft) !important; border-color: transparent; }
 .paper-link { font-size: .875rem; min-height: 42px; }
+.paper-link { gap: .4rem; }
+.paper-icon { display: inline-block; width: 17px; height: 17px; flex-shrink: 0; vertical-align: middle; }
+.accepted-badge { display: inline-flex; align-items: center; gap: .4rem; }
+.news-paper-format { display: inline-flex; align-items: center; gap: .4rem; }
+.news-new-badge { display: inline-flex; align-items: center; gap: .35rem; color: var(--gold); background: var(--gold-soft); padding: .35rem .6rem; border-radius: 6px; font-size: .875rem; font-weight: 700; }
+.news-heading { display: flex; align-items: center; gap: .7rem; }
+.news-heading-icon { display: inline-flex; align-items: center; width: 34px; height: 34px; flex-shrink: 0; color: var(--teal-strong); }
+.news-heading-icon svg { width: 34px; height: 34px; flex-shrink: 0; }
 .publication-side { min-width: 0; }
 .publication-links { flex-wrap: wrap; }
+/* Existing diagram panels are reused as inline previews in every paper card. */
+.publication-preview-wrap { margin: 1.25rem 0 0; min-width: 0; }
+.publication-preview { display: block; width: 100%; padding: .85rem; color: var(--ink); text-align: left; border: 1px solid var(--line); border-radius: 12px; background: var(--paper); cursor: pointer; transition: border-color 180ms ease, background 180ms ease; }
+.publication-preview:hover { border-color: var(--teal); background: var(--paper-elev); }
+.publication-preview:focus-visible { outline: 3px solid var(--teal); outline-offset: 4px; }
+.publication-preview-topline { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .35rem .7rem; margin-bottom: .75rem; font-size: .82rem; color: var(--ink-2); }
+.publication-preview-open { display: inline-flex; align-items: center; gap: .3rem; color: var(--teal-strong); font-weight: 700; }
+.publication-preview-open svg { width: 15px; height: 15px; }
+.publication-preview-steps { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: .65rem; }
+.publication-preview-step { display: flex; flex-direction: column; gap: .5rem; min-width: 0; }
+.publication-preview-graphic { display: block; width: 100%; height: auto; }
+.publication-preview-step-copy { min-width: 0; }
+.publication-preview-step-label { display: flex; flex-direction: column; align-items: flex-start; gap: .2rem; font-size: .875rem; font-weight: 600; line-height: 1.4; overflow-wrap: anywhere; }
+.publication-preview-step-number { color: var(--teal-strong); font: 500 .75rem "IBM Plex Mono",monospace; }
+.publication-preview-step-description { display: none; }
+.publication-preview-summary { margin: .8rem 0 0; color: var(--ink-2); font-size: .95rem; line-height: 1.7; }
+.selected-card:first-child .publication-preview-wrap { max-width: 720px; }
+.selected-card .paper-links { margin-top: auto; padding-top: 1rem; }
+.selected-card .publication-preview-wrap + .paper-links { margin-top: 1.2rem; }
+.publication-item { grid-template-columns: 3.6rem minmax(0,1fr); gap: .8rem 1.5rem; }
+.publication-main { display: grid; grid-template-columns: minmax(0,1fr) minmax(360px,.95fr); align-items: start; gap: 1.6rem; min-width: 0; }
+.publication-copy { min-width: 0; }
+.publication-main .publication-preview-wrap { margin-top: 0; }
+.publication-side { grid-column: 2; display: flex; flex-direction: row; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .7rem; padding-top: .35rem; }
+.publication-links .paper-link { font-size: .82rem; }
+@media (max-width: 1080px) {
+  .publication-main { grid-template-columns: 1fr; gap: 1rem; }
+  .publication-main .publication-preview-wrap { max-width: 720px; }
+}
+@media (max-width: 640px) {
+  .publication-item { grid-template-columns: 1fr; gap: .6rem; padding: 1.3rem 0; }
+  .publication-side { grid-column: 1; align-items: flex-start; flex-direction: column; gap: .8rem; }
+  .publication-links { gap: .45rem; }
+  .publication-preview { padding: .85rem; }
+  .publication-preview-steps { grid-template-columns: 1fr; gap: .7rem; }
+  .publication-preview-step { display: grid; grid-template-columns: 86px minmax(0,1fr); align-items: center; gap: .75rem; }
+  .publication-preview-step-label { flex-direction: row; gap: .4rem; font-size: .9rem; }
+  .publication-preview-step-number { padding-top: .1rem; }
+  .publication-preview-step-description { display: block; margin-top: .3rem; color: var(--ink-2); font-size: .82rem; line-height: 1.5; }
+  .publication-preview-summary { font-size: .925rem; }
+  .news-heading-icon, .news-heading-icon svg { width: 32px; height: 32px; }
+}
 .pe-diagram { display: block; width: 100%; height: auto; }
 .pe-panel { fill: var(--paper-sink); stroke: var(--line); }
 .pe-number { fill: var(--ink-2); font: 500 13px "IBM Plex Mono",monospace; }

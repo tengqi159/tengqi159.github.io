@@ -2,8 +2,8 @@ window.paperStories = [
   {
     "id": "mirage",
     "title": "MIRAGE: Hierarchical MI-Surrogate Regulation for Graph Contrastive Learning",
-    "link": "https://neurips.cc/virtual/2026/poster/151455",
-    "evidenceUrl": "https://neurips.cc/virtual/2026/poster/151455",
+    "publicationStatus": "accepted",
+    "presentationLabel": "Accepted · NeurIPS 2026 · Proceedings forthcoming",
     "evidenceLevel": "method",
     "shortName": "MIRAGE",
     "summary": "MIRAGE calibrates cross-view agreement through bounded node-wise alignment budgets and dual-view MI-surrogate stabilization.",
@@ -28,8 +28,8 @@ window.paperStories = [
   {
     "id": "psdnet",
     "title": "When a Window Is Not an Action: Selective Phase-Script Deliberation for Sliding-Window Human Activity Recognition",
-    "link": "https://neurips.cc/virtual/2026/poster/154058",
-    "evidenceUrl": "https://neurips.cc/virtual/2026/poster/154058",
+    "publicationStatus": "accepted",
+    "presentationLabel": "Accepted · NeurIPS 2026 · Proceedings forthcoming",
     "evidenceLevel": "method",
     "shortName": "PSDNet",
     "summary": "PSDNet combines local phase evidence with recent history and selectively checks class-specific phase scripts when a sliding window remains ambiguous.",

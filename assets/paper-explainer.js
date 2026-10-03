@@ -3,7 +3,14 @@
   const esc = value => String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   const all = () => window.paperStories || [];
   const normalized = title => String(title || "").toLowerCase().replace(/[^a-z0-9]/g, "");
-  const find = pub => all().find(s => s.id === pub.storyId || s.link === pub.link || (s.aliases || []).includes(pub.link) || normalized(s.title) === normalized(pub.title));
+  const find = pub => all().find(s => s.id === pub.storyId || (pub.link && (s.link === pub.link || (s.aliases || []).includes(pub.link))) || normalized(s.title) === normalized(pub.title));
+  const icon = name => `<svg class="paper-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${{
+    abstract: '<rect x="3" y="5" width="18" height="14" rx="3"/><path d="m5 16 5-5 4 4 3-3 4 4"/><circle cx="16" cy="9" r="1"/>',
+    play: '<circle cx="12" cy="12" r="9"/><path d="m10 8 6 4-6 4Z"/>',
+    new: '<path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5Z"/>',
+    accepted: '<circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/>',
+    poster: '<path d="M6 3h9l3 3v15H6Z"/><path d="M14 3v5h4M9 12h6M9 16h6"/>'
+  }[name]}</svg>`;
   const plot = (kind, seed) => {
     const path = (d, cls="pe-line") => `<path class="${cls}" d="${d}"/>`;
     const rect = (x,y,w,h,cls="pe-shape") => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="5"/>`;
@@ -51,17 +58,17 @@
   }
   function buttons(pub, cls="") {
     const story=find(pub); if (!story) return "";
-    return `<button class="paper-link pe-open ${cls}" type="button" data-story="${esc(story.id)}" data-mode="abstract" aria-label="View graphical abstract for ${esc(story.shortName)}">Graphical abstract</button><button class="paper-link pe-open ${cls}" type="button" data-story="${esc(story.id)}" data-mode="animation" aria-label="Play animated introduction for ${esc(story.shortName)}">Animated intro</button>`;
+    return `<button class="paper-link pe-open ${cls}" type="button" data-story="${esc(story.id)}" data-mode="abstract" aria-label="View graphical abstract for ${esc(story.shortName)}">${icon("abstract")}Graphical abstract</button><button class="paper-link pe-open ${cls}" type="button" data-story="${esc(story.id)}" data-mode="animation" aria-label="Play animated introduction for ${esc(story.shortName)}">${icon("play")}Animated intro</button>`;
   }
   function renderNewsCards() {
     const root=document.getElementById("news-papers"); if (!root) return;
     root.innerHTML=(window.siteData.publications || []).filter(p=>p.status==="accepted").map(pub=>{
       const story=find(pub);
       return `<article class="news-paper">
-        <div class="news-paper-top"><span class="accepted-badge">Accepted · NeurIPS ${pub.year}</span><span class="news-paper-format">Poster · Forthcoming</span></div>
+        <div class="news-paper-top"><span class="news-new-badge">${icon("new")}New</span><span class="accepted-badge">${icon("accepted")}Accepted · NeurIPS ${pub.year}</span><span class="news-paper-format">${icon("poster")}Poster · Forthcoming</span></div>
         <h3>${esc(pub.title)}</h3><p class="paper-authors">${esc(pub.authors)}</p>
         ${story?`<div class="news-paper-figure">${diagram(story,-1,true)}</div><p class="news-paper-summary">${esc(story.summary)}</p>`:""}
-        <div class="paper-links">${buttons(pub)}<a class="paper-link" href="${esc(pub.link)}" target="_blank" rel="noreferrer">Conference page</a></div>
+        <div class="paper-links">${buttons(pub)}</div>
       </article>`;
     }).join("");
   }
@@ -86,7 +93,11 @@
     dialog.querySelector("#pe-title").textContent=story.title;
     dialog.querySelector("#pe-subtitle").textContent=story.shortName + (story.presentationLabel ? ` · ${story.presentationLabel}` : " · Method overview");
     dialog.querySelector("#pe-steps").innerHTML=story.steps.map((s,i)=>`<button type="button" data-pe-step="${i}" aria-pressed="false"><span>0${i+1}</span><strong>${esc(s.label)}</strong><span class="pe-step-description">${esc(s.description)}</span></button>`).join("");
-    dialog.querySelector("#pe-source").href=story.evidenceUrl || story.link;
+    const source=dialog.querySelector("#pe-source");
+    const accepted=story.publicationStatus==="accepted" || (window.siteData.publications || []).some(p=>p.storyId===story.id && p.status==="accepted");
+    const sourceUrl=accepted ? "" : story.evidenceUrl || story.link;
+    source.hidden=!sourceUrl;
+    if(sourceUrl) source.href=sourceUrl; else source.removeAttribute("href");
     dialog.querySelector("#pe-note").textContent=story.evidenceLevel?.startsWith("title")?"Concept overview based on the paper title. Shapes and motion are illustrative; consult the paper for full methodological details.":"Conceptual illustration of the method. Shapes and motion do not represent measured results.";
     dialog.querySelector("#pe-play").disabled=!!reduced?.matches;
     dialog.querySelector("#pe-play").title=reduced?.matches?"Reduced motion is enabled; use the step buttons to explore.":"";

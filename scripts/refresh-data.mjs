@@ -217,6 +217,7 @@ async function main() {
       .trim();
 
     const rebuilt = {
+      ...existing,
       title: paper.title,
       authors:
         paper.authors ||
