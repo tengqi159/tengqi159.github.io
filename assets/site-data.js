@@ -164,7 +164,7 @@ window.siteData = {
       "title": "DanHAR: Dual attention network for multimodal human activity recognition using wearable sensors",
       "authors": "W Gao, L Zhang, Q Teng, J He, H Wu",
       "venue": "Applied Soft Computing 111, 107728, 2021",
-      "details": "Applied Soft Computing 111, 107728, 2021 · Vol. 111, 107728-107728 · 2021",
+      "details": "Applied Soft Computing 111, 107728, 2021",
       "year": 2021,
       "citations": 254,
       "link": "https://doi.org/10.1016/j.asoc.2021.107728",
@@ -183,13 +183,22 @@ window.siteData = {
           "citations": 11,
           "citationsUpdatedAt": "2026-08-09"
         }
-      ]
+      ],
+      "bibliography": {
+        "journal": "Applied Soft Computing",
+        "volume": "111",
+        "articleNumber": "107728",
+        "year": 2021,
+        "doi": "10.1016/j.asoc.2021.107728"
+      },
+      "metadataVerified": true,
+      "metadataSource": "https://api.crossref.org/works/10.1016/j.asoc.2021.107728"
     },
     {
       "title": "The layer-wise training convolutional neural networks using local loss for sensor-based human activity recognition",
       "authors": "Q Teng, K Wang, L Zhang, J He",
       "venue": "IEEE Sensors Journal 20 (13), 7265-7274, 2020",
-      "details": "IEEE Sensors Journal 20 (13), 7265-7274, 2020 · Vol. 20, 7265-7274 · 2020",
+      "details": "IEEE Sensors Journal 20 (13), 7265-7274, 2020",
       "year": 2020,
       "citations": 225,
       "link": "https://doi.org/10.1109/JSEN.2020.2978772",
@@ -198,14 +207,27 @@ window.siteData = {
       "type": "Journal article",
       "verified": true,
       "storyId": "local-loss-cnn",
-      "citationsUpdatedAt": "2026-10-03"
+      "citationsUpdatedAt": "2026-10-03",
+      "bibliography": {
+        "journal": "IEEE Sensors Journal",
+        "volume": "20",
+        "number": "13",
+        "pages": "7265-7274",
+        "year": 2020,
+        "doi": "10.1109/JSEN.2020.2978772"
+      },
+      "metadataVerified": true,
+      "metadataSource": "https://doi.org/10.1109/JSEN.2020.2978772",
+      "code": "https://github.com/tengqi159/human-activity-recognition",
+      "codeVerified": true,
+      "codeSource": "https://github.com/tengqi159/human-activity-recognition#readme"
     },
     {
       "title": "Layer-wise training convolutional neural networks with smaller filters for human activity recognition using wearable sensors",
       "authors": "Y Tang, Q Teng, L Zhang, F Min, J He",
-      "venue": "IEEE Sensors Journal 21 (1), 581-592, 2020",
-      "details": "IEEE Sensors Journal 21 (1), 581-592, 2020 · Vol. 21, 581-592 · 2020",
-      "year": 2020,
+      "venue": "IEEE Sensors Journal 21 (1), 581-592, 2021",
+      "details": "IEEE Sensors Journal 21 (1), 581-592, 2021",
+      "year": 2021,
       "citations": 166,
       "link": "https://doi.org/10.1109/JSEN.2020.3015521",
       "linkLabel": "DOI",
@@ -226,13 +248,28 @@ window.siteData = {
             "Efficient convolutional neural networks with smaller filters for human activity recognition using wearable sensors"
           ]
         }
-      ]
+      ],
+      "bibliography": {
+        "journal": "IEEE Sensors Journal",
+        "volume": "21",
+        "number": "1",
+        "pages": "581-592",
+        "year": 2021,
+        "doi": "10.1109/JSEN.2020.3015521"
+      },
+      "metadataVerified": true,
+      "metadataSource": "https://doi.org/10.1109/JSEN.2020.3015521",
+      "onlineYear": 2020,
+      "scholarYear": 2020,
+      "code": "https://github.com/yinntag/Layer-wise-training-convolutional-neural-networks-with-smaller-filters-for-HAR",
+      "codeVerified": true,
+      "codeSource": "https://yinntag.github.io/"
     },
     {
       "title": "Triple cross-domain attention on human activity recognition using wearable sensors",
       "authors": "Y Tang, L Zhang, Q Teng, F Min, A Song",
-      "venue": "IEEE Transactions on Emerging Topics in Computational Intelligence 6 (5 …, 2022",
-      "details": "IEEE Transactions on Emerging Topics in Computational Intelligence 6 (5 …, 2022 · Vol. 6, 1167-1176 · 2022",
+      "venue": "IEEE Transactions on Emerging Topics in Computational Intelligence 6 (5), 1167-1176, 2022",
+      "details": "IEEE Transactions on Emerging Topics in Computational Intelligence 6 (5), 1167-1176, 2022",
       "year": 2022,
       "citations": 149,
       "link": "https://doi.org/10.1109/TETCI.2021.3136642",
@@ -241,13 +278,26 @@ window.siteData = {
       "type": "Journal article",
       "verified": true,
       "storyId": "triple-attention",
-      "citationsUpdatedAt": "2026-10-03"
+      "citationsUpdatedAt": "2026-10-03",
+      "bibliography": {
+        "journal": "IEEE Transactions on Emerging Topics in Computational Intelligence",
+        "volume": "6",
+        "number": "5",
+        "pages": "1167-1176",
+        "year": 2022,
+        "doi": "10.1109/TETCI.2021.3136642"
+      },
+      "metadataVerified": true,
+      "metadataSource": "https://api.crossref.org/works/10.1109/TETCI.2021.3136642",
+      "code": "https://github.com/yinntag/Triple-Cross-domain-Attention-for-HAR",
+      "codeVerified": true,
+      "codeSource": "https://yinntag.github.io/publications/P3.pdf"
     },
     {
       "title": "The convolutional neural networks training with channel-selectivity for human activity recognition based on sensors",
       "authors": "W Huang, L Zhang, Q Teng, C Song, J He",
       "venue": "IEEE Journal of Biomedical and Health Informatics 25 (10), 3834-3843, 2021",
-      "details": "IEEE Journal of Biomedical and Health Informatics 25 (10), 3834-3843, 2021 · Vol. 25, 3834-3843 · 2021",
+      "details": "IEEE Journal of Biomedical and Health Informatics 25 (10), 3834-3843, 2021",
       "year": 2021,
       "citations": 59,
       "link": "https://doi.org/10.1109/JBHI.2021.3092396",
@@ -256,13 +306,23 @@ window.siteData = {
       "type": "Journal article",
       "verified": true,
       "storyId": "channel-selectivity",
-      "citationsUpdatedAt": "2026-10-03"
+      "citationsUpdatedAt": "2026-10-03",
+      "bibliography": {
+        "journal": "IEEE Journal of Biomedical and Health Informatics",
+        "volume": "25",
+        "number": "10",
+        "pages": "3834-3843",
+        "year": 2021,
+        "doi": "10.1109/JBHI.2021.3092396"
+      },
+      "metadataVerified": true,
+      "metadataSource": "https://api.crossref.org/works/10.1109/JBHI.2021.3092396"
     },
     {
       "title": "RepHAR: Decoupling networks with accuracy-speed tradeoff for sensor-based human activity recognition",
       "authors": "Q Teng, Y Tang, G Hu",
-      "venue": "IEEE Transactions on Instrumentation and Measurement 72, 1-11, 2023",
-      "details": "IEEE Transactions on Instrumentation and Measurement 72, 1-11, 2023 · Vol. 72, 1-11 · 2023",
+      "venue": "IEEE Transactions on Instrumentation and Measurement 72, 2505111, 2023",
+      "details": "IEEE Transactions on Instrumentation and Measurement 72, 2505111, 2023",
       "year": 2023,
       "citations": 40,
       "link": "https://doi.org/10.1109/TIM.2023.3240198",
@@ -271,13 +331,22 @@ window.siteData = {
       "type": "Journal article",
       "verified": true,
       "storyId": "rephar",
-      "citationsUpdatedAt": "2026-10-03"
+      "citationsUpdatedAt": "2026-10-03",
+      "bibliography": {
+        "journal": "IEEE Transactions on Instrumentation and Measurement",
+        "volume": "72",
+        "articleNumber": "2505111",
+        "year": 2023,
+        "doi": "10.1109/TIM.2023.3240198"
+      },
+      "metadataVerified": true,
+      "metadataSource": "https://doi.org/10.1109/TIM.2023.3240198"
     },
     {
       "title": "Data driven nonlinear dynamical systems identification using multi-step CLDNN",
       "authors": "Q Teng, L Zhang",
-      "venue": "AIP Advances 9 (8), 2019",
-      "details": "AIP Advances 9 (8), 2019 · Vol. 9 · 2019",
+      "venue": "AIP Advances 9 (8), 085311, 2019",
+      "details": "AIP Advances 9 (8), 085311, 2019",
       "year": 2019,
       "citations": 38,
       "link": "https://doi.org/10.1063/1.5100558",
@@ -286,13 +355,23 @@ window.siteData = {
       "type": "Journal article",
       "verified": true,
       "storyId": "multistep-cldnn",
-      "citationsUpdatedAt": "2026-10-03"
+      "citationsUpdatedAt": "2026-10-03",
+      "bibliography": {
+        "journal": "AIP Advances",
+        "volume": "9",
+        "number": "8",
+        "articleNumber": "085311",
+        "year": 2019,
+        "doi": "10.1063/1.5100558"
+      },
+      "metadataVerified": true,
+      "metadataSource": "https://api.crossref.org/works/10.1063/1.5100558"
     },
     {
       "title": "Innovative dual-decoupling CNN with layer-wise temporal-spatial attention for sensor-based human activity recognition",
       "authors": "Q Teng, W Li, G Hu, Y Shu, Y Liu",
-      "venue": "IEEE Journal of Biomedical and Health Informatics 29 (2), 1035–1048, 2025",
-      "details": "IEEE Journal of Biomedical and Health Informatics 29 (2), 1035–1048, 2025",
+      "venue": "IEEE Journal of Biomedical and Health Informatics 29 (2), 1035-1048, 2025",
+      "details": "IEEE Journal of Biomedical and Health Informatics 29 (2), 1035-1048, 2025",
       "year": 2025,
       "citations": 30,
       "link": "https://doi.org/10.1109/JBHI.2024.3488528",
@@ -302,13 +381,24 @@ window.siteData = {
       "verified": true,
       "metadataVerified": true,
       "storyId": "dual-decoupling-attention",
-      "citationsUpdatedAt": "2026-10-03"
+      "citationsUpdatedAt": "2026-10-03",
+      "bibliography": {
+        "journal": "IEEE Journal of Biomedical and Health Informatics",
+        "volume": "29",
+        "number": "2",
+        "pages": "1035-1048",
+        "year": 2025,
+        "doi": "10.1109/JBHI.2024.3488528"
+      },
+      "metadataSource": "https://doi.org/10.1109/JBHI.2024.3488528",
+      "onlineYear": 2024,
+      "scholarYear": 2024
     },
     {
       "title": "Block-wise training residual networks on multi-channel time series for human activity recognition",
       "authors": "Q Teng, L Zhang, Y Tang, S Song, X Wang, J He",
       "venue": "IEEE Sensors Journal 21 (16), 18063-18074, 2021",
-      "details": "IEEE Sensors Journal 21 (16), 18063-18074, 2021 · Vol. 21, 18063-18074 · 2021",
+      "details": "IEEE Sensors Journal 21 (16), 18063-18074, 2021",
       "year": 2021,
       "citations": 23,
       "link": "https://doi.org/10.1109/JSEN.2021.3085360",
@@ -317,13 +407,23 @@ window.siteData = {
       "type": "Journal article",
       "verified": true,
       "storyId": "blockwise-resnet",
-      "citationsUpdatedAt": "2026-10-03"
+      "citationsUpdatedAt": "2026-10-03",
+      "bibliography": {
+        "journal": "IEEE Sensors Journal",
+        "volume": "21",
+        "number": "16",
+        "pages": "18063-18074",
+        "year": 2021,
+        "doi": "10.1109/JSEN.2021.3085360"
+      },
+      "metadataVerified": true,
+      "metadataSource": "https://doi.org/10.1109/JSEN.2021.3085360"
     },
     {
       "title": "Large receptive field attention: An innovation in decomposing large-kernel convolution for sensor-based activity recognition",
       "authors": "Q Teng, Y Tang, G Hu",
       "venue": "IEEE Sensors Journal 24 (8), 13488-13499, 2024",
-      "details": "IEEE Sensors Journal 24 (8), 13488-13499, 2024 · Vol. 24, 13488-13499 · 2024",
+      "details": "IEEE Sensors Journal 24 (8), 13488-13499, 2024",
       "year": 2024,
       "citations": 20,
       "link": "https://doi.org/10.1109/JSEN.2024.3364187",
@@ -332,13 +432,23 @@ window.siteData = {
       "type": "Journal article",
       "verified": true,
       "storyId": "large-receptive-field",
-      "citationsUpdatedAt": "2026-10-03"
+      "citationsUpdatedAt": "2026-10-03",
+      "bibliography": {
+        "journal": "IEEE Sensors Journal",
+        "volume": "24",
+        "number": "8",
+        "pages": "13488-13499",
+        "year": 2024,
+        "doi": "10.1109/JSEN.2024.3364187"
+      },
+      "metadataVerified": true,
+      "metadataSource": "https://doi.org/10.1109/JSEN.2024.3364187"
     },
     {
       "title": "CSFO: A category-specific flattening optimization method for sensor-based long-tailed activity recognition",
       "authors": "X Wang, Q Teng",
       "venue": "IEEE Sensors Journal 25 (7), 12318-12334, 2025",
-      "details": "IEEE Sensors Journal 25 (7), 12318-12334, 2025 · Vol. 25, 12318-12334 · 2025",
+      "details": "IEEE Sensors Journal 25 (7), 12318-12334, 2025",
       "year": 2025,
       "citations": 3,
       "link": "https://doi.org/10.1109/JSEN.2025.3534413",
@@ -347,13 +457,23 @@ window.siteData = {
       "type": "Journal article",
       "verified": true,
       "storyId": "csfo",
-      "citationsUpdatedAt": "2026-10-03"
+      "citationsUpdatedAt": "2026-10-03",
+      "bibliography": {
+        "journal": "IEEE Sensors Journal",
+        "volume": "25",
+        "number": "7",
+        "pages": "12318-12334",
+        "year": 2025,
+        "doi": "10.1109/JSEN.2025.3534413"
+      },
+      "metadataVerified": true,
+      "metadataSource": "https://doi.org/10.1109/JSEN.2025.3534413"
     },
     {
       "title": "Data driven governing equations approximations using attention based multistep neural networks",
       "authors": "Q Teng, J Wang, Z Ding, L Zhang, Z Wang",
-      "venue": "AIP Advances 10 (6), 2020",
-      "details": "AIP Advances 10 (6), 2020 · Vol. 10 · 2020",
+      "venue": "AIP Advances 10 (6), 065227, 2020",
+      "details": "AIP Advances 10 (6), 065227, 2020",
       "year": 2020,
       "citations": 2,
       "link": "https://doi.org/10.1063/5.0015600",
@@ -362,13 +482,23 @@ window.siteData = {
       "type": "Journal article",
       "verified": true,
       "storyId": "attention-multistep-dynamics",
-      "citationsUpdatedAt": "2026-10-03"
+      "citationsUpdatedAt": "2026-10-03",
+      "bibliography": {
+        "journal": "AIP Advances",
+        "volume": "10",
+        "number": "6",
+        "articleNumber": "065227",
+        "year": 2020,
+        "doi": "10.1063/5.0015600"
+      },
+      "metadataVerified": true,
+      "metadataSource": "https://api.crossref.org/works/10.1063/5.0015600"
     },
     {
       "title": "Dual Stage-Wise Decoupling Networks for Long-Tailed Activity Recognition Using Wearable Sensors",
       "authors": "Q Teng, L Yu, G Hu",
-      "venue": "Human-centric Computing and Information Sciences",
-      "details": "Human-centric Computing and Information Sciences, Vol. 14 · 2024",
+      "venue": "Human-centric Computing and Information Sciences 14, 52, 2024",
+      "details": "Human-centric Computing and Information Sciences 14, 52, 2024",
       "year": 2024,
       "citations": null,
       "link": "https://doi.org/10.22967/HCIS.2024.14.052",
@@ -377,7 +507,15 @@ window.siteData = {
       "type": "Journal article",
       "verified": true,
       "metadataVerified": true,
-      "storyId": "dswd"
+      "storyId": "dswd",
+      "bibliography": {
+        "journal": "Human-centric Computing and Information Sciences",
+        "volume": "14",
+        "articleNumber": "52",
+        "year": 2024,
+        "doi": "10.22967/HCIS.2024.14.052"
+      },
+      "metadataSource": "https://doi.org/10.22967/HCIS.2024.14.052"
     }
   ],
   "excludedPublications": [

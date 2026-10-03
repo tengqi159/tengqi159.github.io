@@ -68,18 +68,18 @@
       href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Manrope:wght@400..800&family=IBM+Plex+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="assets/styles.css?v=research-20261003-compact-papers" />
-    <link rel="stylesheet" href="assets/fx.css?v=research-20261003-compact-papers" />
-    <link rel="stylesheet" href="assets/signal-studies.css?v=research-20261003-compact-papers" />
-    <link rel="stylesheet" href="assets/atlas.css?v=research-20261003-compact-papers" />
-    <link rel="stylesheet" href="assets/research-stories.css?v=research-20261003-compact-papers" />
-    <script defer src="assets/site-data.js?v=research-20261003-compact-papers"></script>
-    <script defer src="assets/atlas-crowd.js?v=research-20261003-compact-papers"></script>
-    <script defer src="assets/paper-stories.js?v=research-20261003-compact-papers"></script>
-    <script defer src="assets/paper-explainer.js?v=research-20261003-compact-papers"></script>
-    <script defer src="assets/site.js?v=research-20261003-compact-papers"></script>
-    <script defer src="assets/fx.js?v=research-20261003-compact-papers"></script>
-    <script defer src="assets/signal-studies.js?v=research-20261003-compact-papers"></script>
+    <link rel="stylesheet" href="assets/styles.css?v=research-20261003-audit-fixes" />
+    <link rel="stylesheet" href="assets/fx.css?v=research-20261003-audit-fixes" />
+    <link rel="stylesheet" href="assets/signal-studies.css?v=research-20261003-audit-fixes" />
+    <link rel="stylesheet" href="assets/atlas.css?v=research-20261003-audit-fixes" />
+    <link rel="stylesheet" href="assets/research-stories.css?v=research-20261003-audit-fixes" />
+    <script defer src="assets/site-data.js?v=research-20261003-audit-fixes"></script>
+    <script defer src="assets/atlas-crowd.js?v=research-20261003-audit-fixes"></script>
+    <script defer src="assets/paper-stories.js?v=research-20261003-audit-fixes"></script>
+    <script defer src="assets/paper-explainer.js?v=research-20261003-audit-fixes"></script>
+    <script defer src="assets/site.js?v=research-20261003-audit-fixes"></script>
+    <script defer src="assets/fx.js?v=research-20261003-audit-fixes"></script>
+    <script defer src="assets/signal-studies.js?v=research-20261003-audit-fixes"></script>
   </head>
   <body>
     <a class="skip-link" href="#top">Skip to content</a>
@@ -222,6 +222,7 @@
               <span>Efficient Deep Networks</span>
               <span>Attention Mechanisms</span>
               <span>Nonlinear Dynamical Systems</span>
+              <span>Graph Representation Learning</span>
             </div>
           </div>
           <div class="profile-block">
@@ -254,9 +255,8 @@
           <p class="section-kicker"><span>03</span>Research</p>
           <h2>Research directions.</h2>
           <p class="section-lede">
-            The common thread across recent work: extracting trustworthy
-            structure from noisy, multi-channel sensor time series — and doing
-            it with models small enough to matter in practice.
+            I study efficient learning from wearable sensor sequences and structured
+            graph data, with an emphasis on robust representations and practical inference.
           </p>
         </header>
 
@@ -375,6 +375,7 @@
           <button id="archive-reset" type="button" hidden>Clear filters</button>
         </div>
         <div class="publication-list" id="publication-list"></div>
+        <noscript><p>Enable JavaScript to browse the publication archive, original figures and method walkthroughs.</p></noscript>
         <p class="archive-empty" id="archive-empty" hidden>No matches. Try another title, author or venue, or clear the filters.</p>
       </section>
 
@@ -399,7 +400,7 @@
             <div class="visitor-map" id="visitor-map-canvas" role="group" aria-label="Visitor locations on a world map">
               <div class="atlas-plot">
                 <div class="atlas-grid" aria-hidden="true"></div>
-                <img class="world-map-image" src="assets/atlas-world.svg?v=research-20261003-compact-papers" alt="World map" loading="lazy" decoding="async" />
+                <img class="world-map-image" src="assets/atlas-world.svg?v=research-20261003-audit-fixes" alt="World map" loading="lazy" decoding="async" />
                 <canvas class="crowd-canvas" id="crowd-canvas" aria-hidden="true"></canvas>
                 <svg class="arc-layer" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
                   <path id="arc-base" class="arc-base" pathLength="100" vector-effect="non-scaling-stroke" hidden />
@@ -430,6 +431,12 @@
           </div>
           <div class="atlas-places-row" id="atlas-places-row" hidden>
             <span>Most connected</span><ul id="crowd-top" aria-label="Most visited places"></ul>
+          </div>
+          <div class="atlas-all-places" id="atlas-all-places" hidden>
+            <label for="atlas-place-select">Explore all visitor places</label>
+            <select id="atlas-place-select" aria-describedby="atlas-tooltip">
+              <option value="-1">Choose a place…</option>
+            </select>
           </div>
           <noscript><p class="atlas-noscript">Enable JavaScript to load the visitor map.</p></noscript>
         </div>

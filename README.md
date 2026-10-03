@@ -16,9 +16,13 @@ The scheduled workflow attempts a daily Scholar refresh and optional OpenAlex me
 
 Owner-provided Scholar snapshots are recorded in `profile.citationSnapshot` with their date and capture source. Per-paper `citationsUpdatedAt` distinguishes historical counts from the current profile snapshot; an absent or blank count is unavailable, rather than a confirmed zero. A successful automatic refresh updates both the provenance and dates.
 
+Published records use primary-source `bibliography` fields for journal, volume, issue, pages or article number, DOI and formal issue year. BibTeX exports those separate fields, preserving leading zeros in article numbers. When first online publication precedes the issue year, `onlineYear` is shown separately; `scholarYear` retains the snapshot's indexing year. `metadataVerified` and `metadataSource` protect checked bibliography from truncated or conflicting refresh data. Scholar HTML entities are decoded before matching titles.
+
 Verified arXiv/journal pairs appear once under the journal record. Its `preprints` array retains the arXiv title, link, DOI, historical citation snapshot and `scholarTitleAliases` for earlier titles. The card offers both DOI and arXiv links; archive search also matches preprint titles and IDs. The displayed count belongs to the journal record, and version counts are never added. Refresh routes known preprint rows into that nested metadata without creating another archive entry or replacing journal citations. Unrelated preprints remain independent.
 
 Run manually with `node scripts/refresh-data.mjs`. Update news in `siteData.news`; the sync preserves it. An optional CV link is shown when `profile.cv` contains a local PDF path.
+
+Published work may expose a `code` repository only after the repository and original paper are matched, with `codeVerified` and `codeSource` recording the check. A related repository is not assumed to implement a different paper. Accepted papers still withhold all outbound paper links.
 
 `siteData.excludedPublications` records owner-requested exclusions by full title and DOI. These cover namesake authorship errors and the CSFO correction notice, which the owner chose to omit. They override Scholar indexing, old verified records and browser metadata enrichment. The original CSFO article remains listed. Remove corresponding news and visual stories when excluding a record.
 
@@ -38,9 +42,13 @@ The configured Cloudflare Worker and D1 database aggregate approximate city/regi
 
 The map supports location details, same-place aggregation, retry, explicit timeout/failure states and a labeled local cache of previously retrieved points. See `workers/README.md` for the API, schema and deployment notes.
 
+The five most visited places remain quick buttons. A labeled native selector exposes every recorded place to keyboard and screen-reader users, including places outside that shortcut list.
+
 The base map is derived from [Natural Earth 1:50m land](https://www.naturalearthdata.com/downloads/50m-physical-vectors/), a public-domain geographic dataset, projected consistently with the location markers.
 
 ## Local preview and verification
+
+Static introductions remain visible when JavaScript is disabled or reveal initialization fails. News cards remain available when there are no earlier updates. Navigation uses a viewport-height observation band and updates after resize; publication search and viewer controls retain their keyboard behavior.
 
 ```sh
 python3 -m http.server 8765 --bind 127.0.0.1

@@ -211,6 +211,65 @@ async function refreshFixture(publications, rows, works = []) {
   return JSON.parse(JSON.stringify(context.parseSiteData(saved)));
 }
 
+test('refresh retains verified issue bibliography, online year and source despite truncated Scholar and conflicting OpenAlex metadata', async () => {
+  const originals = [
+    {
+      title: 'Triple cross-domain attention on human activity recognition using wearable sensors', authors:'Y Tang, L Zhang, Q Teng, F Min, A Song',
+      storyId:'triple-attention',type:'Journal article',verified:true,metadataVerified:true,citations:149,selected:true,
+      venue:'IEEE Transactions on Emerging Topics in Computational Intelligence 6 (5), 1167-1176, 2022',details:'Vol. 6 (5), 1167-1176 · 2022',year:2022,onlineYear:2021,
+      metadataSource:'https://doi.org/10.1109/TETCI.2021.3136642',link:'https://doi.org/10.1109/TETCI.2021.3136642',
+      bibliography:{journal:'IEEE Transactions on Emerging Topics in Computational Intelligence',volume:'6',number:'5',pages:'1167-1176',year:2022,doi:'10.1109/TETCI.2021.3136642'}
+    },
+    {
+      title:'Innovative dual-decoupling CNN with layer-wise temporal-spatial attention for sensor-based human activity recognition',authors:'Q Teng, W Li, G Hu, Y Shu, Y Liu',
+      storyId:'dual-decoupling-attention',type:'Journal article',verified:true,metadataVerified:true,citations:30,
+      venue:'IEEE Journal of Biomedical and Health Informatics 29 (2), 1035-1048, 2025',details:'Vol. 29 (2), 1035-1048 · 2025',year:2025,onlineYear:2024,
+      metadataSource:'https://doi.org/10.1109/JBHI.2024.3488528',link:'https://doi.org/10.1109/JBHI.2024.3488528',
+      bibliography:{journal:'IEEE Journal of Biomedical and Health Informatics',volume:'29',number:'2',pages:'1035-1048',year:2025,doi:'10.1109/JBHI.2024.3488528'}
+    }
+  ];
+  const refreshed = await refreshFixture(originals, originals.map(pub=>scholarRow(pub.title,'150','IEEE …',String(pub.onlineYear))),
+    originals.map(pub=>({title:pub.title,doi:pub.link,publication_year:1999,primary_location:{source:{display_name:'Wrong journal'}},biblio:{volume:'999',first_page:'1',last_page:'2'}})));
+  assert.equal(refreshed.publications.length, originals.length);
+  for (const original of originals) {
+    const updated = refreshed.publications.find(pub=>pub.storyId===original.storyId);
+    const expected = {...original,citations:150,citationsUpdatedAt:refreshed.profile.updatedAt};
+    assert.deepEqual(updated,expected);
+  }
+});
+
+test('all saved published bibliographies survive an abbreviated refresh with only their citation snapshots updated', async () => {
+  const code = readFileSync(new URL('../assets/site-data.js',import.meta.url),'utf8');
+  const originals = JSON.parse(JSON.stringify(loadScript().parseSiteData(code).publications)).filter(pub=>pub.status!=='accepted');
+  assert.equal(originals.length,13);
+  assert.ok(originals.every(pub=>pub.metadataVerified===true && pub.bibliography && pub.metadataSource));
+  const rows = originals.map(pub=>scholarRow(pub.title,String((pub.citations || 0)+1),'IEEE &amp; other truncated journals …','1999'));
+  const works = originals.map(pub=>({title:pub.title,doi:pub.link,publication_year:1999,primary_location:{source:{display_name:'Conflicting source'}},biblio:{volume:'99',first_page:'1',last_page:'2'}}));
+  const refreshed = await refreshFixture(originals,rows,works);
+  assert.equal(refreshed.publications.length,13);
+  for (const original of originals) {
+    assert.deepEqual(refreshed.publications.find(pub=>pub.storyId===original.storyId),{
+      ...original,citations:(original.citations || 0)+1,citationsUpdatedAt:refreshed.profile.updatedAt
+    },original.storyId);
+  }
+});
+
+test('Scholar HTML entities resolve to the saved paper without losing its DOI, story or card count', async () => {
+  const title = 'Attention & sensing: "A" < B > C\'s café';
+  const original = {title,authors:'Q Teng',storyId:'entity-title',type:'Journal article',verified:true,metadataVerified:true,
+    citations:3,year:2024,venue:'Sensors & Systems',link:'https://doi.org/10.1234/entities'};
+  const refreshed = await refreshFixture([original],[scholarRow('Attention &amp; sensing: &quot;A&quot; &lt; B &gt; C&#39;s caf&#xE9;','4','Sensors&nbsp;&amp;&nbsp;Systems')]);
+  assert.equal(refreshed.publications.length,1);
+  assert.deepEqual(refreshed.publications[0],{...original,citations:4,citationsUpdatedAt:refreshed.profile.updatedAt});
+});
+
+test('entity decoding accepts scalar numeric values and leaves invalid code points harmless', () => {
+  const {decodeHtmlEntities:decode,stripTags} = loadScript();
+  assert.equal(decode('&amp;&quot;&apos;&lt;&gt;&nbsp;&#65;&#x1F600;'), '&"\'<> A😀');
+  assert.equal(decode('&#x110000; &#55296; &#0; &unknown;'),'&#x110000; &#55296; &#0; &unknown;');
+  assert.equal(stripTags('<b>X</b> &lt;y&gt;'), 'X <y>');
+});
+
 for (const preprintFirst of [true, false]) {
   test(`identical case-equivalent titles refresh both versions when ${preprintFirst ? 'arXiv' : 'journal'} is first`, async () => {
     const pair = [

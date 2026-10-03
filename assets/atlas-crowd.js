@@ -48,6 +48,7 @@
     const plot=map.querySelector('.atlas-plot');
     const status=get('atlas-map-status'), visitStatus=get('visitor-status'), place=get('visitor-place');
     const refresh=get('atlas-refresh'), retry=get('atlas-retry'), note=get('atlas-map-note'), tooltip=get('atlas-tooltip');
+    const placeSelect=get('atlas-place-select'), allPlaces=get('atlas-all-places');
     let points=[], snapshot=null, active=-1, pinned=false, busy=false, readVersion=0, arcTimer=0;
     let visitSaved=false;
 
@@ -69,6 +70,7 @@
     function showPoint(index,pin=false) {
       active=index;pinned=pin && index>=0;
       document.querySelectorAll('.atlas-place-button').forEach((b,i)=>b.setAttribute('aria-pressed',String(pin && i===index)));
+      if(placeSelect)placeSelect.value=String(pinned ? index : -1);
       if (!points[index]) {tooltip.hidden=true;paint();return;}
       const p=points[index];
       const strong=document.createElement('strong');strong.textContent=label(p) || 'Approximate region';
@@ -107,6 +109,16 @@
         li.append(b);list.append(li);
       });
       get('atlas-places-row').hidden=!points.length;paint();
+      if(placeSelect && allPlaces) {
+        const prompt=document.createElement('option');prompt.value='-1';prompt.textContent='Choose a place…';
+        placeSelect.replaceChildren(prompt);
+        points.forEach((p,i)=>{
+          const option=document.createElement('option');option.value=String(i);
+          option.textContent=`${label(p) || 'Approximate region'} · ${fmt(p.visits)} ${p.visits===1?'visit':'visits'}`;
+          placeSelect.append(option);
+        });
+        allPlaces.hidden=!points.length;
+      }
     }
     async function loadMap() {
       const requestId=++readVersion;
@@ -187,6 +199,7 @@
     map.addEventListener('click',event=>{const i=hit(event);showPoint(pinned && i===active ? -1:i,true);});
     document.addEventListener('keydown',event=>{if(event.key==='Escape' && active>=0)showPoint(-1);});
     refresh.addEventListener('click',run);retry.addEventListener('click',run);
+    placeSelect?.addEventListener('change',()=>showPoint(Number(placeSelect.value),true));
     const repaint=()=>{paint();if(active>=0)showPoint(active,pinned);};
     if('ResizeObserver' in window)new ResizeObserver(repaint).observe(canvas);
     else window.addEventListener('resize',repaint);

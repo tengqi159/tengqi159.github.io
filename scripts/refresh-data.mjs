@@ -121,8 +121,21 @@ function parseSiteData(code) {
   return sandbox.window.siteData;
 }
 
+function decodeHtmlEntities(value) {
+  const named = { amp: "&", quot: '"', apos: "'", lt: "<", gt: ">", nbsp: " " };
+  return String(value ?? "").replace(/&(?:amp|quot|apos|lt|gt|nbsp|#\d+|#x[\da-f]+);/gi, entity => {
+    const key = entity.slice(1, -1).toLowerCase();
+    if (Object.hasOwn(named, key)) return named[key];
+    const codePoint = key.startsWith("#x") ? parseInt(key.slice(2), 16) : parseInt(key.slice(1), 10);
+    return codePoint > 0 && codePoint <= 0x10ffff && !(codePoint >= 0xd800 && codePoint <= 0xdfff)
+      ? String.fromCodePoint(codePoint) : entity;
+  });
+}
+
 function stripTags(s) {
-  return String(s || "").replace(/<[^>]+>/g, "").trim();
+  // Decode after removing markup: an encoded comparison sign in a paper
+  // title must remain text rather than being mistaken for an HTML tag.
+  return decodeHtmlEntities(String(s || "").replace(/<[^>]+>/g, "")).trim();
 }
 
 async function fetchScholarPapers(user) {
@@ -154,7 +167,7 @@ async function fetchScholarPapers(user) {
         authors: grays[0] || "",
         venue: grays[1] || "",
         year: (yearMatch && yearMatch[1].trim()) || "",
-        cites: (citesMatch && citesMatch[1].trim()) || ""
+        cites: (citesMatch && stripTags(citesMatch[1])) || ""
       });
     }
     if (rows.length < pageSize) break;
@@ -263,6 +276,8 @@ async function main() {
     const existing = aliases.length === 1 ? aliases[0] : candidates.find(p => normalize(p.title) === key);
     if (isExcludedPublication(existing, data.excludedPublications)) continue;
     // Acceptance status is curated; indexing alone does not prove publication.
+    // Verified bibliography (including issue year, online year and its source)
+    // stays authoritative when Scholar returns abbreviated or truncated metadata.
     if (existing?.status === "accepted" || existing?.metadataVerified) {
       nextPublications.push({...existing, ...(existing.status === "accepted" ? {} : scholarCitationFields(paper.cites, snapshotDate))});
       seenCombos.add(`${normalize(existing.title)}|${normalize(existing.link)}`);

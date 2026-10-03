@@ -210,10 +210,41 @@ const BIBTEX_STOPWORDS = new Set([
   "with", "from", "using", "based", "that", "this", "for", "and", "the"
 ]);
 
+function bibtexText(value) {
+  const escapes = {"\\":"\\textbackslash{}", "{":"\\{", "}":"\\}", "&":"\\&", "%":"\\%", "#":"\\#", "_":"\\_", "$":"\\$", "~":"\\textasciitilde{}", "^":"\\textasciicircum{}"};
+  return String(value ?? "").replace(/[\\{}&%#_$~^]/g, char => escapes[char]).replace(/\s+/g, " ").trim();
+}
+
+function legacyBibliography(publication) {
+  let journal = String(publication.venue || "").trim();
+  const year = journal.match(/(?:,\s*|\s*·\s*)(\d{4})$/);
+  if (year) journal = journal.slice(0, year.index).trim();
+  const suffix = journal.match(/^(.*?)\s+(?:Vol\.\s*)?(\d+)(?=\s*(?:\(|,|$))([\s\S]*)$/i);
+  const result = { journal, year: publication.year };
+  // Numeric/punctuation-only suffixes can be separated even when Scholar
+  // truncates an issue. Never infer missing digits from an ellipsis.
+  if (suffix && /^[\d\s,().:;\u2010-\u2015\-…]*$/.test(suffix[3])) {
+    result.journal = suffix[1].trim();
+    result.volume = suffix[2];
+    const number = suffix[3].match(/^\s*\(\s*([\d\u2010-\u2015-]+)\s*\)/);
+    if (number) result.number = number[1];
+    const pages = suffix[3].match(/(?:^|[,;\s])(\d+\s*[\u2010-\u2015-]+\s*\d+)\s*$/);
+    if (pages) result.pages = pages[1];
+  }
+  return result;
+}
+
+function bibliographyDoi(publication, bibliography) {
+  const value = String(bibliography.doi || publication.doi || publication.link || "")
+    .trim().replace(/^doi:\s*/i, "").replace(/^https?:\/\/(?:dx\.)?doi\.org\//i, "")
+    .replace(/[?#].*$/, "");
+  return /^10\.\d{4,9}\/[^\s{}]+$/.test(value) ? value : "";
+}
+
 function bibtexFor(publication) {
   if (publication.status === "accepted") {
     const slug = publication.storyId || "paper";
-    return `@unpublished{teng${publication.year}${slug}, title={${publication.title}}, author={${String(publication.authors).split(",").map(s=>s.trim()).join(" and ")}}, note={Accepted at NeurIPS ${publication.year} (Poster); proceedings forthcoming}}`;
+    return `@unpublished{teng${publication.year}${slug}, title={${bibtexText(publication.title)}}, author={${bibtexText(String(publication.authors || "").split(",").map(s=>s.trim()).join(" and "))}}, note={Accepted at NeurIPS ${publication.year} (Poster); proceedings forthcoming}}`;
   }
   const authors = String(publication.authors || "")
     .split(",")
@@ -227,34 +258,37 @@ function bibtexFor(publication) {
     .join(" and ");
 
   const firstAuthor = String(publication.authors || "work").split(",")[0];
-  const lastName = (firstAuthor.trim().split(/\s+/).pop() || "work").toLowerCase();
+  const lastName = (firstAuthor.trim().split(/\s+/).pop() || "work").toLowerCase().replace(/[^a-z0-9]/g, "") || "work";
   const titleWord =
     String(publication.title || "")
       .toLowerCase()
       .replace(/[^a-z\s]/g, " ")
       .split(/\s+/)
       .find((word) => word.length > 3 && !BIBTEX_STOPWORDS.has(word)) || "paper";
-  const key = `${lastName}${publication.year || ""}${titleWord}`;
-
-  const venue = String(publication.venue || "")
-    .replace(/\s+\d+[\d\s,().:-]*$/, "")
-    .trim();
+  const bibliography = { ...legacyBibliography(publication), ...publication.bibliography };
+  const year = bibliography.year || publication.year;
+  const key = `${lastName}${year || ""}${titleWord}`;
+  const venue = bibliography.journal;
+  const doi = bibliographyDoi(publication, bibliography);
   const entryType = BIBTEX_TYPES[publication.type] || "misc";
   const venueField =
     entryType === "article"
-      ? `journal={${venue}}`
+      ? `journal={${bibtexText(venue)}}`
       : entryType === "inproceedings"
-        ? `booktitle={${venue}}`
-        : `howpublished={${venue}}`;
+        ? `booktitle={${bibtexText(venue)}}`
+        : `howpublished={${bibtexText(venue)}}`;
 
   const fields = [
-    `title={${publication.title}}`,
-    authors && `author={${authors}}`,
+    `title={${bibtexText(publication.title)}}`,
+    authors && `author={${bibtexText(authors)}}`,
     venue && venueField,
-    publication.year && `year={${publication.year}}`,
-    publication.link &&
-      publication.link.includes("doi.org") &&
-      `doi={${publication.link.replace("https://doi.org/", "")}}`
+    year && `year={${year}}`,
+    bibliography.volume && `volume={${bibtexText(bibliography.volume)}}`,
+    bibliography.number && `number={${bibtexText(bibliography.number)}}`,
+    bibliography.articleNumber
+      ? `eid={${bibtexText(bibliography.articleNumber)}}`
+      : bibliography.pages && `pages={${bibtexText(String(bibliography.pages).replace(/\s*[\u2010-\u2015-]+\s*/g, "--"))}}`,
+    doi && `doi={${doi}}`
   ].filter(Boolean);
 
   return `@${entryType}{${key}, ${fields.join(", ")}}`;
@@ -271,15 +305,19 @@ function venueLine(publication) {
   const venue = publication.venue || "";
   const details = publication.details || "";
   // Scholar's venue often already includes the full bibliographic line.
-  if (publication.year && new RegExp(`(?:,|\\s)${publication.year}$`).test(venue.trim())) return venue;
-  if (venue && details && details.includes(venue)) return details;
-  return [venue, details].filter(Boolean).join(" · ");
+  const line = publication.year && new RegExp(`(?:,|\\s)${publication.year}$`).test(venue.trim())
+    ? venue : venue && details && details.includes(venue)
+      ? details : [venue, details].filter(Boolean).join(" · ");
+  const canonicalYear = publication.bibliography?.year || publication.year;
+  const onlineYear = publication.onlineYear;
+  return onlineYear && String(onlineYear) !== String(canonicalYear)
+    ? [line, `First online ${onlineYear}`].filter(Boolean).join(" · ") : line;
 }
 
 function venueLineHtml(publication) {
-  const venue = publication.venue || "";
+  const journal = publication.bibliography?.journal || publication.venue || "";
   const line = venueLine(publication);
-  if (venue && line.startsWith(venue)) return `<em>${escapeAttr(venue)}</em>${escapeAttr(line.slice(venue.length))}`;
+  if (journal && line.startsWith(journal)) return `<em>${escapeAttr(journal)}</em>${escapeAttr(line.slice(journal.length))}`;
   return escapeAttr(line);
 }
 
@@ -298,6 +336,11 @@ function createPaperLinks(publication, extraClass) {
     if (!/^https:\/\/arxiv\.org\/abs\/\d{4}\.\d{4,5}(?:v\d+)?$/.test(version.link || "")) continue;
     links.push(
       `<a class="paper-link ${extraClass}" href="${escapeAttr(version.link)}" target="_blank" rel="noreferrer" aria-label="arXiv preprint for ${escapeAttr(publication.title)}">arXiv${ARROW_ICON}</a>`
+    );
+  }
+  if (publication.codeVerified && /^https:\/\/github\.com\/[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+\/?$/.test(publication.code || "")) {
+    links.push(
+      `<a class="paper-link ${extraClass}" href="${escapeAttr(publication.code)}" target="_blank" rel="noreferrer" aria-label="Code repository for ${escapeAttr(publication.title)}">Code${ARROW_ICON}</a>`
     );
   }
   links.push(
@@ -577,11 +620,16 @@ function renderNews() {
     String(b.date).localeCompare(String(a.date))
   );
 
+  const hasAcceptedPapers = (window.siteData.publications || []).some(publication => publication.status === "accepted");
+  const section = document.getElementById("news");
+  const navLink = document.querySelector('[data-nav="news"]');
+  const history = list.closest(".news-history");
+  if (section) section.hidden = !items.length && !hasAcceptedPapers;
+  if (navLink) navLink.hidden = !items.length && !hasAcceptedPapers;
+  if (history) history.hidden = !items.length;
+
   if (!items.length) {
-    const section = document.getElementById("news");
-    const navLink = document.querySelector('[data-nav="news"]');
-    if (section) section.hidden = true;
-    if (navLink) navLink.hidden = true;
+    list.replaceChildren();
     return;
   }
 
@@ -882,52 +930,76 @@ function setupRevealObserver() {
     return;
   }
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("is-visible");
-          observer.unobserve(entry.target);
-        }
-      });
-    },
-    // A full publication archive may be much taller than the viewport.
-    // Reveal on entry rather than requiring a fraction of the entire section.
-    { threshold: 0 }
-  );
-
-  targets.forEach((target) => observer.observe(target));
+  let observer;
+  try {
+    observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      // Reveal even when the archive is taller than the viewport.
+      { threshold: 0 }
+    );
+    targets.forEach((target) => observer.observe(target));
+    // Static content stays visible until observation is successfully set up.
+    targets.forEach((target) => target.classList.add("is-reveal-ready"));
+  } catch {
+    observer?.disconnect();
+    targets.forEach((target) => {
+      target.classList.remove("is-reveal-ready");
+      target.classList.add("is-visible");
+    });
+  }
 }
 
 function setupActiveNav() {
   const links = Array.from(document.querySelectorAll("[data-nav]"));
-  if (!links.length || !("IntersectionObserver" in window)) return;
+  if (!links.length) return;
 
   const byId = new Map(
     links.map((link) => [link.getAttribute("href").slice(1), link])
   );
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        links.forEach((link) => {
-          link.classList.remove("is-active");
-          link.removeAttribute("aria-current");
-        });
-        const link = byId.get(entry.target.id);
-        if (link) {
-          link.classList.add("is-active");
-          link.setAttribute("aria-current", "true");
-        }
-      });
-    },
-    { rootMargin: "-38% 0px -55% 0px" }
-  );
+  function setActive(id) {
+    links.forEach((link) => {
+      const active = byId.get(id) === link;
+      link.classList.toggle("is-active", active);
+      if (active) link.setAttribute("aria-current", "true");
+      else link.removeAttribute("aria-current");
+    });
+  }
+  function syncHash() {
+    setActive(window.location.hash.slice(1));
+  }
+  syncHash();
+  window.addEventListener("hashchange", syncHash);
+  if (!("IntersectionObserver" in window)) return;
 
-  byId.forEach((_, id) => {
-    const section = document.getElementById(id);
-    if (section) observer.observe(section);
+  const sections = [...byId.keys()].map(id => document.getElementById(id)).filter(Boolean);
+  let observer;
+  let resizeFrame = 0;
+  function observeSections() {
+    observer?.disconnect();
+    // Percentage root margins are based on width, so use viewport height here.
+    const height = Math.max(1, window.innerHeight || document.documentElement.clientHeight);
+    observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) setActive(entry.target.id);
+      });
+    }, { rootMargin: `${-height * .38}px 0px ${-height * .55}px 0px` });
+    sections.forEach(section => observer.observe(section));
+  }
+  observeSections();
+  window.addEventListener("resize", () => {
+    if (resizeFrame) return;
+    resizeFrame = window.requestAnimationFrame(() => {
+      resizeFrame = 0;
+      observeSections();
+    });
   });
 }
 
