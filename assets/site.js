@@ -361,7 +361,6 @@ function publicationPreview(publication) {
       <span class="publication-preview-topline"><span>Original paper figure</span><span class="publication-preview-open">Enlarge${ARROW_ICON}</span></span>
       ${explainer.figureMarkup(story, {thumbnail:true})}
     </button>
-    <figcaption class="publication-figure-caption">${escapeAttr(story.figure.label || "Paper framework")}</figcaption>
   </figure>`;
 }
 

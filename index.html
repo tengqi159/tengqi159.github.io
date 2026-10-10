@@ -71,13 +71,15 @@
     <link rel="stylesheet" href="assets/styles.css?v=research-20261003-audit-fixes" />
     <link rel="stylesheet" href="assets/fx.css?v=research-20261003-audit-fixes" />
     <link rel="stylesheet" href="assets/signal-studies.css?v=research-20261003-audit-fixes" />
-    <link rel="stylesheet" href="assets/atlas.css?v=research-20261003-audit-fixes" />
-    <link rel="stylesheet" href="assets/research-stories.css?v=research-20261003-audit-fixes" />
+    <link rel="stylesheet" href="assets/atlas.css?v=atlas-time-20261010" />
+    <link rel="stylesheet" href="assets/research-stories.css?v=atlas-time-20261010" />
+    <link rel="stylesheet" href="assets/collaboration.css?v=collaboration-refresh-20261010" />
     <script defer src="assets/site-data.js?v=research-20261003-audit-fixes"></script>
-    <script defer src="assets/atlas-crowd.js?v=research-20261003-audit-fixes"></script>
+    <script defer src="assets/atlas-crowd.js?v=atlas-time-20261010"></script>
     <script defer src="assets/paper-stories.js?v=research-20261003-audit-fixes"></script>
-    <script defer src="assets/paper-explainer.js?v=research-20261003-audit-fixes"></script>
-    <script defer src="assets/site.js?v=research-20261003-audit-fixes"></script>
+    <script defer src="assets/paper-explainer.js?v=atlas-time-20261010"></script>
+    <script defer src="assets/site.js?v=atlas-time-20261010"></script>
+    <script defer src="assets/collaboration.js?v=collaboration-refresh-20261010"></script>
     <script defer src="assets/fx.js?v=research-20261003-audit-fixes"></script>
     <script defer src="assets/signal-studies.js?v=research-20261003-audit-fixes"></script>
   </head>
@@ -98,9 +100,10 @@
         <a href="#news" data-nav="news"><span class="nav-index">01</span>News</a>
         <a href="#profile" data-nav="profile"><span class="nav-index">02</span>Profile</a>
         <a href="#research" data-nav="research"><span class="nav-index">03</span>Research</a>
-        <a href="#publications" data-nav="publications"><span class="nav-index">04</span>Publications</a>
-        <a href="#atlas" data-nav="atlas"><span class="nav-index">05</span>Atlas</a>
-        <a href="#links" data-nav="links"><span class="nav-index">06</span>Links</a>
+        <a href="#publications" data-nav="publications"><span class="nav-index">04</span><span class="nav-label-full">Publications</span><span class="nav-label-short">Papers</span></a>
+        <a href="#collaboration" data-nav="collaboration"><span class="nav-index">05</span>Collaborate</a>
+        <a href="#atlas" data-nav="atlas"><span class="nav-index">06</span>Atlas</a>
+        <a href="#links" data-nav="links"><span class="nav-index">07</span>Links</a>
       </nav>
 
       <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle color theme">
@@ -147,9 +150,8 @@
                 GitHub
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" /></svg>
               </a>
-              <a class="button button-ghost" href="mailto:tq@zzu.edu.cn">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v12H4z" /><path d="m4.5 7.5 7.5 5.6 7.5-5.6" /></svg>
-                Email
+              <a class="button button-ghost" href="#collaboration">
+                Collaborate
               </a>
             </div>
             <div class="hero-contacts" id="contact-strip"></div>
@@ -330,6 +332,8 @@
         </div>
       </section>
 
+      <p class="research-invitation">Have a related question? <a href="#collaboration">Let’s explore it together.</a></p>
+
       <section class="section" id="publications" data-reveal>
         <header class="section-head">
           <p class="section-kicker"><span>04</span>Publications</p>
@@ -379,9 +383,69 @@
         <p class="archive-empty" id="archive-empty" hidden>No matches. Try another title, author or venue, or clear the filters.</p>
       </section>
 
+      <section class="section collaboration-section" id="collaboration" aria-labelledby="collaboration-title" data-reveal>
+        <header class="section-head">
+          <p class="section-kicker"><span>05</span>Collaboration</p>
+          <h2 id="collaboration-title">Got an idea? <span>Let’s talk.</span></h2>
+          <p class="section-lede">Students, researchers, fresh perspectives. A shared question is a good start.</p>
+        </header>
+
+        <div class="collaboration-workbench">
+          <div id="collaboration-builder" hidden>
+            <fieldset class="collaboration-topics" aria-describedby="collaboration-topic-note">
+              <legend>What are you curious about?</legend>
+              <p id="collaboration-topic-note">Pick a mix. Or bring something new.</p>
+              <div class="collaboration-chips">
+                <label class="collaboration-chip"><input type="checkbox" name="collaboration-topic" value="wearable" /><span><span class="collaboration-chip-mark" aria-hidden="true"></span>Wearables &amp; time series</span></label>
+                <label class="collaboration-chip"><input type="checkbox" name="collaboration-topic" value="efficient" /><span><span class="collaboration-chip-mark" aria-hidden="true"></span>Efficient models</span></label>
+                <label class="collaboration-chip"><input type="checkbox" name="collaboration-topic" value="graphs" /><span><span class="collaboration-chip-mark" aria-hidden="true"></span>Graph learning</span></label>
+              </div>
+            </fieldset>
+
+            <div class="collaboration-persona">
+              <fieldset class="collaboration-audience">
+                <legend class="collaboration-sr-only">Choose a background for the email outline</legend>
+                <label><input type="radio" name="collaboration-audience" value="student" /><span>Student</span></label>
+                <label><input type="radio" name="collaboration-audience" value="researcher" /><span>Researcher</span></label>
+                <label><input type="radio" name="collaboration-audience" value="curious" checked /><span>Just curious</span></label>
+              </fieldset>
+              <p id="collaboration-guidance">An unfinished idea is a good start, too.</p>
+            </div>
+
+            <details class="collaboration-draft" id="collaboration-editor">
+              <summary><span><strong>Preview &amp; edit your hello <span id="collaboration-edited" hidden>Edited</span></strong><span id="collaboration-preview">Let’s talk research</span></span><span class="collaboration-editor-mark" aria-hidden="true"></span></summary>
+              <div class="collaboration-draft-head">
+                <label for="collaboration-body">Your message <span>· editable</span></label>
+                <button id="collaboration-reset" type="button" disabled>Reset draft</button>
+              </div>
+              <div class="collaboration-subject-row">
+                <label for="collaboration-subject">Subject</label>
+                <input id="collaboration-subject" type="text" autocomplete="off" spellcheck="true" aria-describedby="collaboration-draft-status" />
+              </div>
+              <textarea id="collaboration-body" rows="7" spellcheck="true" aria-describedby="collaboration-draft-status"></textarea>
+              <p id="collaboration-draft-status">Make it yours. A few lines are enough.</p>
+            </details>
+            <p class="collaboration-sr-only" id="collaboration-update" role="status" aria-live="polite"></p>
+          </div>
+          <p id="collaboration-fallback" class="collaboration-fallback">Time series, efficient models, graph learning—or a related idea. Tell me what you’d like to explore together.</p>
+
+          <div class="collaboration-footer">
+            <div class="collaboration-actions">
+              <a class="button button-primary" id="collaboration-email" href="mailto:tq@zzu.edu.cn?subject=Research%20conversation" aria-describedby="collaboration-mail-note">Open email draft <span aria-hidden="true">↗</span></a>
+              <button class="button button-ghost" id="collaboration-copy-draft" type="button" aria-label="Copy current email draft" hidden>Copy draft</button>
+            </div>
+            <p class="collaboration-mail-note" id="collaboration-mail-note">Opens your email app. Write your message before sending.</p>
+          </div>
+          <div class="collaboration-address">
+            <span>To <a href="mailto:tq@zzu.edu.cn">tq@zzu.edu.cn</a><button id="collaboration-copy-email" type="button" aria-label="Copy collaboration email address" hidden>Copy address</button></span>
+            <span>Also at <a href="mailto:teqi159@gmail.com">teqi159@gmail.com</a></span>
+          </div>
+        </div>
+      </section>
+
       <section class="section" id="atlas" data-reveal>
         <header class="section-head">
-          <p class="section-kicker"><span>05</span>Visitor Atlas</p>
+          <p class="section-kicker"><span>06</span>Visitor Atlas</p>
           <h2>Where visitors connect.</h2>
           <p class="section-lede">A growing map of visits, by city or region. One shared point for each place.</p>
         </header>
@@ -425,7 +489,7 @@
               <details class="atlas-details">
                 <summary>How it works</summary>
                 <p>Locations are estimated from the network IP, usually at city or region level. VPNs and mobile networks can point elsewhere. No GPS permission is requested.</p>
-                <p>A random browser ID limits repeat counts to one visit per place every 30 minutes. Only coarse locations and counts are saved; raw IP addresses are not stored in the atlas database. Visitor counts are approximate.</p>
+                <p>A random browser ID limits repeat counts to one visit per place every 30 minutes. Coarse locations, counts and the latest visit time for each place are saved; raw IP addresses are not stored in the atlas database. Visitor counts are approximate. Select a map point to see its latest recorded visit in your local time zone.</p>
               </details>
             </aside>
           </div>
@@ -444,7 +508,7 @@
 
       <section class="section" id="links" data-reveal>
         <header class="section-head">
-          <p class="section-kicker"><span>06</span>Links</p>
+          <p class="section-kicker"><span>07</span>Links</p>
           <h2>Research links.</h2>
         </header>
 
@@ -492,7 +556,7 @@
     <footer class="site-footer">
       <p>Qi Teng · 滕起 — Academic Homepage</p>
       <p class="colophon">
-        Content updated 3 October 2026 · Qi Teng · Zhengzhou University
+        Content updated 10 October 2026 · Qi Teng · Zhengzhou University
       </p>
       <a class="to-top" href="#top">Back to top ↑</a>
     </footer>

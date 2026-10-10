@@ -12,6 +12,18 @@
   const label = p => [...new Set([p.city,p.region,p.country || p.countryCode || p.country_code].filter(Boolean))].join(', ');
   const count = n => Number.isFinite(Number(n)) && Number(n)>=0 ? Math.floor(Number(n)) : 0;
   const fmt = n => count(n).toLocaleString('en-US');
+  function visitTime(raw) {
+    if (typeof raw !== 'string' || !raw.trim()) return null;
+    const date = new Date(raw);
+    if (!Number.isFinite(date.getTime())) return null;
+    const offset = -date.getTimezoneOffset();
+    const absolute = Math.abs(offset);
+    const zone = `UTC${offset >= 0 ? '+' : '-'}${String(Math.floor(absolute / 60)).padStart(2, '0')}:${String(absolute % 60).padStart(2, '0')}`;
+    const text = date.toLocaleString('en-GB', {
+      day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false
+    });
+    return {date, text: `${text} (${zone})`};
+  }
   function validLocation(p) {
     return p && typeof p.latitude==='number' && typeof p.longitude==='number' &&
       Number.isFinite(p.latitude) && Number.isFinite(p.longitude) &&
@@ -75,7 +87,14 @@
       const p=points[index];
       const strong=document.createElement('strong');strong.textContent=label(p) || 'Approximate region';
       const span=document.createElement('span');span.textContent=`${fmt(p.visits)} ${p.visits===1?'visit':'visits'} · ${fmt(p.visitors)} ${p.visitors===1?'visitor':'visitors'}`;
-      tooltip.replaceChildren(strong,span);tooltip.hidden=false;
+      const visited=document.createElement('div');visited.className='atlas-visit-time';
+      const heading=document.createElement('span');heading.textContent='Last visit';
+      const last=visitTime(p.last_seen);
+      const time=document.createElement(last ? 'time' : 'span');
+      time.textContent=last ? last.text : 'Time unavailable';
+      if (last) time.dateTime=last.date.toISOString();
+      visited.append(heading,time);
+      tooltip.replaceChildren(strong,span,visited);tooltip.hidden=false;
       const pr=plot.getBoundingClientRect(),mr=map.getBoundingClientRect(),xy=project(p.lat,p.lon,pr.width,pr.height);
       tooltip.style.left=`${clamp(pr.left-mr.left+xy.x+10,8,mr.width-tooltip.offsetWidth-8)}px`;
       tooltip.style.top=`${clamp(pr.top-mr.top+xy.y-tooltip.offsetHeight-10,8,mr.height-tooltip.offsetHeight-8)}px`;
@@ -94,7 +113,7 @@
       get('atlas-visits').textContent=fmt(t.visits);
       get('atlas-places').textContent=fmt(t.places ?? t.cities);
       get('atlas-countries').textContent=t.countries==null ? '—' : fmt(t.countries);
-      note.textContent=points.length ? (payload.truncated ? `Showing ${fmt(points.length)} places. Select a point for details.` : 'Hover or tap a point to explore.') : 'No recorded visits yet.';
+      note.textContent=points.length ? (payload.truncated ? `Showing ${fmt(points.length)} places. Select a point for details.` : 'Hover or tap a point for visits and the latest visit time.') : 'No recorded visits yet.';
       const list=get('crowd-top');list.replaceChildren();
       points.slice(0,5).forEach((p,i)=>{
         const li=document.createElement('li'),b=document.createElement('button'),n=document.createElement('span');

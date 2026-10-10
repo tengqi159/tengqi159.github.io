@@ -36,7 +36,7 @@
     root.innerHTML = (window.siteData.publications || []).filter(p => p.status === "accepted").map(pub => {
       const story = find(pub);
       return `<article class="news-paper paper-row">
-        ${hasFigure(story) ? `<figure class="publication-preview-wrap news-paper-figure"><button class="publication-preview" type="button" data-story="${esc(story.id)}" data-mode="abstract" aria-label="View paper framework for ${esc(story.shortName)}"><span class="publication-preview-topline"><span>Original paper figure</span><span class="publication-preview-open">Enlarge ↗</span></span>${figureMarkup(story, {thumbnail:true})}</button><figcaption class="publication-figure-caption">${esc(story.figure.label || "Paper framework")}</figcaption></figure>` : ""}
+        ${hasFigure(story) ? `<figure class="publication-preview-wrap news-paper-figure"><button class="publication-preview" type="button" data-story="${esc(story.id)}" data-mode="abstract" aria-label="View paper framework for ${esc(story.shortName)}"><span class="publication-preview-topline"><span>Original paper figure</span><span class="publication-preview-open">Enlarge ↗</span></span>${figureMarkup(story, {thumbnail:true})}</button></figure>` : ""}
         <div class="publication-copy">
           <div class="news-paper-top"><span class="news-new-badge">${icon("new")}New</span><span class="accepted-badge">${icon("accepted")}Accepted · NeurIPS ${pub.year}</span><span class="news-paper-format">${icon("poster")}Poster · Forthcoming</span></div>
           <h3>${esc(pub.title)}</h3><p class="paper-authors">${esc(pub.authors)}</p>

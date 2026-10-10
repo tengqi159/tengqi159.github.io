@@ -47,7 +47,6 @@
 .publication-preview-topline { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .3rem .5rem; margin-bottom: .5rem; font-size: .72rem; color: var(--ink-2); }
 .publication-preview-open { display: inline-flex; align-items: center; gap: .3rem; color: var(--teal-strong); font-weight: 700; }
 .publication-preview-open svg { width: 15px; height: 15px; }
-.publication-figure-caption { margin: .45rem 0 0; color: var(--ink-2); font-size: .75rem; line-height: 1.5; }
 .pe-image-stage { display: block; position: relative; margin: 0 auto; background: #fff; flex-shrink: 0; }
 .pe-original-image { display: block; width: 100%; height: auto; max-width: none; margin: 0; background: #fff; }
 .pe-image-thumbnail { width: 100%; }
