@@ -1,4 +1,4 @@
-/* A short editorial note, using the homepage's existing paper and ink tokens. */
+/* An editorial note, using the homepage's existing paper and ink tokens. */
 .research-note {
   scroll-margin-top: 6rem;
   min-width: 0;
@@ -107,6 +107,50 @@
 .research-note-body p {
   min-width: 0;
   margin: 0;
+}
+
+.research-note-column { min-width: 0; }
+.research-note-column p + p { margin-top: 1rem; }
+
+.research-note-pivot {
+  margin: 1.4rem 0 .75rem;
+  color: var(--ink);
+  font-family: "Cormorant Garamond", Baskerville, Georgia, serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.research-note-quote {
+  margin: 0;
+  max-width: 75ch;
+  color: var(--ink);
+  font-family: "Cormorant Garamond", Baskerville, Georgia, serif;
+  font-size: 1.2rem;
+  font-weight: 500;
+  line-height: 1.65;
+}
+.research-note-quote p { margin: 0; }
+.research-note-quote cite {
+  font-family: "Manrope", system-ui, sans-serif;
+  font-size: .8rem;
+  font-weight: 400;
+  font-style: normal;
+}
+.research-note-quote a {
+  color: var(--teal-strong);
+  text-decoration: underline;
+  text-underline-offset: .2em;
+}
+.research-note-quote a:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 3px;
+}
+
+@media (min-width: 761px) {
+  .research-note-body {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  }
 }
 
 .research-note-footer {
