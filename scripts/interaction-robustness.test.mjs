@@ -23,7 +23,7 @@ function element(id = "") {
   };
 }
 
-function fixture({ publications = [], news = [], hash = "", observerFailure } = {}) {
+function fixture({ publications = [], news = [], hash = "", observerFailure, researchNote = false } = {}) {
   const sections = [element("news"), element("publications")];
   const links = sections.map(section => {
     const link = element(); link.setAttribute("href", `#${section.id}`); return link;
@@ -32,6 +32,7 @@ function fixture({ publications = [], news = [], hash = "", observerFailure } = 
   const history = element("history"), timeline = element("news-timeline");
   timeline.closest = selector => selector === ".news-history" ? history : null;
   const byId = new Map([...sections, timeline].map(node => [node.id, node]));
+  if (researchNote) byId.set("research-note", element("research-note"));
   const observers = [], listeners = new Map(), frames = [];
   let nextFrame = 0;
   class Observer {
@@ -75,6 +76,17 @@ function fixture({ publications = [], news = [], hash = "", observerFailure } = 
 
 test("accepted papers remain visible when their earlier-news history is empty", () => {
   const f = fixture({ publications: [{ status: "accepted" }] });
+  f.sections[0].hidden = true; f.links[0].hidden = true;
+  f.timeline.children = [element("stale-news")];
+  f.context.renderNews();
+  assert.equal(f.sections[0].hidden, false);
+  assert.equal(f.links[0].hidden, false);
+  assert.equal(f.history.hidden, true);
+  assert.equal(f.timeline.children.length, 0);
+});
+
+test("a research note keeps News and navigation visible without papers or earlier updates", () => {
+  const f = fixture({ researchNote: true });
   f.sections[0].hidden = true; f.links[0].hidden = true;
   f.timeline.children = [element("stale-news")];
   f.context.renderNews();

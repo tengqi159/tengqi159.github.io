@@ -623,8 +623,10 @@ function renderNews() {
   const section = document.getElementById("news");
   const navLink = document.querySelector('[data-nav="news"]');
   const history = list.closest(".news-history");
-  if (section) section.hidden = !items.length && !hasAcceptedPapers;
-  if (navLink) navLink.hidden = !items.length && !hasAcceptedPapers;
+  const hasResearchNote = Boolean(document.getElementById("research-note"));
+  const isEmpty = !items.length && !hasAcceptedPapers && !hasResearchNote;
+  if (section) section.hidden = isEmpty;
+  if (navLink) navLink.hidden = isEmpty;
   if (history) history.hidden = !items.length;
 
   if (!items.length) {
