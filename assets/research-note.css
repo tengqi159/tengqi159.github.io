@@ -83,21 +83,16 @@
 .research-note-title {
   margin: 0;
   color: var(--ink);
-  font-family: "Songti SC", "Noto Serif CJK SC", "Source Han Serif SC", STSong, SimSun, serif;
+  font-family: "Cormorant Garamond", Baskerville, Georgia, serif;
   font-size: clamp(1.9rem, 3vw, 2.5rem);
   font-weight: 600;
   line-height: 1.3;
-  letter-spacing: .04em;
+  letter-spacing: -.015em;
 }
 
-.research-note-deck {
-  margin: .55rem 0 1.4rem;
-  color: var(--ink-2);
-  font-size: .95rem;
-  line-height: 1.8;
-}
 
 .research-note-body {
+  margin-top: 1.35rem;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1.1rem clamp(1.5rem, 3vw, 3rem);
@@ -139,9 +134,10 @@
   min-width: 0;
   margin: 0;
   color: var(--ink);
-  font-family: "Songti SC", "Noto Serif CJK SC", "Source Han Serif SC", STSong, SimSun, serif;
-  font-size: 1.05rem;
-  line-height: 1.85;
+  font-family: "Cormorant Garamond", Baskerville, Georgia, serif;
+  font-size: 1.18rem;
+  font-weight: 500;
+  line-height: 1.6;
 }
 
 .research-note-signature {
@@ -153,9 +149,6 @@
 }
 
 @media (max-width: 760px) {
-  .research-note-break {
-    display: none;
-  }
 
   .research-note-body {
     grid-template-columns: minmax(0, 1fr);
@@ -176,9 +169,6 @@
     margin-bottom: 1rem;
   }
 
-  .research-note-deck {
-    margin-bottom: 1.15rem;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
