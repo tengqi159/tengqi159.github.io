@@ -21,10 +21,10 @@
       const value = Math.sin(x * 127.1 + y * 311.7 + salt * 74.7) * 43758.5453;
       return value - Math.floor(value);
     };
-    const colors = ['#8abdb4', '#a9c2bc', '#d0ba8b', '#477e76'];
+    let colors = [];
     let width = 1, height = 1, artWidth = 1, artHeight = 1, compact = false;
     let particles = [], frame = 0, lastPaint = 0, phase = 4.2;
-    let needsLayout = true, dirty = true, failed = false, onScreen = false;
+    let needsLayout = true, needsColors = true, dirty = true, failed = false, onScreen = false;
     let lastInput = performance.now();
     const pointer = {x: -1000, y: -1000, active: false};
     const paused = () => reduced.matches || root.dataset.motionPaused === 'true';
@@ -82,6 +82,20 @@
         ? candidates.sort((a, b) => a.rank - b.rank).slice(0, limit)
         : candidates;
       needsLayout = false;
+    }
+
+    function readColors() {
+      const style = getComputedStyle(root);
+      const token = (name, fallback) => style.getPropertyValue(name).trim() || fallback;
+      const ink = token('--ink-2', '#4d565f');
+      // Use the surrounding page's palette in both light and dark themes.
+      colors = [
+        token('--teal', '#0e5f63'),
+        ink,
+        token('--gold', '#96690f'),
+        token('--ink-3', ink)
+      ];
+      needsColors = false;
     }
 
     function requestFrame() {
@@ -155,6 +169,7 @@
       if ((dirty || animate) && (!lastPaint || time - lastPaint >= interval)) {
         try {
           if (needsLayout) measure();
+          if (needsColors) readColors();
           draw(time, animate);
         } catch {
           failed = true;
@@ -197,6 +212,10 @@
       if (onScreen) wake();
     }, {passive: true});
     document.addEventListener('qt-motionchange', syncMotion);
+    document.addEventListener('qt-themechange', () => {
+      needsColors = true;
+      wake(false);
+    });
     document.addEventListener('visibilitychange', () => {
       if (!document.hidden) lastInput = performance.now();
       syncMotion();

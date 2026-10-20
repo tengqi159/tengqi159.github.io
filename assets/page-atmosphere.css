@@ -19,8 +19,11 @@
   pointer-events: none;
   contain: strict;
   visibility: hidden;
+  transition: opacity 700ms ease;
 }
 .has-page-atmosphere .page-atmosphere { visibility: visible; }
+/* Let the closing pixels take over without stacking two competing fields. */
+[data-page-scene="links"] .page-atmosphere { opacity: .18; }
 .page-atmosphere canvas { display: block; width: 100%; height: 100%; }
 /* Keep the signal visible around the reader, softer behind the reading column. */
 .page-atmosphere canvas {
@@ -93,6 +96,10 @@
 }
 [data-motion-paused="true"] .section-head h2,
 [data-motion-paused="true"] .section-head::after { animation: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  .page-atmosphere { transition: none; }
+}
+[data-motion-paused="true"] .page-atmosphere { transition: none; }
 @media print {
   .page-atmosphere, .has-page-atmosphere .chapter-echo { display: none; }
   .has-page-atmosphere .section-head { padding-bottom: 0; }
