@@ -69,22 +69,34 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="assets/styles.css?v=research-20261003-audit-fixes" />
-    <link rel="stylesheet" href="assets/fx.css?v=research-20261003-audit-fixes" />
-    <link rel="stylesheet" href="assets/signal-studies.css?v=research-20261003-audit-fixes" />
-    <link rel="stylesheet" href="assets/atlas.css?v=atlas-time-20261010" />
+    <link rel="stylesheet" href="assets/fx.css?v=motion-polish-20261020" />
+    <link rel="stylesheet" href="assets/signal-studies.css?v=signal-studies-original-20261020" />
+    <link rel="stylesheet" href="assets/atlas.css?v=atlas-resilience-20261020" />
     <link rel="stylesheet" href="assets/research-stories.css?v=atlas-time-20261010" />
     <link rel="stylesheet" href="assets/collaboration.css?v=collaboration-refresh-20261010" />
     <link rel="stylesheet" href="assets/research-note.css?v=research-note-author-20261013" />
+    <link rel="stylesheet" href="assets/page-atmosphere.css?v=motion-polish-20261020" />
+    <link rel="stylesheet" href="assets/page-navigation.css?v=motion-polish-20261020" />
+    <link rel="stylesheet" href="assets/closing-field.css?v=pixel-finale-20261020" />
     <script defer src="assets/site-data.js?v=research-20261003-audit-fixes"></script>
-    <script defer src="assets/atlas-crowd.js?v=atlas-time-20261010"></script>
+    <script defer src="assets/atlas-snapshot.js?v=atlas-resilience-20261020"></script>
+    <script defer src="assets/atlas-crowd.js?v=atlas-resilience-20261020"></script>
     <script defer src="assets/paper-stories.js?v=research-20261003-audit-fixes"></script>
     <script defer src="assets/paper-explainer.js?v=atlas-time-20261010"></script>
-    <script defer src="assets/site.js?v=research-note-20261013"></script>
+    <script defer src="assets/site.js?v=motion-polish-20261020"></script>
     <script defer src="assets/collaboration.js?v=collaboration-refresh-20261010"></script>
-    <script defer src="assets/fx.js?v=research-20261003-audit-fixes"></script>
-    <script defer src="assets/signal-studies.js?v=research-20261003-audit-fixes"></script>
+    <script defer src="assets/fx.js?v=motion-polish-20261020"></script>
+    <script defer src="assets/signal-studies.js?v=signal-studies-original-20261020"></script>
+    <script defer src="assets/page-atmosphere.js?v=editorial-field-20261020"></script>
+    <script defer src="assets/page-navigation.js?v=motion-polish-20261020"></script>
+    <script defer src="assets/page-rhythm.js?v=motion-polish-20261020"></script>
+    <script defer src="assets/closing-field.js?v=pixel-finale-20261020"></script>
   </head>
   <body>
+    <div class="page-atmosphere" id="page-atmosphere" aria-hidden="true">
+      <canvas id="atmosphere-canvas"></canvas>
+      <div class="atmosphere-wash"></div>
+    </div>
     <a class="skip-link" href="#top">Skip to content</a>
     <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
 
@@ -190,7 +202,8 @@
         </a>
       </section>
 
-      <section class="section" id="news" data-reveal>
+      <section class="section" id="news" data-chapter="01" data-reveal>
+        <span class="chapter-echo" aria-hidden="true">01</span>
         <header class="section-head">
           <p class="section-kicker"><span>01</span>News</p>
           <h2 class="news-heading"><svg class="news-heading-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v14H4Z"/><path d="M8 9h3v3H8ZM14 9h3M14 12h3M8 15h9"/></svg>Latest news.</h2>
@@ -234,7 +247,8 @@
         <details class="news-history"><summary>Earlier updates</summary><ol class="news-timeline" id="news-timeline"></ol></details>
       </section>
 
-      <section class="section" id="profile" data-reveal>
+      <section class="section" id="profile" data-chapter="02" data-reveal>
+        <span class="chapter-echo" aria-hidden="true">02</span>
         <header class="section-head">
           <p class="section-kicker"><span>02</span>Profile</p>
           <h2>Research profile.</h2>
@@ -283,7 +297,8 @@
         </div>
       </section>
 
-      <section class="section" id="research" data-reveal>
+      <section class="section" id="research" data-chapter="03" data-reveal>
+        <span class="chapter-echo" aria-hidden="true">03</span>
         <header class="section-head">
           <p class="section-kicker"><span>03</span>Research</p>
           <h2>Research directions.</h2>
@@ -291,6 +306,7 @@
             I study efficient learning from wearable sensor sequences and structured
             graph data, with an emphasis on robust representations and practical inference.
           </p>
+
         </header>
 
         <div class="research-explorer">
@@ -365,7 +381,8 @@
 
       <p class="research-invitation">Have a related question? <a href="#collaboration">Let’s explore it together.</a></p>
 
-      <section class="section" id="publications" data-reveal>
+      <section class="section" id="publications" data-chapter="04" data-reveal>
+        <span class="chapter-echo" aria-hidden="true">04</span>
         <header class="section-head">
           <p class="section-kicker"><span>04</span>Publications</p>
           <h2>Selected publications.</h2>
@@ -414,7 +431,8 @@
         <p class="archive-empty" id="archive-empty" hidden>No matches. Try another title, author or venue, or clear the filters.</p>
       </section>
 
-      <section class="section collaboration-section" id="collaboration" aria-labelledby="collaboration-title" data-reveal>
+      <section class="section collaboration-section" id="collaboration" data-chapter="05" aria-labelledby="collaboration-title" data-reveal>
+        <span class="chapter-echo" aria-hidden="true">05</span>
         <header class="section-head">
           <p class="section-kicker"><span>05</span>Collaboration</p>
           <h2 id="collaboration-title">Got an idea? <span>Let’s talk.</span></h2>
@@ -474,7 +492,8 @@
         </div>
       </section>
 
-      <section class="section" id="atlas" data-reveal>
+      <section class="section" id="atlas" data-chapter="06" data-reveal>
+        <span class="chapter-echo" aria-hidden="true">06</span>
         <header class="section-head">
           <p class="section-kicker"><span>06</span>Visitor Atlas</p>
           <h2>Where visitors connect.</h2>
@@ -511,6 +530,7 @@
               <p class="atlas-eyebrow">Your connection</p>
               <h3 id="visitor-place">Finding your region…</h3>
               <p class="visitor-status" id="visitor-status" role="status">Looking up an approximate location.</p>
+              <a class="atlas-local-preview" id="atlas-local-preview" href="http://127.0.0.1:8765/#atlas" hidden>Open connected preview ↗</a>
               <button class="atlas-refresh" id="atlas-retry" type="button" hidden>Try again</button>
               <ul class="atlas-legend" aria-label="Map legend">
                 <li><i class="legend-home" aria-hidden="true"></i>Home lab</li>
@@ -528,21 +548,42 @@
             <span>Most connected</span><ul id="crowd-top" aria-label="Most visited places"></ul>
           </div>
           <div class="atlas-all-places" id="atlas-all-places" hidden>
-            <label for="atlas-place-select">Explore all visitor places</label>
-            <select id="atlas-place-select" aria-describedby="atlas-tooltip">
-              <option value="-1">Choose a place…</option>
-            </select>
+            <div class="atlas-place-picker">
+              <label for="atlas-place-select">Explore all visitor places</label>
+              <select id="atlas-place-select" aria-describedby="atlas-order-note atlas-tooltip">
+                <option value="-1">Choose a place…</option>
+              </select>
+            </div>
+            <div class="atlas-order-control">
+              <label for="atlas-order-select">Order by</label>
+              <select id="atlas-order-select">
+                <option value="recent">Latest visit</option>
+                <option value="visits">Most visits</option>
+              </select>
+            </div>
+            <p id="atlas-order-note">Latest recorded visit per city or region · times in your local time zone.</p>
           </div>
           <noscript><p class="atlas-noscript">Enable JavaScript to load the visitor map.</p></noscript>
         </div>
       </section>
 
-      <section class="section" id="links" data-reveal>
+      <section class="section" id="links" data-chapter="07" data-reveal>
+        <span class="chapter-echo" aria-hidden="true">07</span>
         <header class="section-head">
           <p class="section-kicker"><span>07</span>Links</p>
           <h2>Research links.</h2>
         </header>
 
+        <div class="links-finale" id="links-finale">
+          <canvas id="closing-field" aria-hidden="true"></canvas>
+          <div class="links-finale-copy">
+            <p class="links-finale-eyebrow">From signals to connections</p>
+            <h3>Keep exploring.</h3>
+            <p>Papers, code, and new conversations.</p>
+            <a class="links-finale-hello" href="#collaboration">Start a conversation
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" /></svg>
+            </a>
+          </div>
         <div class="link-list">
           <a class="link-row" href="https://scholar.google.com/citations?user=D5kHbeAAAAAJ&hl=en" target="_blank" rel="noreferrer">
             <span class="link-icon" aria-hidden="true">
@@ -576,6 +617,8 @@
             <span class="link-desc">Additional publication profile</span>
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" /></svg>
           </a>
+        </div>
+
         </div>
 
         <p class="source-note" id="data-stamp">

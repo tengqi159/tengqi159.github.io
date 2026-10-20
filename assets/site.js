@@ -981,6 +981,8 @@ function setupActiveNav() {
   if (!("IntersectionObserver" in window)) return;
 
   const sections = [...byId.keys()].map(id => document.getElementById(id)).filter(Boolean);
+  // Returning to the introduction must clear the last section's highlight.
+  const hero = document.querySelector(".hero");
   let observer;
   let resizeFrame = 0;
   function observeSections() {
@@ -989,10 +991,11 @@ function setupActiveNav() {
     const height = Math.max(1, window.innerHeight || document.documentElement.clientHeight);
     observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) setActive(entry.target.id);
+        if (entry.isIntersecting) setActive(entry.target === hero ? "" : entry.target.id);
       });
     }, { rootMargin: `${-height * .38}px 0px ${-height * .55}px 0px` });
     sections.forEach(section => observer.observe(section));
+    if (hero) observer.observe(hero);
   }
   observeSections();
   window.addEventListener("resize", () => {

@@ -3,6 +3,7 @@
 (() => {
   'use strict';
   const ENDPOINT = (window.QT_ATLAS_ENDPOINT ?? 'https://qt-atlas.teqi159.workers.dev').replace(/\/$/,'');
+  const FILE_MODE = window.location?.protocol==='file:';
   const TIMEOUT_MS = 7500;
   const CACHE_KEY = `qt-atlas-map-v2:${ENDPOINT}`;
   const TOKEN_KEY = 'qt-atlas-token';
@@ -60,8 +61,10 @@
     const plot=map.querySelector('.atlas-plot');
     const status=get('atlas-map-status'), visitStatus=get('visitor-status'), place=get('visitor-place');
     const refresh=get('atlas-refresh'), retry=get('atlas-retry'), note=get('atlas-map-note'), tooltip=get('atlas-tooltip');
-    const placeSelect=get('atlas-place-select'), allPlaces=get('atlas-all-places');
+    const placeSelect=get('atlas-place-select'), allPlaces=get('atlas-all-places'), orderSelect=get('atlas-order-select');
+    const localPreview=get('atlas-local-preview');
     let points=[], snapshot=null, active=-1, pinned=false, busy=false, readVersion=0, arcTimer=0;
+    let snapshotAt=null;
     let visitSaved=false;
 
     function paint() {
@@ -106,8 +109,35 @@
         .map(p=>({...p,visitors:count(p.visitors),visits:count(p.visits ?? p.visitors)}));
       return {...payload,points:pts};
     }
-    function render(payload) {
+    function renderPlaceOptions() {
+      if (!placeSelect || !allPlaces) return;
+      const prompt=document.createElement('option');prompt.value='-1';prompt.textContent='Choose a place…';
+      const order=orderSelect?.value || 'recent';
+      const entries=points.map((point,index)=>({point,index,time:visitTime(point.last_seen)}));
+      entries.sort((a,b)=>{
+        if (order==='visits' && a.point.visits!==b.point.visits) return b.point.visits-a.point.visits;
+        const at=a.time?.date.getTime() ?? -Infinity, bt=b.time?.date.getTime() ?? -Infinity;
+        if (at!==bt) return at>bt ? -1:1;
+        return label(a.point).localeCompare(label(b.point),'en') || a.index-b.index;
+      });
+      placeSelect.replaceChildren(prompt);
+      entries.forEach(({point:p,index,time})=>{
+        const option=document.createElement('option');option.value=String(index);
+        option.textContent=`${time ? time.text : 'Time unavailable'} · ${label(p) || 'Approximate region'} · ${fmt(p.visits)} ${p.visits===1?'visit':'visits'}`;
+        placeSelect.append(option);
+      });
+      placeSelect.value=String(pinned && active>=0 ? active:-1);
+      allPlaces.hidden=!points.length;
+    }
+    function savedState() {
+      shell.dataset.state='cached';
+      const saved=visitTime(snapshotAt);
+      status.textContent=`Saved visitor map${saved ? ' · '+saved.date.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}):''}`;
+      status.title=saved ? `Public map snapshot captured ${saved.text}. Live updates are unavailable.` : 'Saved visitor records. Live updates are unavailable.';
+    }
+    function render(payload,at=null) {
       snapshot=payload;points=payload.points;active=-1;pinned=false;tooltip.hidden=true;
+      snapshotAt=at;
       const t=payload.totals;
       get('atlas-visitors').textContent=fmt(t.visitors);
       get('atlas-visits').textContent=fmt(t.visits);
@@ -128,16 +158,7 @@
         li.append(b);list.append(li);
       });
       get('atlas-places-row').hidden=!points.length;paint();
-      if(placeSelect && allPlaces) {
-        const prompt=document.createElement('option');prompt.value='-1';prompt.textContent='Choose a place…';
-        placeSelect.replaceChildren(prompt);
-        points.forEach((p,i)=>{
-          const option=document.createElement('option');option.value=String(i);
-          option.textContent=`${label(p) || 'Approximate region'} · ${fmt(p.visits)} ${p.visits===1?'visit':'visits'}`;
-          placeSelect.append(option);
-        });
-        allPlaces.hidden=!points.length;
-      }
+      renderPlaceOptions();
     }
     async function loadMap() {
       const requestId=++readVersion;
@@ -145,15 +166,15 @@
       try {
         const data=decode(await api('/visits'));
         if (requestId!==readVersion) return;
-        render(data);shell.dataset.state='ready';
         const synced=new Date();
+        render(data,synced.toISOString());shell.dataset.state='ready';
         status.textContent=`Visitor map · synced ${synced.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}`;
         status.title=`Last successful refresh: ${synced.toLocaleString()}`;
         save(CACHE_KEY,JSON.stringify({at:Date.now(),data}));
       } catch {
         if (requestId!==readVersion) return;
-        shell.dataset.state=snapshot?'cached':'error';
-        status.textContent=snapshot?'Saved map · refresh unavailable':'Visitor map temporarily unavailable';
+        if (snapshot) savedState();
+        else {shell.dataset.state='error';status.textContent='Visitor map temporarily unavailable';}
         if (!snapshot) note.textContent='No visitor records could be loaded. Try refreshing the map.';
       }
     }
@@ -202,6 +223,18 @@
       }
     }
     async function run() {
+      if (FILE_MODE) {
+        refresh.hidden=true;retry.hidden=true;
+        if (localPreview) localPreview.hidden=false;
+        place.textContent='Local file preview';
+        visitStatus.textContent='Saved visitor records are shown here. Open the connected preview for live updates and visit recording.';
+        if (snapshot) savedState();
+        else {
+          shell.dataset.state='error';status.textContent='Connected preview needed';
+          note.textContent='Open the connected preview to load visitor records.';
+        }
+        return;
+      }
       if (busy) return;
       busy=true;refresh.disabled=true;retry.disabled=true;
       try {await Promise.allSettled([loadMap(),recordConnection()]);}
@@ -219,12 +252,24 @@
     document.addEventListener('keydown',event=>{if(event.key==='Escape' && active>=0)showPoint(-1);});
     refresh.addEventListener('click',run);retry.addEventListener('click',run);
     placeSelect?.addEventListener('change',()=>showPoint(Number(placeSelect.value),true));
+    orderSelect?.addEventListener('change',renderPlaceOptions);
     const repaint=()=>{paint();if(active>=0)showPoint(active,pinned);};
     if('ResizeObserver' in window)new ResizeObserver(repaint).observe(canvas);
     else window.addEventListener('resize',repaint);
     document.addEventListener('qt-themechange',repaint);
     window.addEventListener('online',run);
-    try {const cached=JSON.parse(stored(CACHE_KEY));if(cached && Date.now()-cached.at<7*86400000)render(decode(cached.data));}catch{}
+    const saved=[];
+    try {
+      const bundled=window.QT_ATLAS_SNAPSHOT;
+      const at=typeof bundled?.capturedAt==='string' ? Date.parse(bundled.capturedAt) : NaN;
+      if (Number.isFinite(at)) saved.push({at,data:decode(bundled.data)});
+    } catch {}
+    try {
+      const cached=JSON.parse(stored(CACHE_KEY));
+      if(cached && typeof cached.at==='number' && cached.at<=Date.now() && Date.now()-cached.at<7*86400000) saved.push({at:cached.at,data:decode(cached.data)});
+    }catch{}
+    saved.sort((a,b)=>b.at-a.at);
+    if (saved[0]) {render(saved[0].data,new Date(saved[0].at).toISOString());savedState();}
     window.QtAtlasCrowd={refresh:run};
     run();
   }

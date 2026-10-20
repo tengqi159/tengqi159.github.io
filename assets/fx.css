@@ -123,7 +123,7 @@
   transition: opacity 300ms ease;
 }
 
-.portrait.fx-tilt:hover .portrait-glare {
+.portrait.fx-tilt.is-fx-pointed .portrait-glare {
   opacity: 1;
 }
 
@@ -152,7 +152,7 @@
   );
 }
 
-.fx-spotlight:hover::after {
+.fx-spotlight.is-fx-pointed::after {
   opacity: 1;
 }
 
@@ -419,6 +419,14 @@ html.fx-sweep body *::after {
    ============================================================ */
 
 @media (hover: none), (pointer: coarse) {
+  .button.fx-magnetic,
+  .fx-tilt,
+  .portrait.fx-tilt,
+  .selected-card.fx-tilt:hover {
+    transform: none !important;
+    will-change: auto;
+  }
+
   .fx-spotlight::after,
   .portrait-glare {
     display: none;
@@ -426,6 +434,25 @@ html.fx-sweep body *::after {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .button.fx-magnetic,
+  .fx-tilt,
+  .portrait.fx-tilt,
+  .selected-card.fx-tilt:hover {
+    transform: none !important;
+    transition: none !important;
+    will-change: auto;
+  }
+
+  .fx-unit {
+    animation: none !important;
+    opacity: 1;
+    filter: none;
+    transform: none;
+    will-change: auto;
+  }
+
+  .fx-draw [data-draw] { stroke-dashoffset: 0; }
+
   .fx-split.fx-armed:not(.is-locked) .fx-unit {
     opacity: 1;
   }
@@ -454,4 +481,54 @@ html.fx-sweep body *::after {
   ::view-transition-new(root) {
     animation: none;
   }
+}
+
+/* Pause is a live preference, shared with the page-wide background. Hide
+   only decoration; keep text, icon strokes and citation values readable. */
+.fx-split.fx-settled .fx-unit {
+  animation: none !important;
+  opacity: 1 !important;
+  filter: none !important;
+  transform: none !important;
+  will-change: auto;
+}
+.fx-draw.fx-settled [data-draw] {
+  animation: none !important;
+  stroke-dashoffset: 0;
+}
+html.fx-motion-suspended .button.fx-magnetic,
+html.fx-motion-suspended .fx-tilt,
+html.fx-motion-suspended .portrait.fx-tilt,
+html.fx-motion-suspended .selected-card.fx-tilt:hover {
+  transform: none !important;
+  transition: none !important;
+  will-change: auto;
+}
+html.fx-motion-suspended .fx-unit {
+  animation: none !important;
+  opacity: 1 !important;
+  filter: none !important;
+  transform: none !important;
+  will-change: auto;
+}
+html.fx-motion-suspended .fx-spotlight::after,
+html.fx-motion-suspended .portrait-glare,
+html.fx-motion-suspended .packet-layer,
+html.fx-motion-suspended .fx-ripple,
+html.fx-motion-suspended .news-rail,
+html.fx-motion-suspended .cite-meter i::after {
+  display: none;
+}
+html.fx-motion-suspended .fx-draw [data-draw] {
+  animation: none !important;
+  stroke-dashoffset: 0;
+}
+html.fx-motion-suspended .orbit-spin,
+html.fx-motion-suspended .direction-row:hover .orbit-spin,
+html.fx-motion-suspended .news-node {
+  animation: none !important;
+}
+html.fx-motion-suspended .cite-meter i {
+  width: var(--w, 0%);
+  transition: none;
 }

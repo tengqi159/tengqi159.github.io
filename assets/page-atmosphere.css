@@ -1,0 +1,100 @@
+/* A continuous editorial background. The geometry is drawn by page-atmosphere.js.
+   Text, figures and controls remain in the existing foreground layout. */
+:root {
+  --atmo-teal: 14, 95, 99;
+  --atmo-gold: 150, 105, 15;
+  --atmo-x: 78%;
+  --atmo-y: 52%;
+  --atmo-strength: .8;
+}
+[data-theme="dark"] {
+  --atmo-teal: 111, 185, 182;
+  --atmo-gold: 217, 169, 79;
+}
+.page-atmosphere {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  contain: strict;
+  visibility: hidden;
+}
+.has-page-atmosphere .page-atmosphere { visibility: visible; }
+.page-atmosphere canvas { display: block; width: 100%; height: 100%; }
+/* Keep the signal visible around the reader, softer behind the reading column. */
+.page-atmosphere canvas {
+  -webkit-mask-image: linear-gradient(90deg, rgba(0,0,0,.24), rgba(0,0,0,.4) 42%, #000 74%);
+  mask-image: linear-gradient(90deg, rgba(0,0,0,.24), rgba(0,0,0,.4) 42%, #000 74%);
+}
+.atmosphere-wash {
+  position: absolute;
+  inset: 0;
+  opacity: var(--atmo-strength);
+  background:
+    radial-gradient(ellipse 64% 75% at var(--atmo-x) var(--atmo-y), rgba(var(--atmo-teal), .12), transparent 78%),
+    radial-gradient(ellipse 56% 45% at 8% 86%, rgba(var(--atmo-gold), .07), transparent 82%);
+}
+/* Keep the original hero study as a secondary detail within the wider field. */
+.has-page-atmosphere .hero .signal-canvas { opacity: .16; }
+.has-page-atmosphere main > .section { position: relative; isolation: isolate; }
+.chapter-echo { display: none; }
+.has-page-atmosphere .chapter-echo {
+  display: block;
+  position: absolute;
+  top: clamp(3rem, 6vw, 5rem);
+  right: -.02em;
+  z-index: -1;
+  font: 400 clamp(7.5rem, 20vw, 15rem)/.8 "Fraunces", serif;
+  letter-spacing: -.08em;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(var(--atmo-teal), .1);
+  pointer-events: none;
+  user-select: none;
+}
+.has-page-atmosphere .section-head { position: relative; padding-bottom: 1.35rem; }
+.has-page-atmosphere .section-head::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, var(--teal), var(--line-soft) 40%, transparent 90%);
+  transform-origin: left;
+  opacity: .55;
+}
+/* Cards enter individually; a long section never blanks its entire contents. */
+.has-page-rhythm main > .section[data-reveal] {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .has-page-atmosphere .section[data-reveal].is-reveal-ready:not(.is-visible) { transform: none; }
+  .has-page-atmosphere .section.is-visible .section-head h2 {
+    animation: atmo-chapter-enter 850ms var(--ease-out) both;
+  }
+  .has-page-atmosphere .section.is-visible .section-head::after {
+    animation: atmo-rule-enter 1100ms var(--ease-out) both;
+  }
+}
+@keyframes atmo-chapter-enter {
+  from { opacity: .2; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes atmo-rule-enter {
+  from { transform: scaleX(.05); opacity: 0; }
+  to { transform: scaleX(1); opacity: .55; }
+}
+@media (max-width: 820px) {
+  .atmosphere-wash { opacity: calc(var(--atmo-strength) * .72); }
+  .page-atmosphere canvas { opacity: .72; }
+  .has-page-atmosphere .chapter-echo { font-size: clamp(6.5rem, 23vw, 10rem); }
+}
+[data-motion-paused="true"] .section-head h2,
+[data-motion-paused="true"] .section-head::after { animation: none !important; }
+@media print {
+  .page-atmosphere, .has-page-atmosphere .chapter-echo { display: none; }
+  .has-page-atmosphere .section-head { padding-bottom: 0; }
+  .has-page-atmosphere .section-head::after { display: none; }
+}

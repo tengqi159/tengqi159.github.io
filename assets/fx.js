@@ -16,8 +16,17 @@
 (function () {
   "use strict";
 
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+  const root = document.documentElement;
+  const pointerResets = new Map();
+  const motionEnabled = () => !reducedMotion.matches && !document.hidden &&
+    root.dataset.motionPaused !== "true";
+  const pointerEnabled = () => motionEnabled() && finePointer.matches;
+  const watchMedia = (query, callback) => {
+    if (query.addEventListener) query.addEventListener("change", callback);
+    else query.addListener?.(callback);
+  };
 
   const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 
@@ -28,17 +37,65 @@
 
   /* run fn at most once per frame, keeping the latest arguments */
   function rafThrottle(fn) {
-    let queued = false;
+    let frame = 0;
     let latest = null;
-    return function throttled(...args) {
+    function throttled(...args) {
       latest = args;
-      if (queued) return;
-      queued = true;
-      window.requestAnimationFrame(() => {
-        queued = false;
+      if (frame) return;
+      frame = window.requestAnimationFrame(() => {
+        frame = 0;
         fn.apply(this, latest);
+        latest = null;
       });
+    }
+    throttled.cancel = () => {
+      if (frame) window.cancelAnimationFrame(frame);
+      frame = 0;
+      latest = null;
     };
+    return throttled;
+  }
+
+  // Check preferences both when input arrives and when its queued frame runs.
+  // A leave/pause between those moments must not restore a stale offset.
+  function bindPointerEffect(element, paint, resetStyles) {
+    let inside = false;
+    const move = rafThrottle(event => {
+      if (!inside || !pointerEnabled()) return;
+      element.classList.add("is-fx-pointed");
+      paint(event);
+    });
+    const reset = () => {
+      inside = false;
+      move.cancel();
+      element.classList.remove("is-fx-pointed");
+      resetStyles();
+    };
+    element.addEventListener("pointermove", event => {
+      if (!pointerEnabled() || event.pointerType === "touch") return;
+      inside = true;
+      move(event);
+    }, { passive: true });
+    element.addEventListener("pointerleave", reset);
+    element.addEventListener("pointercancel", reset);
+    element.addEventListener("blur", reset);
+    const resets = pointerResets.get(element) || [];
+    resets.push(reset);
+    pointerResets.set(element, resets);
+  }
+
+  function syncPointerMotion() {
+    root.classList.toggle("fx-motion-suspended", !motionEnabled());
+    if (!motionEnabled()) {
+      // Finish entrances already underway. Resuming ambient motion should not
+      // replay the introduction or make previously visible letters disappear.
+      document.querySelectorAll(".fx-split, .fx-draw.is-drawn")
+        .forEach(element => element.classList.add("fx-settled"));
+    }
+    pointerResets.forEach((resets, element) => {
+      if (!pointerEnabled() || !element.isConnected) resets.forEach(reset => reset());
+      if (!element.isConnected) pointerResets.delete(element);
+    });
   }
 
   /* fire onEnter once per element, the first time it shows up */
@@ -134,21 +191,19 @@
 
   function setupMagnetic(selector, strength) {
     document.querySelectorAll(selector).forEach((element) => {
+      if (element.classList.contains("fx-magnetic")) return;
       element.classList.add("fx-magnetic");
       const reset = () => {
         element.style.setProperty("--fx-x", "0px");
         element.style.setProperty("--fx-y", "0px");
       };
-      const move = rafThrottle((event) => {
+      bindPointerEffect(element, event => {
         const rect = element.getBoundingClientRect();
         const dx = event.clientX - (rect.left + rect.width / 2);
         const dy = event.clientY - (rect.top + rect.height / 2);
         element.style.setProperty("--fx-x", `${clamp(dx * strength, -9, 9).toFixed(2)}px`);
         element.style.setProperty("--fx-y", `${clamp(dy * strength * 0.8, -7, 7).toFixed(2)}px`);
-      });
-      element.addEventListener("pointermove", move);
-      element.addEventListener("pointerleave", reset);
-      element.addEventListener("blur", reset);
+      }, reset);
     });
   }
 
@@ -161,12 +216,14 @@
       if (!element) return;
       if (element.classList.contains("fx-spotlight")) return;
       element.classList.add("fx-spotlight");
-      const move = rafThrottle((event) => {
+      bindPointerEffect(element, event => {
         const rect = element.getBoundingClientRect();
         element.style.setProperty("--mx", `${(event.clientX - rect.left).toFixed(1)}px`);
         element.style.setProperty("--my", `${(event.clientY - rect.top).toFixed(1)}px`);
+      }, () => {
+        element.style.setProperty("--mx", "50%");
+        element.style.setProperty("--my", "50%");
       });
-      element.addEventListener("pointermove", move);
     });
   }
 
@@ -181,10 +238,15 @@
     const reset = () => {
       element.style.setProperty("--rx", "0deg");
       element.style.setProperty("--ry", "0deg");
+      if (glare) {
+        glare.style.setProperty("--gx", "50%");
+        glare.style.setProperty("--gy", "50%");
+      }
     };
 
-    const move = rafThrottle((event) => {
+    bindPointerEffect(element, event => {
       const rect = element.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
       const px = (event.clientX - rect.left) / rect.width - 0.5;
       const py = (event.clientY - rect.top) / rect.height - 0.5;
       element.style.setProperty("--ry", `${(px * maxDeg * 2).toFixed(2)}deg`);
@@ -193,10 +255,7 @@
         glare.style.setProperty("--gx", `${((px + 0.5) * 100).toFixed(1)}%`);
         glare.style.setProperty("--gy", `${((py + 0.5) * 100).toFixed(1)}%`);
       }
-    });
-
-    element.addEventListener("pointermove", move);
-    element.addEventListener("pointerleave", reset);
+    }, reset);
   }
 
   /* ============================================================
@@ -250,7 +309,7 @@
     }
 
     function update() {
-      if (span <= 0) return;
+      if (span <= 0 || !motionEnabled()) return;
       const rect = timeline.getBoundingClientRect();
       const anchor = window.innerHeight * 0.62;
       const progress = clamp((anchor - (rect.top + top)) / span, 0, 1);
@@ -418,7 +477,10 @@
 
     function render(now) {
       frame = 0;
-      if (!running || !onScreen || !points.length) return;
+      if (!running || !onScreen || !points.length || !motionEnabled()) {
+        stop();
+        return;
+      }
 
       const cycle = (now / PACKET_PERIOD) % 1;
 
@@ -451,9 +513,7 @@
     }
 
     function start() {
-      if (running || !points.length || !onScreen || document.hidden ||
-          document.documentElement.dataset.motionPaused === "true" ||
-          window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      if (running || !points.length || !onScreen || !motionEnabled()) return;
       running = true;
       frame = window.requestAnimationFrame(render);
     }
@@ -494,6 +554,10 @@
       stop();
       start();
     });
+    watchMedia(reducedMotion, () => {
+      stop();
+      start();
+    });
 
     document.addEventListener("qt-arcdrawn", (event) => {
       path = event.detail;
@@ -519,24 +583,26 @@
      ============================================================ */
 
   function initCards() {
-    if (!finePointer || reduceMotion) return;
     const cards = Array.from(document.querySelectorAll(".selected-card"));
     cards.forEach((card) => setupTilt(card, 4, null));
     setupSpotlight(cards);
   }
 
   function init() {
-    if (!reduceMotion) {
+    if (!reducedMotion.matches) {
       setupSignalLock();
       setupIconDraw();
       setupNewsRail();
       setupCiteMeters();
-      setupPackets();
     }
+    // Always subscribe to future arcs, including when reduced motion was on
+    // at load. Preference changes can then resume without reloading the page.
+    setupPackets();
 
     watchRenderedContent();
-    if (!finePointer || reduceMotion) return;
 
+    // Bind once even on touch/reduced-motion startup; live gates above decide
+    // whether each incoming event may produce motion.
     setupMagnetic(".hero-cta .button", 0.22);
     setupSpotlight([
       ...document.querySelectorAll(".metric"),
@@ -553,6 +619,11 @@
       portrait.appendChild(glare);
       setupTilt(portrait, 5, glare);
     }
+    document.addEventListener("qt-motionchange", syncPointerMotion);
+    document.addEventListener("visibilitychange", syncPointerMotion);
+    watchMedia(reducedMotion, syncPointerMotion);
+    watchMedia(finePointer, syncPointerMotion);
+    syncPointerMotion();
   }
 
   function watchRenderedContent() {
@@ -566,10 +637,9 @@
         window.requestAnimationFrame(() => {
           queued = false;
           initCards();
-          if (!reduceMotion) setupCiteMeters();
-          if (finePointer && !reduceMotion) {
-            setupSpotlight(Array.from(document.querySelectorAll(".metric")));
-          }
+          if (!reducedMotion.matches) setupCiteMeters();
+          setupSpotlight(Array.from(document.querySelectorAll(".metric")));
+          syncPointerMotion();
         });
       };
       ["metrics-grid", "selected-publications"].forEach((id) => {
