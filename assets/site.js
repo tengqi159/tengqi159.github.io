@@ -837,9 +837,19 @@ function syncThemeColor(theme) {
 function setupThemeToggle() {
   const button = document.getElementById("theme-toggle");
   if (!button) return;
+  const root = document.documentElement;
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const motionAllowed = () => !reduced.matches && root.dataset.motionPaused !== "true" && !document.hidden;
+  let activeTransition = null;
+  const settleMotion = () => {
+    if (!motionAllowed()) activeTransition?.skipTransition();
+  };
+  document.addEventListener("qt-motionchange", settleMotion);
+  document.addEventListener("visibilitychange", settleMotion);
+  if (reduced.addEventListener) reduced.addEventListener("change", settleMotion);
+  else reduced.addListener?.(settleMotion);
 
   button.addEventListener("click", () => {
-    const root = document.documentElement;
     const next = root.dataset.theme === "dark" ? "light" : "dark";
 
     const apply = (crossfade) => {
@@ -855,12 +865,11 @@ function setupThemeToggle() {
       }
     };
 
-    const canSweep =
-      typeof document.startViewTransition === "function" &&
-      !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const animate = motionAllowed();
+    const canSweep = animate && typeof document.startViewTransition === "function";
 
     if (!canSweep) {
-      apply(true);
+      apply(animate);
       return;
     }
 
@@ -881,12 +890,20 @@ function setupThemeToggle() {
     root.classList.add("fx-sweep");
 
     const transition = document.startViewTransition(() => apply(false));
-    const settle = () => root.classList.remove("fx-sweep");
+    activeTransition = transition;
+    const settle = () => {
+      if (activeTransition !== transition) return;
+      activeTransition = null;
+      root.classList.remove("fx-sweep");
+    };
     transition.finished.then(settle, () => {
+      if (activeTransition !== transition) return;
       /* the browser declined to animate (hidden tab, size change, …):
          fall back to the ordinary crossfade instead of a hard cut */
-      root.classList.add("is-theming");
-      window.setTimeout(() => root.classList.remove("is-theming"), 480);
+      if (motionAllowed()) {
+        root.classList.add("is-theming");
+        window.setTimeout(() => root.classList.remove("is-theming"), 480);
+      }
       settle();
     });
   });
@@ -1010,40 +1027,64 @@ function setupActiveNav() {
 function setupMetricCountUp() {
   const values = document.querySelectorAll(".metric-value[data-count]");
   if (!values.length) return;
+  const root = document.documentElement;
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const disabled = () => reduced.matches || root.dataset.motionPaused === "true" || document.hidden;
+  const frames = new Map();
+  const settled = new WeakSet();
+  let observer;
 
-  if (
-    !("IntersectionObserver" in window) ||
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches
-  ) {
-    values.forEach((value) => {
-      value.textContent = value.dataset.count;
-    });
+  function settle(value) {
+    const frame = frames.get(value);
+    if (frame) window.cancelAnimationFrame(frame);
+    frames.delete(value);
+    value.textContent = value.dataset.count;
+    settled.add(value);
+    observer?.unobserve(value);
+  }
+  function syncMotion() {
+    if (!disabled()) return;
+    values.forEach(settle);
+    observer?.disconnect();
+  }
+
+  if (!("IntersectionObserver" in window) || disabled()) {
+    values.forEach(settle);
     return;
   }
 
-  const observer = new IntersectionObserver(
+  observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
+        if (!entry.isIntersecting || settled.has(entry.target)) return;
         observer.unobserve(entry.target);
+        if (disabled()) { settle(entry.target); return; }
         const target = Number(entry.target.dataset.count);
         if (!Number.isFinite(target)) return;
         const duration = 1100;
         const started = performance.now();
 
         function step(now) {
+          frames.delete(entry.target);
+          if (settled.has(entry.target)) return;
+          if (disabled() || entry.target.isConnected === false) { settle(entry.target); return; }
           const t = Math.min(1, (now - started) / duration);
           const eased = 1 - Math.pow(1 - t, 3);
           entry.target.textContent = String(Math.round(target * eased));
-          if (t < 1) window.requestAnimationFrame(step);
+          if (t < 1) frames.set(entry.target, window.requestAnimationFrame(step));
+          else settled.add(entry.target);
         }
-        window.requestAnimationFrame(step);
+        frames.set(entry.target, window.requestAnimationFrame(step));
       });
     },
     { threshold: 0.6 }
   );
 
   values.forEach((value) => observer.observe(value));
+  document.addEventListener("qt-motionchange", syncMotion);
+  document.addEventListener("visibilitychange", syncMotion);
+  if (reduced.addEventListener) reduced.addEventListener("change", syncMotion);
+  else reduced.addListener?.(syncMotion);
 }
 
 /* ---------- bootstrap ---------- */

@@ -22,25 +22,38 @@
       return value - Math.floor(value);
     };
     let colors = [];
-    let width = 1, height = 1, artWidth = 1, artHeight = 1, compact = false;
+    let width = 1, height = 1, hostWidth = 1, bleed = 0, artWidth = 1, artHeight = 1, compact = false;
     let particles = [], frame = 0, lastPaint = 0, phase = 4.2;
     let needsLayout = true, needsColors = true, dirty = true, failed = false, onScreen = false;
     let lastInput = performance.now();
     const pointer = {x: -1000, y: -1000, active: false};
+    // Hovering a research link bends the end of the stream toward that row.
+    const focus = {y: 0, target: 0, amount: 0};
+    // Vary the fringe by row so its silhouette never traces a rectangular edge.
+    // Density and opacity both taper; the final CSS mask is only a safety net.
+    const envelope = (u, v) => {
+      const fringe = .025 * Math.sin(v * 9.2) + .012 * Math.sin(v * 21.7);
+      return smooth(.015 + fringe, compact ? .22 : .28, u)
+        * (1 - smooth(compact ? .72 : .55, compact ? 1 : .94, u));
+    };
     const paused = () => reduced.matches || root.dataset.motionPaused === 'true';
     const moving = time => onScreen && !document.hidden && !paused() && time - lastInput < 20000;
 
     function measure() {
       const rect = host.getBoundingClientRect();
-      width = Math.max(1, rect.width);
+      const canvasRect = canvas.getBoundingClientRect();
+      hostWidth = Math.max(1, rect.width);
+      // The canvas bleeds into the page gutter while content keeps its column.
+      bleed = Math.max(0, rect.left - canvasRect.left);
+      width = Math.max(1, canvasRect.width);
       height = Math.max(1, rect.height);
-      compact = (window.innerWidth || width) <= 760;
+      compact = (window.innerWidth || hostWidth) <= 760;
       const ratio = Math.min(window.devicePixelRatio || 1, 1.5, 1600 / width);
       canvas.width = Math.max(1, Math.round(width * ratio));
       canvas.height = Math.max(1, Math.round(height * ratio));
       ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
       // The lower-left invitation and the right-hand links have quiet space.
-      artWidth = width * (compact ? 1.04 : .69);
+      artWidth = hostWidth * (compact ? 1 : .62) + bleed;
       artHeight = Math.min(height * (compact ? .30 : .56), compact ? 190 : 320);
       const spacing = compact ? 6.7 : 7.2;
       const candidates = [];
@@ -61,14 +74,14 @@
             const distance = (v - ridge) / spread;
             density += Math.exp(-distance * distance * .5) * .55;
           }
-          density *= 1 - smooth(.73, 1.02, u);
-          density *= smooth(-.04, .055, v) * (1 - smooth(.82, 1, v));
+          density *= envelope(u, v);
+          density *= smooth(0, .14, v) * (1 - smooth(.76, 1, v));
           const seed = hash(col, row);
           if (seed > density * .82) continue;
           candidates.push({
             x: x + (hash(col, row, 1) - .5) * 1.5,
             y: y + artHeight * .08 + (hash(col, row, 2) - .5) * 1.5,
-            u, seed, density: clamp(density, 0, 1),
+            u, v, seed, density: clamp(density, 0, 1),
             size: 1.4 + hash(col, row, 3) * 1.7,
             color: seed < .085 ? 2 : seed < .34 ? 0 : seed < .77 ? 1 : 3,
             dx: 0, dy: 0, vx: 0, vy: 0,
@@ -123,13 +136,26 @@
       const delta = lastPaint ? Math.min((time - lastPaint) / 1000, .09) : 0;
       if (animate) phase += delta;
       ctx.clearRect(0, 0, width, height);
-      const radius = Math.min(140, width * .17);
+      const radius = Math.min(140, hostWidth * .17);
       const radiusSquared = radius * radius;
+      // Ease the hover convergence in and out instead of snapping.
+      if (animate) {
+        focus.amount += (focus.target - focus.amount) * Math.min(1, delta * 4.2);
+        if (Math.abs(focus.target - focus.amount) < .002) focus.amount = focus.target;
+      } else if (paused()) {
+        focus.amount = 0;
+      }
+      // A soft pulse travels along the band, like a signal reaching the links.
+      const pulseOn = !paused();
+      const sweep = ((phase * .085) % 1.7) - .35;
       for (const p of particles) {
         const drift = Math.sin(phase * .23 + p.u * 7.6 + p.seed * 2.4) * artHeight * .025;
         const fold = Math.sin(phase * .12 - p.u * 11.3) * artHeight * .012;
-        const x = p.x + Math.sin(phase * .14 + p.seed * 6.3) * 1.8;
-        const y = p.y + drift + fold;
+        const wave = pulseOn ? Math.exp(-((p.u - sweep) * (p.u - sweep)) / .0055) : 0;
+        const pull = focus.amount * smooth(.32, .96, p.u);
+        const x = p.x + Math.sin(phase * .14 + p.seed * 6.3) * 1.8 + wave * 3;
+        const baseY = p.y + drift + fold - wave * artHeight * .03;
+        const y = baseY + (focus.y - baseY) * pull * (.38 + p.seed * .3);
         let tx = 0, ty = 0;
         if (animate && pointer.active && fine.matches) {
           const px = x + p.dx - pointer.x;
@@ -152,10 +178,16 @@
           }
         }
         const twinkle = .90 + .10 * Math.sin(phase * .34 + p.seed * 24);
-        const fade = 1 - smooth(.70, 1, p.u);
-        ctx.globalAlpha = (.22 + p.seed * .42 + p.density * .16) * fade * twinkle;
-        ctx.fillStyle = colors[p.color];
-        ctx.fillRect(Math.round(x + p.dx), Math.round(y + p.dy), p.size, p.size);
+        const px = x + p.dx, py = y + p.dy;
+        const edgeFade = smooth(0, Math.max(24, bleed * .85), px)
+          * (1 - smooth(width - 36, width, px))
+          * smooth(0, 22, py) * (1 - smooth(height - 36, height, py));
+        const fade = envelope(p.u, p.v) * edgeFade;
+        const glow = 1 + wave * .9 + pull * .45;
+        ctx.globalAlpha = Math.min(1, (.22 + p.seed * .42 + p.density * .16) * fade * twinkle * glow);
+        ctx.fillStyle = colors[wave > .55 && p.seed < .5 ? 0 : p.color];
+        const size = p.size * (1 + wave * .55);
+        ctx.fillRect(Math.round(px), Math.round(py), size, size);
       }
       ctx.globalAlpha = 1;
       host.classList.add('has-closing-field');
@@ -194,14 +226,29 @@
     host.addEventListener('pointermove', event => {
       if (!onScreen || !fine.matches || paused() || event.pointerType === 'touch') return;
       const rect = host.getBoundingClientRect();
-      pointer.x = event.clientX - rect.left;
+      pointer.x = event.clientX - rect.left + bleed;
       pointer.y = event.clientY - rect.top;
       pointer.active = true;
       wake();
     }, {passive: true});
-    const leave = () => { pointer.active = false; wake(); };
+    const leave = () => { pointer.active = false; focus.target = 0; wake(); };
     host.addEventListener('pointerleave', leave, {passive: true});
     host.addEventListener('pointercancel', leave, {passive: true});
+    // Converge on the hovered or keyboard-focused link row.
+    const aim = row => {
+      if (!onScreen || paused()) return;
+      const hostRect = host.getBoundingClientRect();
+      const rowRect = row.getBoundingClientRect();
+      focus.y = rowRect.top + rowRect.height / 2 - hostRect.top;
+      focus.target = 1;
+      wake();
+    };
+    host.querySelectorAll('.link-row').forEach(row => {
+      row.addEventListener('pointerenter', () => aim(row), {passive: true});
+      row.addEventListener('focus', () => aim(row));
+      row.addEventListener('blur', () => { focus.target = 0; wake(); });
+      row.addEventListener('pointerleave', () => { focus.target = 0; wake(); }, {passive: true});
+    });
     window.addEventListener('resize', layout, {passive: true});
     window.addEventListener('scroll', () => {
       if (!('IntersectionObserver' in window)) {

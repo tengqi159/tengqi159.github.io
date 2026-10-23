@@ -297,7 +297,10 @@
   width: 46px;
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
   animation: fx-shimmer 2.6s ease-in-out infinite;
+  animation-play-state: paused;
 }
+
+.selected-card.is-cite-visible .cite-meter i::after { animation-play-state: running; }
 
 .is-locked .cite-meter i {
   width: var(--w, 0%);
@@ -394,6 +397,8 @@
 html.fx-sweep::view-transition-new(root) {
   animation: fx-sweep 620ms var(--ease-out) both;
 }
+
+html[data-motion-paused="true"]::view-transition-new(root) { animation: none; }
 
 /* the sweep shows the destination state outright, so the ordinary
    colour crossfade would only muddy the reveal */

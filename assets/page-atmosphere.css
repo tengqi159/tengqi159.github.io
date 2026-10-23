@@ -24,6 +24,7 @@
 .has-page-atmosphere .page-atmosphere { visibility: visible; }
 /* Let the closing pixels take over without stacking two competing fields. */
 [data-page-scene="links"] .page-atmosphere { opacity: .18; }
+[data-page-scene="collaboration"] .page-atmosphere { opacity: .45; }
 .page-atmosphere canvas { display: block; width: 100%; height: 100%; }
 /* Keep the signal visible around the reader, softer behind the reading column. */
 .page-atmosphere canvas {

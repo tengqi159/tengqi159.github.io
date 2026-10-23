@@ -1,0 +1,80 @@
+/* A small, open sketch: existing interests meet at a shared question. */
+.connection-sketch {
+  position: relative;
+  width: min(100%, 360px);
+  height: 160px;
+  margin: 0;
+  color: var(--ink-2);
+  isolation: isolate;
+}
+.connection-sketch canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+}
+.connection-sketch-label {
+  position: absolute;
+  left: 0;
+  width: 30%;
+  margin: 0;
+  transform: translateY(-50%);
+  color: var(--ink-2);
+  text-align: right;
+  font: 550 .72rem/1.35 "Manrope", system-ui, sans-serif;
+  white-space: nowrap;
+  transition: color 220ms ease;
+}
+.connection-sketch-label[data-connection-topic="wearable"] { top: 17%; }
+.connection-sketch-label[data-connection-topic="efficient"] { top: 48%; }
+.connection-sketch-label[data-connection-topic="graphs"] { top: 79%; }
+.connection-sketch-label.is-selected { color: var(--teal-strong); }
+.connection-sketch-label.is-muted { color: var(--ink-3); }
+.connection-sketch-question {
+  position: absolute;
+  left: 78%;
+  top: 64%;
+  margin: 0;
+  transform: translateX(-50%);
+  color: var(--teal-strong);
+  font: 650 .74rem/1.4 "Manrope", system-ui, sans-serif;
+  white-space: nowrap;
+}
+/* Pins also exist without JavaScript; the canvas only adds their connections. */
+.connection-sketch-label::after {
+  content: "";
+  position: absolute;
+  left: calc(100% + 10px);
+  top: calc(50% - 2.5px);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--teal);
+  opacity: .65;
+}
+.connection-sketch-question::before {
+  content: "";
+  position: absolute;
+  left: calc(50% - 5px);
+  bottom: calc(100% + 20px);
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--teal);
+  border-radius: 50%;
+  background: var(--paper);
+}
+.connection-sketch.has-connection-sketch .connection-sketch-label::after,
+.connection-sketch.has-connection-sketch .connection-sketch-question::before { visibility: hidden; }
+@media (max-width: 760px) {
+  .connection-sketch { height: 145px; width: min(100%, 360px); }
+  .connection-sketch-label { font-size: .7rem; }
+  .connection-sketch-question { font-size: .72rem; }
+  .connection-sketch-question::before { bottom: calc(100% + 18px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .connection-sketch-label { transition: none; }
+}
+html[data-motion-paused="true"] .connection-sketch-label { transition: none; }
+@media print { .connection-sketch { display: none; } }

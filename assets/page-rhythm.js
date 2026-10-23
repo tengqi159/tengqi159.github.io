@@ -5,7 +5,13 @@
     if (!('IntersectionObserver' in window) || !Element.prototype.animate) return;
     const root = document.documentElement;
     const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-    const selector = '.metric, .profile-columns > *, .news-paper, .selected-card, .collaboration-workbench, .link-row';
+    const selector = [
+      '.hero-ribbon', '.hero-cta > *', '.contact-row', '.hero-facts > div', '.hero-latest',
+      '.metric', '.keyword-row > span', '.journey-list li',
+      '.research-note', '.news-paper', '.direction-row', '.signal-study',
+      '.selected-card', '.collaboration-workbench', '.atlas-shell',
+      '.links-finale-copy > :not(h3)', '.link-row', '.venue-band'
+    ].join(', ');
     const observed = new WeakSet();
     const entered = new WeakSet();
     const running = new Map();
@@ -20,6 +26,7 @@
     }
     function settleAll() {
       for (const element of running.keys()) settle(element);
+      document.querySelectorAll('.rhythm-pending').forEach(element => element.classList.remove('rhythm-pending'));
     }
     const observer = new IntersectionObserver(entries => {
       let order = 0;
@@ -28,17 +35,19 @@
           a.boundingClientRect.left - b.boundingClientRect.left)
         .forEach(({target}) => {
           observer.unobserve(target);
+          target.classList.remove('rhythm-pending');
           if (entered.has(target)) return;
           entered.add(target);
           if (disabled() || target.contains(document.activeElement)) return;
           try {
             // Individual translate composes with the existing hover transforms.
+            const small = target.matches('.keyword-row > span, .hero-ribbon, .contact-row');
             const animation = target.animate([
-              {opacity: .32, translate: '0 14px'},
+              {opacity: .18, translate: small ? '0 10px' : '0 22px'},
               {opacity: 1, translate: '0 0'}
             ], {
-              duration: 560, delay: Math.min(order++ * 65, 195),
-              easing: 'cubic-bezier(.22,.9,.28,1)', fill: 'backwards'
+              duration: small ? 540 : 740, delay: Math.min(order++ * (small ? 45 : 70), 280),
+              easing: 'cubic-bezier(.16,1,.3,1)', fill: 'backwards'
             });
             running.set(target, animation);
             const finish = () => {
@@ -47,12 +56,14 @@
             animation.finished.then(finish, finish);
           } catch { /* The visible resting state is always the fallback. */ }
         });
-    }, {threshold: .05, rootMargin: '0px 0px -16px 0px'});
+    }, {threshold: 0, rootMargin: '0px 0px -7% 0px'});
 
     function scan() {
       document.querySelectorAll(selector).forEach(element => {
         if (observed.has(element)) return;
         observed.add(element);
+        // A marker only: content remains visible if observation is interrupted.
+        if (!disabled()) element.classList.add('rhythm-pending');
         observer.observe(element);
       });
       // Live citation refreshes can replace cards during their entrance.
@@ -66,6 +77,7 @@
       const element = event.target.closest?.(selector);
       if (!element) return;
       entered.add(element);
+      element.classList.remove('rhythm-pending');
       observer.unobserve(element);
       settle(element);
     });

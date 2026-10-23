@@ -1,0 +1,269 @@
+/* ============================================================
+   Motion layer, second pass — styles for motion-plus.js
+   ============================================================ */
+
+/* Entrances never make unobserved content invisible. */
+.has-page-rhythm .rhythm-pending { opacity: 1; }
+
+/* ---------- 1. word-rise headings ---------- */
+.mp-w {
+  display: inline-block;
+  vertical-align: top;
+  /* Clip only below the line so italics and ascenders keep their overhang. */
+  clip-path: inset(-60% -25% -.2em -25%);
+}
+.mp-wi {
+  display: inline-block;
+}
+.mp-armed:not(.mp-in) .mp-wi {
+  transform: translate3d(0, 115%, 0) rotate(4deg);
+  opacity: 0;
+}
+.mp-armed.mp-in .mp-wi {
+  animation: mp-rise 1050ms cubic-bezier(.16, 1, .3, 1) both;
+  animation-delay: calc(var(--i, 0) * 75ms + 80ms);
+}
+@keyframes mp-rise {
+  from { transform: translate3d(0, 115%, 0) rotate(4deg); opacity: 0; }
+  35% { opacity: 1; }
+  to { transform: none; opacity: 1; }
+}
+/* The previous whole-heading fade is replaced by the word rise. */
+.has-page-atmosphere .section.is-visible .section-head.mp-armed h2 { animation: none; }
+
+/* ---------- 2. kicker decode + drawn rule ---------- */
+.mp-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.mp-scramble { font-variant-numeric: tabular-nums; }
+.mp-armed .section-kicker::after {
+  transform-origin: left center;
+  transition: transform 1100ms cubic-bezier(.16, 1, .3, 1) 260ms, flex-basis 1100ms cubic-bezier(.16, 1, .3, 1) 260ms;
+}
+.mp-armed:not(.mp-in) .section-kicker::after { transform: scaleX(0); }
+.mp-armed.mp-in .section-kicker::after { flex-basis: 4.5rem; }
+.mp-armed .section-kicker > span:first-child {
+  display: inline-block;
+  transition: transform 700ms cubic-bezier(.16, 1, .3, 1), opacity 500ms ease;
+}
+.mp-armed:not(.mp-in) .section-kicker > span:first-child { opacity: 0; transform: translateX(-10px); }
+
+/* The rule under each heading sweeps in from the kicker side. */
+.has-page-atmosphere .section-head.mp-armed::after { animation: none; transform-origin: left; }
+.has-page-atmosphere .section-head.mp-armed:not(.mp-in)::after { transform: scaleX(0); opacity: 0; }
+.has-page-atmosphere .section-head.mp-armed.mp-in::after {
+  animation: atmo-rule-enter 1400ms cubic-bezier(.16, 1, .3, 1) 220ms both;
+}
+
+/* ---------- 3. chapter numerals ---------- */
+.mp-echo-armed.has-page-atmosphere .chapter-echo {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 1600ms cubic-bezier(.65, 0, .2, 1) 120ms, -webkit-text-stroke-color 600ms ease;
+}
+.mp-echo-armed.has-page-atmosphere .mp-section-in .chapter-echo { clip-path: inset(0 -5% 0 0); }
+.has-motion-plus.has-page-atmosphere .section:hover .chapter-echo { -webkit-text-stroke-color: rgba(var(--atmo-teal), .2); }
+
+/* ---------- 4. venue band ---------- */
+.venue-band {
+  position: relative;
+  z-index: 2;
+  margin: clamp(1.5rem, 4vw, 3rem) 0 0;
+  padding: 1.4rem 0 1.2rem;
+  border-block: 1px solid var(--line-soft);
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+.venue-band-label {
+  width: min(var(--max), calc(100vw - clamp(2rem, 6vw, 4.5rem)));
+  margin: 0 auto .9rem;
+  display: flex;
+  align-items: center;
+  gap: .9rem;
+  color: var(--teal);
+  font: .66rem/1.4 "IBM Plex Mono", monospace;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+}
+.venue-band-label span { color: var(--gold); }
+.venue-band-label::after { content: ""; flex: 0 0 3rem; height: 1px; background: var(--line); }
+.venue-track { overflow: hidden; }
+.venue-track + .venue-track { margin-top: .55rem; }
+.venue-rail {
+  display: flex;
+  width: max-content;
+}
+.venue-list {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.6rem, 3.4vw, 3rem);
+  margin: 0;
+  padding: 0 clamp(1.6rem, 3.4vw, 3rem) 0 0;
+  list-style: none;
+}
+.venue-list li {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(1.6rem, 3.4vw, 3rem);
+  white-space: nowrap;
+  font: 500 clamp(1.35rem, 2.6vw, 2.15rem)/1.25 "Fraunces", serif;
+  letter-spacing: -.02em;
+  color: var(--ink);
+  transition: color 250ms ease;
+}
+.venue-list li:hover { color: var(--teal-strong); }
+.venue-list li::after {
+  content: "";
+  width: 7px;
+  height: 7px;
+  background: var(--gold);
+  opacity: .75;
+  transform: rotate(45deg);
+}
+.venue-list li em { font-style: italic; color: var(--teal); }
+.venue-track-themes .venue-list li {
+  font: 500 .74rem/1.6 "IBM Plex Mono", monospace;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.venue-track-themes .venue-list li::after {
+  width: 4px;
+  height: 4px;
+  background: var(--teal);
+  transform: none;
+}
+.venue-band.is-ready .venue-rail { animation: mp-marquee 62s linear infinite; }
+.venue-band.is-ready .venue-track-themes .venue-rail { animation-duration: 48s; animation-direction: reverse; }
+.venue-band:hover .venue-rail,
+.venue-band.is-offscreen .venue-rail { animation-play-state: paused; }
+@keyframes mp-marquee { to { transform: translate3d(-50%, 0, 0); } }
+
+/* ---------- 5. pointer aura ---------- */
+.mp-aura {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 640px;
+  height: 640px;
+  margin: -320px 0 0 -320px;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle, rgba(var(--atmo-teal, 14, 95, 99), .085), rgba(var(--atmo-gold, 150, 105, 15), .03) 42%, transparent 68%);
+  transition: opacity 700ms ease;
+  will-change: transform;
+}
+.mp-aura.is-on { opacity: 1; }
+[data-theme="dark"] .mp-aura {
+  background: radial-gradient(circle, rgba(var(--atmo-teal), .11), rgba(var(--atmo-gold), .035) 42%, transparent 68%);
+}
+
+/* ---------- research links: a signal runs along the hovered row ---------- */
+.links-finale .link-row { position: relative; }
+.links-finale .link-row::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  z-index: 2;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--teal) 30%, var(--gold) 70%, transparent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 700ms cubic-bezier(.16, 1, .3, 1);
+  pointer-events: none;
+}
+.links-finale .link-row:hover::before,
+.links-finale .link-row:focus-visible::before { transform: scaleX(1); }
+
+/* ---------- gates ---------- */
+.chapter-accent { color: var(--teal); font-style: italic; }
+.hero-statement em {
+  color: var(--teal-strong);
+  background: linear-gradient(var(--teal-soft), var(--teal-soft)) 0 95% / 100% .14em no-repeat;
+}
+.hero-hello {
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  min-height: 36px;
+  margin: .7rem 0 .1rem;
+  color: var(--teal-strong);
+  font: 600 .78rem/1.5 "Manrope", sans-serif;
+  text-underline-offset: .25em;
+}
+.hello-signal { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); }
+.has-motion-plus .hello-signal {
+  animation: mp-hello 4.8s ease-out infinite;
+  animation-play-state: paused;
+}
+.hero-hello.mp-ambient-visible .hello-signal { animation-play-state: running; }
+@keyframes mp-hello {
+  0%, 70%, 100% { box-shadow: 0 0 0 0 var(--teal-soft); }
+  28% { box-shadow: 0 0 0 7px transparent; }
+}
+.hero-hello:hover { text-decoration: underline; }
+.hero-hello:focus-visible { outline: 2px solid var(--teal); outline-offset: 5px; border-radius: 3px; }
+.collaboration-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+  align-items: center;
+  gap: 2rem;
+}
+.collaboration-heading > div { min-width: 0; }
+.keyword-row > span { transition: color 180ms ease, border-color 180ms ease, translate 220ms var(--ease-out); }
+.publication-preview-open { transition: translate 220ms var(--ease-out); }
+.publication-preview { transition: border-color 200ms ease, box-shadow 240ms ease, translate 240ms var(--ease-out); }
+.publication-preview:hover, .publication-preview:focus-visible { box-shadow: 0 8px 25px var(--teal-soft); }
+.publication-preview:hover .publication-preview-open, .publication-preview:focus-visible .publication-preview-open { translate: 2px -1px; }
+@media (hover: hover) and (pointer: fine) {
+  .keyword-row > span:hover { translate: 0 -3px; color: var(--teal-strong); border-color: var(--teal); }
+  .publication-preview:hover { translate: 0 -2px; }
+}
+@media (max-width: 900px) {
+  .collaboration-heading { grid-template-columns: 1fr; gap: .7rem; }
+  .collaboration-heading .connection-sketch { justify-self: start; }
+}
+@media (hover: none), (pointer: coarse) {
+  .mp-aura { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .has-page-rhythm .rhythm-pending { opacity: 1; }
+  .mp-armed .mp-wi, .mp-armed:not(.mp-in) .mp-wi { transform: none !important; opacity: 1 !important; animation: none !important; }
+  .mp-armed:not(.mp-in) .section-kicker::after,
+  .mp-armed:not(.mp-in) .section-kicker > span:first-child { transform: none; opacity: 1; }
+  .mp-echo-armed.has-page-atmosphere .chapter-echo { clip-path: none; transition: none; translate: none; }
+  .venue-band.is-ready .venue-rail { animation: none; }
+  .mp-aura { display: none; }
+  .links-finale .link-row::before { transition: none; }
+  .hello-signal { animation: none !important; }
+  .keyword-row > span, .publication-preview, .publication-preview-open { transition: none; translate: none !important; }
+}
+html.mp-suspended .rhythm-pending { opacity: 1; }
+html.mp-suspended .mp-wi { animation: none !important; transform: none !important; opacity: 1 !important; }
+html.mp-suspended .chapter-echo { clip-path: none !important; transition: none !important; }
+html.mp-suspended .venue-band .venue-rail { animation-play-state: paused; }
+html.mp-suspended .mp-aura { display: none; }
+html.mp-suspended .section-kicker::after,
+html.mp-suspended .section-kicker > span:first-child { transition: none; }
+html.mp-suspended .hello-signal { animation: none; }
+html.mp-suspended .keyword-row > span, html.mp-suspended .publication-preview, html.mp-suspended .publication-preview-open { translate: none; transition: none; }
+.mp-settled .mp-wi { animation: none !important; transform: none !important; opacity: 1 !important; }
+
+@media (max-width: 760px) {
+  .venue-band { -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
+  .venue-band.is-ready .venue-rail { animation-duration: 44s; }
+  .venue-band.is-ready .venue-track-themes .venue-rail { animation-duration: 34s; }
+}
+@media print {
+  .venue-band, .mp-aura { display: none; }
+  .rhythm-pending, .mp-wi { opacity: 1 !important; transform: none !important; }
+}

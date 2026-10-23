@@ -379,10 +379,32 @@
      7. citation meter — fills when the card is read
      ============================================================ */
 
+  let citationVisibility = null;
+  const citationCards = new Set();
+
   function setupCiteMeters() {
     const cards = Array.from(document.querySelectorAll(".selected-card"));
+    // A single live observer lets the shimmer rest outside the viewport, and
+    // remains attached when optional metadata replaces the publication cards.
+    if ("IntersectionObserver" in window && !citationVisibility) {
+      citationVisibility = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          entry.target.classList.toggle("is-cite-visible", entry.isIntersecting);
+        });
+      }, {threshold: 0});
+    }
+    for (const card of citationCards) {
+      if (card.isConnected) continue;
+      citationVisibility?.unobserve(card);
+      citationCards.delete(card);
+    }
     if (!cards.length) return;
-    onceVisible(cards, { threshold: 0.3 }, (card) => card.classList.add("is-locked"));
+    const fresh = cards.filter(card => !citationCards.has(card));
+    fresh.forEach(card => {
+      citationCards.add(card);
+      citationVisibility?.observe(card);
+    });
+    if (fresh.length) onceVisible(fresh, { threshold: 0.3 }, (card) => card.classList.add("is-locked"));
   }
 
   /* ============================================================
@@ -593,8 +615,9 @@
       setupSignalLock();
       setupIconDraw();
       setupNewsRail();
-      setupCiteMeters();
     }
+    // Keep visibility observation available across live preference changes.
+    setupCiteMeters();
     // Always subscribe to future arcs, including when reduced motion was on
     // at load. Preference changes can then resume without reloading the page.
     setupPackets();
@@ -637,7 +660,7 @@
         window.requestAnimationFrame(() => {
           queued = false;
           initCards();
-          if (!reducedMotion.matches) setupCiteMeters();
+          setupCiteMeters();
           setupSpotlight(Array.from(document.querySelectorAll(".metric")));
           syncPointerMotion();
         });

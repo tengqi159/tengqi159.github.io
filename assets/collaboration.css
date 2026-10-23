@@ -11,7 +11,7 @@
 .collaboration-section { padding-top: clamp(3.5rem, 5vw, 4rem); }
 .collaboration-section .section-head { max-width: none; margin-bottom: 1.8rem; }
 .collaboration-section .section-head h2 { font-family: "Manrope", system-ui, sans-serif; font-weight: 750; letter-spacing: -.05em; line-height: 1.12; }
-.collaboration-section h2 span { color: var(--teal); }
+.collaboration-section h2 > .collaboration-accent { color: var(--teal); }
 .collaboration-section .section-lede { max-width: 52rem; font-size: 1rem; margin-top: .85rem; }
 .collaboration-section [hidden] { display: none !important; }
 .collaboration-workbench { padding: clamp(1.2rem, 3vw, 2rem); border: 1px solid var(--line); border-radius: 24px; background: var(--paper-elev); }

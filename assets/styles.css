@@ -799,7 +799,7 @@ a.contact-row-value:hover {
   color: var(--teal);
 }
 
-.section-kicker span {
+.section-kicker > span:first-child {
   color: var(--gold);
 }
 
