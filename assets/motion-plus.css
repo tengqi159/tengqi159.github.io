@@ -275,12 +275,16 @@ html.mp-suspended .keyword-row > span, html.mp-suspended .publication-preview, h
 :root {
   --coral: #ad5542;
   --coral-soft: rgba(173, 85, 66, .10);
+  --review-red: #b13d34;
+  --review-red-soft: rgba(177, 61, 52, .24);
   --periwinkle: #586da6;
   --periwinkle-soft: rgba(88, 109, 166, .11);
 }
 [data-theme="dark"] {
   --coral: #e4927d;
   --coral-soft: rgba(228, 146, 125, .12);
+  --review-red: #f09687;
+  --review-red-soft: rgba(240, 150, 135, .30);
   --periwinkle: #a8b9eb;
   --periwinkle-soft: rgba(168, 185, 235, .12);
 }
@@ -550,6 +554,15 @@ html.mp-suspended .keyword-row > span, html.mp-suspended .publication-preview, h
   color: var(--ink-2);
   font-size: .85rem;
   line-height: 1.8;
+}
+.peer-review-key {
+  color: var(--review-red);
+  font-weight: 750;
+  text-decoration: underline;
+  text-decoration-color: var(--review-red-soft);
+  text-decoration-thickness: .14em;
+  text-underline-offset: .16em;
+  text-decoration-skip-ink: auto;
 }
 
 @media (max-width: 900px) {
