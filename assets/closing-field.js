@@ -29,12 +29,13 @@
     const pointer = {x: -1000, y: -1000, active: false};
     // Hovering a research link bends the end of the stream toward that row.
     const focus = {y: 0, target: 0, amount: 0};
-    // Vary the fringe by row so its silhouette never traces a rectangular edge.
-    // Density and opacity both taper; the final CSS mask is only a safety net.
+    // Density, rather than the canvas clip, defines the silhouette. The left
+    // envelope is exactly zero at x <= 0, so no row can form a vertical seam.
     const envelope = (u, v) => {
-      const fringe = .025 * Math.sin(v * 9.2) + .012 * Math.sin(v * 21.7);
-      return smooth(.015 + fringe, compact ? .22 : .28, u)
-        * (1 - smooth(compact ? .72 : .55, compact ? 1 : .94, u));
+      const organic = .88 + .12 * Math.sin(v * 12.7 + u * 5.1) * Math.sin(v * 5.3 - u * 8.4);
+      return smooth(0, compact ? .25 : .31, u)
+        * (1 - smooth(compact ? .69 : .53, compact ? 1 : .96, u))
+        * organic;
     };
     const paused = () => reduced.matches || root.dataset.motionPaused === 'true';
     const moving = time => onScreen && !document.hidden && !paused() && time - lastInput < 20000;
@@ -79,8 +80,8 @@
           const seed = hash(col, row);
           if (seed > density * .82) continue;
           candidates.push({
-            x: x + (hash(col, row, 1) - .5) * 1.5,
-            y: y + artHeight * .08 + (hash(col, row, 2) - .5) * 1.5,
+            x: x + (hash(col, row, 1) - .5) * spacing * .96,
+            y: y + artHeight * .08 + (hash(col, row, 2) - .5) * spacing * .92,
             u, v, seed, density: clamp(density, 0, 1),
             size: 1.4 + hash(col, row, 3) * 1.7,
             color: seed < .085 ? 2 : seed < .34 ? 0 : seed < .77 ? 1 : 3,

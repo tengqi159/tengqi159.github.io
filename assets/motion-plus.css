@@ -267,3 +267,331 @@ html.mp-suspended .keyword-row > span, html.mp-suspended .publication-preview, h
   .venue-band, .mp-aura { display: none; }
   .rhythm-pending, .mp-wi { opacity: 1 !important; transform: none !important; }
 }
+
+/* ============================================================
+   Content-alive pass — 24 October 2026
+   Motion is attached to research content, not decorative noise.
+   ============================================================ */
+:root {
+  --coral: #ad5542;
+  --coral-soft: rgba(173, 85, 66, .10);
+  --periwinkle: #586da6;
+  --periwinkle-soft: rgba(88, 109, 166, .11);
+}
+[data-theme="dark"] {
+  --coral: #e4927d;
+  --coral-soft: rgba(228, 146, 125, .12);
+  --periwinkle: #a8b9eb;
+  --periwinkle-soft: rgba(168, 185, 235, .12);
+}
+
+/* The two research phrases acquire their highlight after the text lock. */
+.hero-statement em:last-of-type {
+  color: var(--periwinkle);
+  background-image: linear-gradient(var(--periwinkle-soft), var(--periwinkle-soft));
+}
+.has-motion-plus .hero-statement.is-locked em {
+  animation: mp-highlight-in 1100ms cubic-bezier(.16, 1, .3, 1) 520ms both;
+}
+.has-motion-plus .hero-statement.is-locked em:last-of-type { animation-delay: 720ms; }
+@keyframes mp-highlight-in {
+  from { background-size: 0 .14em; }
+  to { background-size: 100% .14em; }
+}
+
+/* A quiet live-signal layer gives the first screen an ambient focal point. */
+.portrait-live {
+  position: absolute;
+  top: .75rem;
+  left: .75rem;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  min-height: 1.7rem;
+  padding: 0 .6rem;
+  border: 1px solid rgba(255, 255, 255, .2);
+  border-radius: 99px;
+  color: #f4f1e9;
+  background: rgba(16, 19, 21, .58);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font: 500 .55rem/1 "IBM Plex Mono", monospace;
+  letter-spacing: .11em;
+  pointer-events: none;
+}
+.portrait-live i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #8fd0cd;
+  box-shadow: 0 0 0 0 rgba(143, 208, 205, .35);
+  animation: mp-portrait-live 3200ms ease-out infinite;
+  animation-play-state: paused;
+}
+.portrait-scan {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 1;
+  aspect-ratio: 1;
+  border-radius: var(--radius);
+  overflow: hidden;
+  pointer-events: none;
+}
+.portrait-scan::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 24%;
+  background: linear-gradient(180deg, transparent, rgba(143, 208, 205, .12), rgba(143, 208, 205, .32), transparent);
+  opacity: 0;
+  transform: translateY(-110%);
+  animation: mp-portrait-scan 8200ms ease-in-out infinite;
+  animation-play-state: paused;
+}
+.has-motion-plus .hero.mp-ambient-visible .portrait-live i,
+.has-motion-plus .hero.mp-ambient-visible .portrait-scan::before { animation-play-state: running; }
+@keyframes mp-portrait-live {
+  0%, 62%, 100% { box-shadow: 0 0 0 0 rgba(143, 208, 205, .32); }
+  82% { box-shadow: 0 0 0 6px rgba(143, 208, 205, 0); }
+}
+@keyframes mp-portrait-scan {
+  0% { transform: translateY(-110%); opacity: 0; }
+  8% { opacity: .65; }
+  42% { transform: translateY(440%); opacity: 0; }
+  100% { transform: translateY(440%); opacity: 0; }
+}
+
+/* A compact, living dispatch replaces the plain latest-news rule. */
+.hero-latest {
+  position: relative;
+  display: grid;
+  grid-template-columns: 32px auto minmax(0, 1fr) 1.2rem;
+  align-items: center;
+  gap: .3rem .9rem;
+  margin-top: 1.35rem;
+  padding: .78rem .95rem;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--card);
+  box-shadow: 0 12px 34px -28px var(--teal);
+  overflow: hidden;
+  transition: translate 280ms var(--ease-out), border-color 220ms ease, box-shadow 280ms ease;
+}
+.hero-latest::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: linear-gradient(180deg, var(--teal), var(--periwinkle), var(--coral));
+}
+.hero-latest strong {
+  display: flex;
+  flex-direction: column;
+  font-size: .9rem;
+  line-height: 1.35;
+  white-space: nowrap;
+}
+.hero-latest strong small {
+  color: var(--coral);
+  font: 500 .58rem/1.5 "IBM Plex Mono", monospace;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+.hero-latest .hero-latest-pulse {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  width: 30px;
+  min-width: 30px;
+  height: 30px;
+  overflow: visible;
+  color: var(--teal);
+}
+.hero-latest-pulse i {
+  display: block;
+  width: 3px;
+  height: 70%;
+  border-radius: 99px;
+  background: currentColor;
+  opacity: .55;
+  transform: scaleY(.42);
+  animation: mp-dispatch 1900ms ease-in-out infinite;
+  animation-play-state: paused;
+}
+.hero-latest-pulse i:nth-child(2) { height: 100%; color: var(--periwinkle); animation-delay: -720ms; }
+.hero-latest-pulse i:nth-child(3) { height: 82%; color: var(--coral); animation-delay: -1180ms; }
+.hero-latest-pulse i:nth-child(4) { height: 55%; animation-delay: -430ms; }
+.hero-latest-pulse i:nth-child(5) { height: 35%; color: var(--gold); animation-delay: -940ms; }
+.has-motion-plus .hero-latest.mp-ambient-visible .hero-latest-pulse i { animation-play-state: running; }
+@keyframes mp-dispatch {
+  0%, 100% { transform: scaleY(.38); opacity: .42; }
+  50% { transform: scaleY(1); opacity: 1; }
+}
+.hero-latest .hero-latest-arrow {
+  min-width: 0;
+  color: var(--teal-strong);
+  font-size: 1rem;
+  transition: translate 240ms var(--ease-out);
+}
+.hero-latest:hover { translate: 0 -2px; border-color: var(--teal); box-shadow: 0 18px 40px -26px var(--teal); }
+.hero-latest:hover .hero-latest-arrow { translate: 2px -2px; }
+
+/* Accepted papers become a visual two-up spread instead of two long rows. */
+.news-papers {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.1rem;
+}
+.news-paper {
+  position: relative;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+  overflow: hidden;
+  transition: translate 280ms var(--ease-out), border-color 220ms ease, box-shadow 280ms ease;
+}
+.news-paper::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 2px;
+  background: linear-gradient(90deg, var(--teal), var(--periwinkle), var(--coral));
+  opacity: .72;
+}
+.news-paper .publication-preview-wrap { max-width: none; }
+.news-paper .publication-preview { overflow: hidden; }
+.news-paper .pe-image-thumbnail .pe-original-image {
+  height: 205px;
+  transition: transform 650ms cubic-bezier(.16, 1, .3, 1), filter 300ms ease;
+}
+.news-paper:hover { translate: 0 -3px; border-color: var(--teal); box-shadow: 0 24px 60px -42px var(--teal); }
+.news-paper:hover .pe-image-thumbnail .pe-original-image { transform: scale(1.025); filter: saturate(1.06); }
+.news-new-badge { color: var(--coral); background: var(--coral-soft); }
+.has-motion-plus .news-new-badge .paper-icon {
+  animation: mp-new-spark 5200ms ease-in-out infinite;
+  animation-play-state: paused;
+}
+.has-motion-plus .news-paper.mp-ambient-visible .news-new-badge .paper-icon { animation-play-state: running; }
+@keyframes mp-new-spark {
+  0%, 76%, 100% { transform: rotate(0deg) scale(1); }
+  84% { transform: rotate(18deg) scale(1.18); }
+  92% { transform: rotate(-8deg) scale(1.05); }
+}
+.paper-link-motion {
+  color: var(--coral) !important;
+  background: var(--coral-soft) !important;
+  border-color: transparent;
+}
+.paper-link-motion:hover { color: var(--coral) !important; border-color: var(--coral); }
+.paper-link-motion:hover .paper-icon { transform: scale(1.12); }
+.paper-link-motion .paper-icon { transition: transform 200ms var(--ease-out); }
+
+/* The selected research row and its generative study read as one control. */
+.is-interactive .direction-row::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 3px;
+  height: 0;
+  border-radius: 99px;
+  background: linear-gradient(180deg, var(--teal), var(--periwinkle));
+  transform: translateY(-50%);
+  transition: height 360ms var(--ease-out);
+}
+.is-interactive .direction-row.is-active::before { height: 58%; }
+#study-index {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.55rem;
+  padding: 0 .5rem;
+  border-radius: 99px;
+  background: var(--teal-soft);
+}
+.study-caption, .study-viewport { transform-origin: center bottom; }
+
+/* The method dialog now has a clear, polished playback state. */
+.paper-dialog[open] { animation: mp-dialog-in 360ms cubic-bezier(.16, 1, .3, 1) both; }
+.paper-dialog[open]::backdrop { animation: mp-backdrop-in 300ms ease both; }
+@keyframes mp-dialog-in {
+  from { opacity: 0; transform: translateY(18px) scale(.985); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes mp-backdrop-in { from { opacity: 0; } to { opacity: 1; } }
+.paper-dialog.is-playing .pe-region { animation: mp-region-pulse 2400ms ease-in-out infinite; }
+@keyframes mp-region-pulse {
+  0%, 100% { box-shadow: 0 0 0 1px #fff, 0 0 0 0 rgba(183, 106, 16, .28); }
+  50% { box-shadow: 0 0 0 1px #fff, 0 0 0 8px rgba(183, 106, 16, 0); }
+}
+
+/* A static professional-integrity note closes the research links chapter. */
+.peer-review-note {
+  display: grid;
+  grid-template-columns: minmax(200px, .55fr) minmax(0, 1.45fr);
+  gap: 1.25rem 2.5rem;
+  margin-top: clamp(2.2rem, 5vw, 4rem);
+  padding-top: 1.35rem;
+  border-top: 1px solid var(--line);
+}
+.peer-review-eyebrow {
+  margin: 0 0 .45rem;
+  color: var(--coral);
+  font: 500 .62rem/1.5 "IBM Plex Mono", monospace;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+}
+.peer-review-note h3 {
+  margin: 0;
+  font: 500 clamp(1.25rem, 2vw, 1.6rem)/1.25 "Fraunces", serif;
+  letter-spacing: -.015em;
+}
+.peer-review-body {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: .85rem;
+  line-height: 1.8;
+}
+
+@media (max-width: 900px) {
+  .news-papers { grid-template-columns: minmax(0, 1fr); }
+  .news-paper { grid-template-columns: minmax(210px, 240px) minmax(0, 1fr); }
+  .news-paper .publication-preview-wrap { max-width: 240px; }
+  .news-paper .pe-image-thumbnail .pe-original-image { height: 180px; }
+}
+@media (max-width: 640px) {
+  .peer-review-note { grid-template-columns: minmax(0, 1fr); gap: .65rem; }
+  .hero-latest { grid-template-columns: 30px minmax(0, 1fr) 1rem; column-gap: .7rem; }
+  .hero-latest > span:not(.hero-latest-pulse):not(.hero-latest-arrow) { grid-column: 2 / 4; font-size: .8rem; }
+  .hero-latest-arrow { grid-column: 3; grid-row: 1; }
+  .news-paper { grid-template-columns: minmax(0, 1fr); }
+  .news-paper .publication-preview-wrap { max-width: none; }
+  .news-paper .pe-image-thumbnail .pe-original-image { height: 190px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .has-motion-plus .hero-statement.is-locked em,
+  .portrait-live i, .portrait-scan::before,
+  .hero-latest-pulse i,
+  .has-motion-plus .news-new-badge .paper-icon,
+  .paper-dialog[open], .paper-dialog[open]::backdrop,
+  .paper-dialog.is-playing .pe-region { animation: none !important; }
+  .hero-latest, .hero-latest-arrow, .news-paper,
+  .news-paper .pe-image-thumbnail .pe-original-image,
+  .is-interactive .direction-row::before { transition: none; translate: none !important; }
+  .news-paper:hover .pe-image-thumbnail .pe-original-image { transform: none; }
+}
+html.mp-suspended .portrait-live i,
+html.mp-suspended .portrait-scan::before,
+html.mp-suspended .hero-latest-pulse i,
+html.mp-suspended .news-new-badge .paper-icon,
+html.mp-suspended .paper-dialog .pe-region { animation: none !important; }
+html.mp-suspended .hero-latest,
+html.mp-suspended .hero-latest-arrow,
+html.mp-suspended .news-paper { translate: none !important; transition: none; }
+html[data-motion-paused="true"] .paper-dialog .pe-region { animation: none !important; }
+@media print {
+  .portrait-live, .portrait-scan { display: none; }
+  .hero-latest { display: flex; box-shadow: none; }
+  .hero-latest-pulse { display: none !important; }
+  .news-papers { grid-template-columns: minmax(0, 1fr); }
+  .news-paper { translate: none; box-shadow: none; }
+}

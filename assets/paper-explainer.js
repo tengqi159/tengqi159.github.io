@@ -29,7 +29,7 @@
   }
   function buttons(pub, cls = "") {
     const story = find(pub); if (!hasFigure(story)) return "";
-    return `<button class="paper-link pe-open ${cls}" type="button" data-story="${esc(story.id)}" data-mode="abstract" aria-label="View paper framework for ${esc(story.shortName)}">${icon("abstract")}Paper framework</button>` + (hasAnimation(story) ? `<button class="paper-link pe-open ${cls}" type="button" data-story="${esc(story.id)}" data-mode="animation" aria-label="Explore method walkthrough for ${esc(story.shortName)}">${icon("play")}Method walkthrough</button>` : "");
+    return `<button class="paper-link pe-open ${cls}" type="button" data-story="${esc(story.id)}" data-mode="abstract" aria-label="View paper framework for ${esc(story.shortName)}">${icon("abstract")}Paper framework</button>` + (hasAnimation(story) ? `<button class="paper-link paper-link-motion pe-open ${cls}" type="button" data-story="${esc(story.id)}" data-mode="animation" data-autoplay="true" aria-label="Play method walkthrough for ${esc(story.shortName)}">${icon("play")}Method walkthrough</button>` : "");
   }
   function renderNewsCards() {
     const root = document.getElementById("news-papers"); if (!root) return;
@@ -95,7 +95,7 @@
   }
   function play() { if (reduced?.matches || !hasAnimation(current)) return; stop(); playing = true; frame = setInterval(() => { phase = (phase + 1) % current.steps.length; update(); revealRegion(); }, 12000); update(); revealRegion(); }
   function changeMode(next) { stop(); mode = next === "animation" && hasAnimation(current) ? "animation" : "abstract"; phase = 0; dialog.querySelector("#pe-figure").innerHTML = figureMarkup(current,{presentation:mode}); setZoom(1); update(); }
-  function open(story, requestedMode) {
+  function open(story, requestedMode, autoplay = false) {
     if (!hasFigure(story)) return;
     current = story; stop(); phase = 0; mode = requestedMode === "animation" && hasAnimation(story) ? "animation" : "abstract"; previousFocus = document.activeElement;
     dialog.querySelector("#pe-title").textContent = story.title;
@@ -114,6 +114,7 @@
     if (sourceUrl) source.href = sourceUrl; else source.removeAttribute("href");
     dialog.querySelector("#pe-note").textContent = hasAnimation(story) ? `${story.walkthroughNote ? story.walkthroughNote + " " : ""}Select a module, or press Play for a guided tour of the original figure.` : "Original paper figure, preserving the paper's labels and connections.";
     update(); dialog.showModal(); setZoom(1); document.body.classList.add("pe-modal-open"); dialog.querySelector("#pe-close").focus(); dialog.scrollTop = 0;
+    if (autoplay && mode === "animation" && !reduced?.matches) play();
   }
   function downloadFigure() {
     if (!hasFigure(current)) return;
@@ -124,7 +125,7 @@
   document.addEventListener("DOMContentLoaded", () => {
     dialog = document.getElementById("paper-dialog"); if (!dialog) return;
     renderNewsCards();
-    document.addEventListener("click", e => { const button = e.target.closest("[data-story]"); if (!button) return; const story = all().find(s => s.id === button.dataset.story); if (story) open(story, button.dataset.mode || "abstract"); });
+    document.addEventListener("click", e => { const button = e.target.closest("[data-story]"); if (!button) return; const story = all().find(s => s.id === button.dataset.story); if (story) open(story, button.dataset.mode || "abstract", button.dataset.autoplay === "true"); });
     dialog.addEventListener("click", e => {
       const modeButton = e.target.closest("[data-pe-mode]"); if (modeButton) { changeMode(modeButton.dataset.peMode); return; }
       const step = e.target.closest("[data-pe-step]"); if (step && hasAnimation(current)) { stop(); mode = "animation"; phase = Number(step.dataset.peStep); update(); revealRegion(); return; }

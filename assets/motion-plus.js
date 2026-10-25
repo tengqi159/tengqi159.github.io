@@ -213,7 +213,7 @@
     }
 
     // Small accents only run while their own content is in view.
-    const ambientTargets = document.querySelectorAll('.hero-hello');
+    const ambientTargets = document.querySelectorAll('.hero, .hero-hello, .hero-latest, .news-paper');
     if (hasIO) {
       const ambientObserver = new IntersectionObserver(entries => {
         entries.forEach(entry => entry.target.classList.toggle('mp-ambient-visible', entry.isIntersecting));

@@ -208,6 +208,16 @@
     }
     motionButtons.forEach(button=>button.addEventListener("click",()=>{paused=!paused;sync();}));
 
+    function animateStudyChange() {
+      if (paused || reduced.matches || document.hidden || !Element.prototype.animate) return;
+      panel.querySelectorAll(".study-viewport, .study-caption").forEach((element, index) => {
+        element.animate([
+          {opacity: .28, translate: "0 7px"},
+          {opacity: 1, translate: "0 0"}
+        ], {duration: 460, delay: index * 45, easing: "cubic-bezier(.16,1,.3,1)"});
+      });
+    }
+
     const rows = Array.from(document.querySelectorAll(".direction-row"));
     rows.forEach((row,index)=>{
       const heading = row.querySelector("h3");
@@ -228,6 +238,7 @@
         document.getElementById("study-index").textContent=`0${index+1} / 04`;
         ["study-eyebrow","study-title","study-description"].forEach((id,i)=>document.getElementById(id).textContent=studies[index][i]);
         drawStudy(elapsed);
+        animateStudyChange();
         panel.scrollIntoView({behavior: reduced.matches ? "instant" : "smooth",block:"start"});
       });
     });
